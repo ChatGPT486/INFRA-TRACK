@@ -1,0 +1,244 @@
+/* ---------- GENERAL ---------- */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #f5f7fa;
+}
+/* ---------- TOP BAR ---------- */
+.top-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 35px;
+    background: #080808;      
+    color: white;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2)
+}
+
+/* ---------- TOGGLE MENU ICON (☰) ---------- */
+.toggle-btn {
+    background:rgb(130, 18, 235); ;
+    border: none;
+    color: rgb(8, 8, 8);
+    font-size: 25px;
+    cursor: pointer;
+}
+
+/* ---------- RIGHT SIDE BUTTONS ---------- */
+.menu-buttons {
+    display: flex;
+    gap: 10px; 
+}
+
+/* ---------- ABOUT US BUTTON ---------- */
+.about-btn {
+    background: rgb(150, 43, 244);
+    color: #070707;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* ---------- USER ICON BUTTON ---------- */
+.user-btn {
+    background: rgb(101, 29, 226);
+    color: #1671d2;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 30%;        
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---------- HOVER EFFECTS ---------- */
+.toggle-btn:hover,
+.about-btn:hover,
+.user-btn:hover {
+    background: rgba(143, 105, 219, 0.8);
+}
+
+
+/* ---------- HERO SECTION ---------- */
+.hero-section {
+    background: linear-gradient(135deg, #1e3a8a, #7c3aed);
+    padding: 40px 10px;
+    text-align: center;
+    color: white;
+    border-radius: 12px;
+    margin: 10px;
+}
+
+.hero-section h1 {
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+
+.tagline {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    margin-bottom: 25px;
+}
+
+/* Hero Stats */
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ---------- SERVICE SELECTOR ---------- */
+.service-selector {
+    display: flex;
+    gap: 25px;
+    margin: 25px;
+    overflow-x: auto;
+    padding: 20px 0;
+}
+
+.service-btn {
+    padding: 15px 30px;
+    border-radius: 12px;
+    border: 2px solid #0b0c0d;
+    background: rgb(63, 200, 250);
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+}
+
+.service-btn.active {
+    background: #fbbf24;
+    border-color: #070707;
+    color: white;
+    box-shadow: 0 4px 12px rgba(246, 245, 244, 0.3);
+}
+
+/* ---------- LIVE MAP ----------- */
+.map-section {
+    background: #f8fafc;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 20px;
+}
+
+.map-section h3 {
+    color: #1e40af;
+    margin-bottom: 10px;
+}
+
+.map-placeholder {
+    background: linear-gradient(135deg, #e0e7ff, #ddd6fe);
+    height: 300px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Map button styling */
+.map-btn {
+  background-color: #333;      
+  color: white;               
+  border: none;                
+  padding: 8px 16px;           
+  border-radius: 4px;          
+  font-size: 16px;             
+  display: flex;               
+  align-items: left;         
+  gap: 8px;                   
+  cursor: pointer;             
+  transition: background 0.3s, transform 0.2s; 
+}
+
+/* Hover effect */
+.map-btn:hover {
+  background-color: #555;      /* lighter gray on hover */
+  transform: translateY(-2px); /* subtle lift effect */
+}
+
+/* Optional: active state */
+.map-btn:active {
+  transform: translateY(0);
+}
+
+
+/* ---------- QUICK STATS ---------- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+    gap: 20px;
+    margin: 20px;
+}
+
+.stat-card {
+    background: rgb(39, 121, 244);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.big-number {
+    font-size: 2.3rem;
+    font-weight: bold;
+    color: #34229e;
+}
+/* bottom bar container */
+.buttom-bar {
+  display: flex;
+  align-items: center;
+  background-color: #333; /* dark background */
+  padding: 10px 20px;
+  color: rgb(11, 11, 11);
+   justify-content: space-between; 
+}
+
+/* Menu links container */
+.menu-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Menu links styling */
+.menu-buttons a {
+  color: white;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Hover effect */
+.menu-buttons a:hover {
+  background-color: #8dc6eb;
+}
+
