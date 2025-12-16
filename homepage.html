@@ -3,112 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfraTrack Global - Homepage</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="homepagestyle.css">
+    <title>InfraTrack Global - Infrastructure Transparency Platform</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="homepage.css">
 </head>
 <body>
-    <div class="top-bar">
-        <button class="toggle-btn"><i class="fas fa-bars"></i></button>
-        
+    <div class="animated-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="content-wrapper">
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div class="logo-section">
+                <button class="toggle-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <div class="logo-icon">🌍</div>
+            </div>
+            
+            <div class="menu-buttons" id="topMenu">
+                <a href="Account.html">
+                   <i class="fas fa-user"></i> <span>Account</span>
+                </a>
+                <a href="about.html">
+                   <i class="fas fa-info-circle"></i> <span>About us</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- HERO SECTION -->
+        <div class="hero-section">
+            <div class="hero-badge">✨ Real-Time Infrastructure Monitoring</div>
+            <h1>InfraTrack Global</h1>
+            <p class="tagline">Transparency & Accountability for Developing Nations</p>
+
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">2.4M</div>
+                    <div class="stat-label">📊 Active Reports</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">🌍 Countries Covered</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-number">150K</div>
+                    <div class="stat-label">👥 Active Users</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVICE SELECTOR -->
+        <div class="service-selector">
+            <button class="service-btn active">⚡ Power Infrastructure</button>
+            <button class="service-btn">💧 Water Supply</button>
+            <button class="service-btn">📱 Internet Connectivity</button>
+        </div>
+
+        <!-- LIVE MAP SECTION -->
+        <div class="map-section">
+            <h3 class="section-title">
+                <i class="fas fa-map-marked-alt"></i>
+                Live Infrastructure Map
+            </h3>
+            <div class="map-placeholder">
+                <p>
+                    🗺️ Interactive Global Infrastructure Map<br>
+                    <span style="font-size: 0.9em; color: rgba(255,255,255,0.4);">(Google Maps Integration)</span>
+                </p>
+                <a href="Mapview.html">
+                    <i class="fas fa-map-marker-alt"></i> Explore Map
+                </a>
+            </div>
+        </div>
+
+        <!-- QUICK STATS -->
+        <div class="map-section" style="margin-top: 40px;">
+            <h3 class="section-title">
+                <i class="fas fa-chart-line"></i>
+                Today's Performance Overview
+            </h3>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h2>⚡ Power Grid</h2>
+                <div class="big-number">87%</div>
+                <p>Network Reliability</p>
+            </div>
+
+            <div class="stat-card">
+                <h2>💧 Water Systems</h2>
+                <div class="big-number">79%</div>
+                <p>Supply Consistency</p>
+            </div>
+
+            <div class="stat-card">
+                <h2>📱 Internet</h2>
+                <div class="big-number">92%</div>
+                <p>Connection Uptime</p>
+            </div>
+
+            <div class="stat-card featured">
+                <h2>🏆 Overall Infrastructure Score</h2>
+                <div class="big-number">86/100</div>
+                <p>Excellent Performance</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="bottom-bar">
         <div class="menu-buttons">
-            <a href="user.html" class="user-btn">
-               <i class="fas fa-user"></i> Account
+            <a href="homepage.html">
+                <i class="fas fa-home"></i> Home
             </a>
-            <a href="about.html" class="about-btn">
-               <i class="fas fa-file-alt"></i> About us
+            <a href="map.html">
+                <i class="fas fa-map-marker-alt"></i> Map
             </a>
-        </div>
-    </div>
-    <!-- HERO SECTION -->
-    <div class="hero-section">
-        <h1>🌍 InfraTrack Global</h1>
-        <p class="tagline">Infrastructure Transparency for the Developing World</p>
-
-        <div class="hero-stats">
-            <div class="stat-item">
-                <div class="stat-number">2.4M</div>
-                <div class="stat-label">📊 Reports</div>
-            </div>
-
-            <div class="stat-item">
-                <div class="stat-number">15</div>
-                <div class="stat-label">🌍 Countries</div>
-            </div>
-
-            <div class="stat-item">
-                <div class="stat-number">150K</div>
-                <div class="stat-label">👥 Users</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SERVICE SELECTOR -->
-    <div class="service-selector">
-        <button class="service-btn active">⚡ Power</button>
-        <button class="service-btn">💧 Water</button>
-        <button class="service-btn">📱 Internet</button>
-    </div>
-
-    <!-- LIVE MAP SECTION -->
-    <div class="map-section">
-        <h3>🗺️ Live Infrastructure Map </h3>
-        <div class="map-placeholder">
-            <p style="color:#64748b;">
-                Interactive Map Placeholder <br> (Google Maps/API Here)
-            </p>
-            <a href="Mapview.html" class="map">
-             <i class="fas fa-map-marker-alt"></i> MapView
+            <a href="report.html">
+                <i class="fas fa-file-alt"></i> Report
+            </a>
+            <a href="report_feeds.html">
+                <i class="fas fa-rss"></i> Report feeds
             </a>
         </div>
     </div>
 
-    <!-- QUICK STATS -->
-    <h3 style="margin-left: 15px; color:#1eaf75;">📊 Today's Overview</h3>
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const topMenu = document.getElementById('topMenu');
 
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h2>⚡ Power</h2>
-            <div class="big-number">87%</div>
-            <p>Reliability</p>
-        </div>
+        if (window.innerWidth <= 768) {
+            topMenu.classList.add('mobile-hidden');
+        }
 
-        <div class="stat-card">
-            <h2>💧 Water</h2>
-            <div class="big-number">79%</div>
-            <p>Reliability</p>
-        </div>
+        menuToggle.addEventListener('click', function() {
+            topMenu.classList.toggle('mobile-hidden');
+            const icon = this.querySelector('i');
+            icon.className = topMenu.classList.contains('mobile-hidden') ? 'fas fa-bars' : 'fas fa-times';
+        });
 
-        <div class="stat-card">
-            <h2>📱 Internet</h2>
-            <div class="big-number">92%</div>
-            <p>Reliability</p>
-        </div>
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768) {
+                const isClickInsideMenu = topMenu.contains(event.target);
+                const isClickOnToggle = menuToggle.contains(event.target);
+                
+                if (!isClickInsideMenu && !isClickOnToggle && !topMenu.classList.contains('mobile-hidden')) {
+                    topMenu.classList.add('mobile-hidden');
+                    menuToggle.querySelector('i').className = 'fas fa-bars';
+                }
+            }
+        });
 
-        <div class="stat-card" style="border:2px solid #f5f6f9d8;">
-            <h2>🏆 Overall Score</h2>
-            <div class="big-number">86/100</div>
-            <p>Very Good</p>
-        </div>
-    </div>
-    <div class="buttom-bar">
-    <button class="toggle-btn"><i class="fas fa-bars"></i></button>
-    <div class="menu-buttons">
-      <a href="homepage.html" class="home-btn">
-        <i class="fas fa-home"></i> Home
-      </a>
-      <a href="map.html" class="map-btn">
-        <i class="fas fa-map-marker-alt"></i> MapView
-      </a>
-      <a href="report.html" class="report-btn">
-       <i class="fas fa-file-alt"></i> Report
-     </a>
-     <a href="ratings.html" class="ratings-btn">
-       <i class="fas fa-file-alt"></i> Report Feeds
-     </a>
-    </div>
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                topMenu.classList.remove('mobile-hidden');
+                menuToggle.querySelector('i').className = 'fas fa-bars';
+            }
+        });
 
-  </div>
+        // Service button interactions
+        const serviceButtons = document.querySelectorAll('.service-btn');
+        serviceButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                serviceButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Parallax effect on scroll
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.animated-bg');
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
 
 </body>
 </html>
