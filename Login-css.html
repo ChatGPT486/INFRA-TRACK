@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!--Google Font-->
+    <link href="https://googleapis.com/css2?family=Poppins:wght@300;400;500;600&display"rel="stylesheet">
+    <style>
+        /*==== RESET & GLOBAL STYLES ====*/
+        *{
+            box-sizing: border-box;
+            font-family: 'Poppins',sans-serif;
+        }
+        body{
+            margin:0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: Linear-gradient(135deg,#6a85f1,#9f7aea,#ec4899);
+            animation: bgMove 8s ease infinite;
+        }
+        @keyframes bgMove{
+            0%{background-position: 0% 50%;}
+            50%{background-position: 100% 50%;}
+            100%{background-position: 0% 50%;}
+        }
+        /*==== LOGIN CARD ====*/
+        .card{
+            background: #ffffff;
+            width: 360px;
+            padding: 32px 26px;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn{
+            from{
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to{
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card h2{
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .subtitle{
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        /*==== INPUTS ====*/
+        label{
+            font-size: 13px;
+            margin-top: 14px;
+            display: block;
+            color: #444;
+        }
+        input{
+            width: 100%;
+            padding: 11px 12px;
+            margin-top: 6px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            outline: none;
+            transition: 0.3s;
+        }
+        input:focus{
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+        /*==== OPTIONS ROW ====*/
+        .row{
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            font-size: 12px;
+        }
+        .row label{
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+            .row a{
+                text-decoration: none;
+                color: #7c3aed;
+                font-weight: 500;
+            }
+            .row a:hover{
+                text-decoration: underline;
+            }
+            /* ==== Button ==== */
+            button{
+                width: 100%;
+                padding: 13px;
+                margin-top: 22px;
+                background: linear-gradient(135deg,#10b981,#22c55e);
+                border: none;
+                color: white;
+                font-size: 16px;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: transform0.25s,box-shadow0.2s;
+            }
+            button:hover{
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
+            }
+            /* ====FOOTER LINKS ==== */
+            .footer{
+                display: flex;
+                justify-content: space-between;
+                margin-top: 18px;
+                font-size: 11px;
+            }
+            .footer a{
+                text-decoration: none;
+                color: #666;
+            }
+            .footer a:hover{
+                color:#000;
+            }
+            /* ==== RESPONSIVE ====*/
+            @media(max-width:420){
+                .card{
+                    width: 90%;
+                }
+            }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Login</h2>
+        <p class="subtitle">or use your email</p>
+        <form>
+            <!--Email Field-->
+            <label>Email</label>
+            <div class="input-box">
+                <span class="icon"></span>
+                <input type="email" placeholder="Email" required/>
+            </div>
+            <!--Password Field-->
+            <label>Password</label>
+            <div class="input-box">
+                <span class="icon"></span>
+                <input type="password" placeholder="Password" required/>
+            </div>
+            <div class="row">
+            <label><input type="checkbox"/>Remember me</label>
+            <a href="#">Forgot Password?</a>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+        <div class="footer">
+            <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+        </div>
+    </div>
+</body>
+</html>
