@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 InfraTrack Global - Live Map</title>
+     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="map.css">
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+            <div class="logo-section">
+                <div class="logo-icon">🌍</div>
+            </div>
+            <span class="logo-text">InfraTrack Map</span>
+        </div>
+        
+        <div class="menu-buttons">
+            <a href="homepage.html">
+               <i class="fas fa-home"></i> <span>Home</span>
+            </a>
+            <a href="report.html">
+               <i class="fas fa-file-alt"></i> <span>Report</span>
+            </a>
+            <a href="account.html">
+               <i class="fas fa-user"></i> <span>Account</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- MAP CONTAINER -->
+    <div class="map-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-chevron-up"></i>
+            </div>
+
+            <div class="sidebar-header">
+                <h2>📍 Live Reports</h2>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search location...">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="filter-chips">
+                    <div class="filter-chip active" onclick="filterReports('all')">
+                        <span>All</span>
+                    </div>
+                    <div class="filter-chip" onclick="filterReports('power')">
+                        <span>⚡ Power</span>
+                    </div>
+                    <div class="filter-chip" onclick="filterReports('water')">
+                        <span>💧 Water</span>
+                    </div>
+                    <div class="filter-chip" onclick="filterReports('internet')">
+                        <span>📱 Internet</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-list" id="reportList">
+                <!-- Sample Reports -->
+                <div class="report-item power" onclick="zoomToLocation(3.8480, 11.5021)">
+                    <div class="report-header">
+                        <div class="report-type">⚡ Power Outage</div>
+                        <div class="report-time">5 min ago</div>
+                    </div>
+                    <div class="report-location">📍 Bastos, Yaoundé</div>
+                    <span class="report-status ongoing">🔴 Ongoing</span>
+                </div>
+
+                <div class="report-item water" onclick="zoomToLocation(3.8667, 11.5167)">
+                    <div class="report-header">
+                        <div class="report-type">💧 Water Supply</div>
+                        <div class="report-time">15 min ago</div>
+                    </div>
+                    <div class="report-location">📍 Melen, Yaoundé</div>
+                    <span class="report-status ongoing">🔴 Ongoing</span>
+                </div>
+
+                <div class="report-item internet" onclick="zoomToLocation(3.8578, 11.5192)">
+                    <div class="report-header">
+                        <div class="report-type">📱 Slow Internet</div>
+                        <div class="report-time">1 hour ago</div>
+                    </div>
+                    <div class="report-location">📍 Essos, Yaoundé</div>
+                    <span class="report-status ongoing">🔴 Ongoing</span>
+                </div>
+
+                <div class="report-item power" onclick="zoomToLocation(3.8700, 11.5200)">
+                    <div class="report-header">
+                        <div class="report-type">⚡ Power Restored</div>
+                        <div class="report-time">2 hours ago</div>
+                    </div>
+                    <div class="report-location">📍 Ngousso, Yaoundé</div>
+                    <span class="report-status resolved">✅ Resolved</span>
+                </div>
+
+                <div class="report-item water" onclick="zoomToLocation(3.8450, 11.5050)">
+                    <div class="report-header">
+                        <div class="report-type">💧 Water Restored</div>
+                        <div class="report-time">3 hours ago</div>
+                    </div>
+                    <div class="report-location">📍 Mokolo, Yaoundé</div>
+                    <span class="report-status resolved">✅ Resolved</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAP -->
+        <div class="map">
+            <div id="map"></div>
+
+            <!-- STATS OVERLAY -->
+            <div class="stats-overlay">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">47</div>
+                        <div class="stat-label">Active Reports</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">23</div>
+                        <div class="stat-label">Resolved Today</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAP CONTROLS -->
+            <div class="map-controls">
+                <button class="control-btn" onclick="toggleHeatmap()">
+                    <i class="fas fa-fire"></i> Heatmap
+                </button>
+                <button class="control-btn" onclick="toggleClusters()">
+                    <i class="fas fa-layer-group"></i> Clusters
+                </button>
+                <button class="control-btn" onclick="myLocation()">
+                    <i class="fas fa-crosshairs"></i> My Location
+                </button>
+            </div>
+
+            <!-- LEGEND -->
+            <div class="legend">
+                <div class="legend-title">Legend</div>
+                <div class="legend-item">
+                    <span class="legend-icon">⚡</span>
+                    <span>Power Outage</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-icon">💧</span>
+                    <span>Water Issue</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-icon">📱</span>
+                    <span>Internet Problem</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let map;
+        let markers = [];
+        let markerGroup;
+        let heatmapEnabled = false;
+
+        // Initialize Map with Leaflet (free alternative to Google Maps)
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+        });
+
+        function initMap() {
+            // Yaoundé coordinates
+            const center = [3.8480, 11.5021];
+            
+            map = L.map('map', {
+                center: center,
+                zoom: 13,
+                zoomControl: true
+            });
+
+            // Add dark theme tile layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(map);
+
+            markerGroup = L.layerGroup().addTo(map);
+
+            // Add sample markers
+            addMarker([3.8480, 11.5021], '⚡', 'Power Outage - Bastos', 'power');
+            addMarker([3.8667, 11.5167], '💧', 'Water Supply - Melen', 'water');
+            addMarker([3.8578, 11.5192], '📱', 'Slow Internet - Essos', 'internet');
+            addMarker([3.8700, 11.5200], '⚡', 'Power Restored - Ngousso', 'power');
+            addMarker([3.8450, 11.5050], '💧', 'Water Restored - Mokolo', 'water');
+        }
+
+        function addMarker(position, icon, title, type) {
+            const customIcon = L.divIcon({
+                html: `<div style="font-size: 24px; text-align: center;">${icon}</div>`,
+                className: 'custom-marker',
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
+            });
+
+            const marker = L.marker(position, { 
+                icon: customIcon,
+                title: title
+            }).addTo(markerGroup);
+
+            marker.bindPopup(`<div style="color: #000; padding: 10px; font-weight: 600;">${title}</div>`);
+            marker.type = type;
+            markers.push(marker);
+        }
+
+        function zoomToLocation(lat, lng) {
+            map.setView([lat, lng], 15, {
+                animate: true,
+                duration: 1
+            });
+        }
+
+        function filterReports(type) {
+            // Update active filter
+            document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+            event.target.closest('.filter-chip').classList.add('active');
+
+            // Filter markers
+            markerGroup.clearLayers();
+            markers.forEach(marker => {
+                if (type === 'all' || marker.type === type) {
+                    markerGroup.addLayer(marker);
+                }
+            });
+
+            // Filter report list
+            document.querySelectorAll('.report-item').forEach(item => {
+                if (type === 'all' || item.classList.contains(type)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function toggleHeatmap() {
+            heatmapEnabled = !heatmapEnabled;
+            event.target.closest('.control-btn').classList.toggle('active');
+            
+            if (heatmapEnabled) {
+                // Switch to heatmap view
+                map.removeLayer(map._layers[Object.keys(map._layers)[0]]);
+                L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
+            } else {
+                // Switch back to dark theme
+                map.eachLayer(layer => {
+                    if (layer instanceof L.TileLayer) {
+                        map.removeLayer(layer);
+                    }
+                });
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+                }).addTo(map);
+            }
+        }
+
+        function toggleClusters() {
+            event.target.closest('.control-btn').classList.toggle('active');
+            // Clustering would require additional library like Leaflet.markercluster
+            alert('Cluster feature - requires Leaflet.markercluster plugin');
+        }
+
+        function myLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const pos = [position.coords.latitude, position.coords.longitude];
+                    map.setView(pos, 15);
+                    
+                    // Add user location marker
+                    L.marker(pos, {
+                        icon: L.divIcon({
+                            html: '<div style="font-size: 24px;">📍</div>',
+                            className: 'custom-marker',
+                            iconSize: [40, 40]
+                        })
+                    }).addTo(map).bindPopup('Your Location');
+                }, () => {
+                    alert('Could not get your location');
+                });
+            } else {
+                alert('Geolocation is not supported by your browser');
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            document.querySelectorAll('.report-item').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

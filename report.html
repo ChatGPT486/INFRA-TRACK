@@ -2,35 +2,288 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Report an Issue</title>
-    <link rel="stylesheet" href="report.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 InfraTrack Global - Submit Report</title>
+      <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="report.css">
 </head>
 <body>
+    <div class="animated-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="content-wrapper">
+           <!-- TOP BAR -->
+        <div class="top-bar">
+            <div class="logo-section">
+                <button class="toggle-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <div class="logo-icon">🌍</div>
+            </div>
+            
+            <div class="menu-buttons" id="topMenu">
+                <a href="account.html">
+                   <i class="fas fa-home"></i> <span>Account</span>
+                </a>
+                <a href="aboutUs.html">
+                   <i class="fas fa-info-circle"></i> <span>About</span>
+                </a>
+            </div>
+        </div>
 
-    <div class="report-container">
-        <h1>Community Report</h1>
-        <p>Please report any issue affecting your area.</p>
+        <!-- HEADER -->
+        <div class="page-header">
+            <h1>📝 Report an Issue</h1>
+            <p>Help your community by reporting infrastructure problems</p>
+        </div>
 
-        <form>
-            <label for="title">Report Title</label>
-            <input type="text" id="title" placeholder="e.g. No light at Bastos" required>
+        <!-- REPORT FORM -->
+        <div class="report-container">
+            <form class="report-form" id="reportForm">
+                <!-- SERVICE SELECTOR -->
+                <div class="service-selector">
+                    <h3>What service is affected?</h3>
+                    <div class="service-options">
+                        <label class="service-option">
+                            <input type="radio" name="service" value="power" required>
+                            <div class="service-icon">⚡</div>
+                            <div class="service-name">Power</div>
+                        </label>
+                        <label class="service-option">
+                            <input type="radio" name="service" value="water" required>
+                            <div class="service-icon">💧</div>
+                            <div class="service-name">Water</div>
+                        </label>
+                        <label class="service-option">
+                            <input type="radio" name="service" value="internet" required>
+                            <div class="service-icon">📱</div>
+                            <div class="service-name">Internet</div>
+                        </label>
+                    </div>
+                </div>
 
-            <label for="location">Location</label>
-            <input type="text" id="location" placeholder="e.g. Bastos" required>
+                <!-- ISSUE TYPE -->
+                <div class="form-section">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Issue Type</h3>
+                    <div class="form-group">
+                        <label>What's happening?</label>
+                        <select name="issueType" required>
+                            <option value="">Select issue type</option>
+                            <option value="outage">Complete Outage</option>
+                            <option value="partial">Partial Service</option>
+                            <option value="slow">Slow/Poor Quality</option>
+                            <option value="intermittent">Intermittent Service</option>
+                            <option value="restored">Service Restored</option>
+                        </select>
+                    </div>
+                </div>
 
-            <label for="message">Report Details</label>
-            <textarea id="message" rows="5" placeholder="Describe the problem in detail..." required></textarea>
+                <!-- STATUS -->
+                <div class="form-section">
+                    <h3><i class="fas fa-info-circle"></i> Current Status</h3>
+                    <div class="status-options">
+                        <label class="status-option">
+                            <input type="radio" name="status" value="ongoing" required>
+                            <div class="status-icon">🔴</div>
+                            <div>Ongoing Issue</div>
+                        </label>
+                        <label class="status-option">
+                            <input type="radio" name="status" value="resolved" required>
+                            <div class="status-icon">✅</div>
+                            <div>Problem Resolved</div>
+                        </label>
+                    </div>
+                </div>
 
-            <label for="type">Issue Type</label>
-            <select id="type">
-                <option>Power</option>
-                <option>Water</option>
-                <option>Internet</option>
-            </select>
+                <!-- LOCATION -->
+                <div class="form-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+                    <div class="form-group">
+                        <label>Neighborhood</label>
+                        <select name="neighborhood" required>
+                            <option value="">Select neighborhood</option>
+                            <option value="bastos">Bastos</option>
+                            <option value="melen">Melen</option>
+                            <option value="ngousso">Ngousso</option>
+                            <option value="essos">Essos</option>
+                            <option value="mokolo">Mokolo</option>
+                            <option value="nlongkak">Nlongkak</option>
+                            <option value="elig-edzoa">Elig-Edzoa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Street/Area (Optional)</label>
+                        <input type="text" name="street" placeholder="e.g., Avenue Kennedy">
+                    </div>
+                    <div class="location-detector">
+                        <button type="button" class="location-btn" onclick="detectLocation()">
+                            <i class="fas fa-crosshairs"></i> Use My Location
+                        </button>
+                        <span class="location-text" id="locationText">Or select manually above</span>
+                    </div>
+                </div>
 
-            <button type="submit">Submit Report</button>
-        </form>
+                <!-- DESCRIPTION -->
+                <div class="form-section">
+                    <h3><i class="fas fa-comment-alt"></i> Description</h3>
+                    <div class="form-group">
+                        <label>Describe the issue</label>
+                        <textarea name="description" required placeholder="Please provide details about the problem..."></textarea>
+                    </div>
+                </div>
+
+                <!-- DURATION -->
+                <div class="form-section">
+                    <h3><i class="fas fa-clock"></i> Duration</h3>
+                    <div class="form-group">
+                        <label>How long has this been happening?</label>
+                        <select name="duration" required>
+                            <option value="">Select duration</option>
+                            <option value="<30min">Less than 30 minutes</option>
+                            <option value="30min-1hr">30 minutes - 1 hour</option>
+                            <option value="1-3hrs">1 - 3 hours</option>
+                            <option value="3-6hrs">3 - 6 hours</option>
+                            <option value="6-12hrs">6 - 12 hours</option>
+                            <option value="12-24hrs">12 - 24 hours</option>
+                            <option value=">24hrs">More than 24 hours</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SUBMIT -->
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Report
+                    </button>
+                </div>
+
+                <!-- SUCCESS MESSAGE -->
+                <div class="success-message" id="successMessage">
+                    <div class="success-icon">✅</div>
+                    <h2>Report Submitted Successfully!</h2>
+                    <p>Thank you for helping your community. Your report will help others stay informed.</p>
+                </div>
+            </form>
+        </div>
     </div>
 
+    <!-- BOTTOM BAR -->
+    <div class="bottom-bar">
+        <div class="menu-buttons">
+            <a href="homepage.html">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="map.html">
+                <i class="fas fa-map-marker-alt"></i> Map
+            </a>
+            <a href="report.html">
+                <i class="fas fa-file-alt"></i> Report
+            </a>
+            <a href="report_feeds.html">
+                <i class="fas fa-rss"></i> Report Feeds
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Service selection
+        document.querySelectorAll('.service-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.service-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // Status selection
+        document.querySelectorAll('.status-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.status-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // Location detection
+        function detectLocation() {
+            const locationText = document.getElementById('locationText');
+            locationText.textContent = 'Detecting location...';
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        locationText.textContent = `📍 Location detected: ${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`;
+                    },
+                    function(error) {
+                        locationText.textContent = '❌ Could not detect location. Please select manually.';
+                    }
+                );
+            } else {
+                locationText.textContent = '❌ Geolocation not supported. Please select manually.';
+            }
+        }
+
+        // Form submission
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Disable submit button
+            const submitBtn = this.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            
+            // Simulate submission
+            setTimeout(() => {
+                // Show success message
+                document.getElementById('successMessage').classList.add('show');
+                
+                // Reset form
+                this.reset();
+                document.querySelectorAll('.service-option, .status-option').forEach(opt => opt.classList.remove('selected'));
+                
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Report';
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('successMessage').classList.remove('show');
+                }, 5000);
+            }, 1500);
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const topMenu = document.getElementById('topMenu');
+
+        if (window.innerWidth <= 768) {
+            topMenu.classList.add('mobile-hidden');
+        }
+
+        menuToggle.addEventListener('click', function() {
+            topMenu.classList.toggle('mobile-hidden');
+            const icon = this.querySelector('i');
+            icon.className = topMenu.classList.contains('mobile-hidden') ? 'fas fa-bars' : 'fas fa-times';
+        });
+
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768) {
+                const isClickInsideMenu = topMenu.contains(event.target);
+                const isClickOnToggle = menuToggle.contains(event.target);
+                
+                if (!isClickInsideMenu && !isClickOnToggle && !topMenu.classList.contains('mobile-hidden')) {
+                    topMenu.classList.add('mobile-hidden');
+                    menuToggle.querySelector('i').className = 'fas fa-bars';
+                }
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                topMenu.classList.remove('mobile-hidden');
+                menuToggle.querySelector('i').className = 'fas fa-bars';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,4 +1,13 @@
-       * {
+        html {
+            background: #0a0e27;
+        }
+        body {
+            background: #0a0e27;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -60,7 +69,7 @@
         }
 
         /* TOP NAV */
-        .top-bar {
+       .top-bar {
             background: rgba(15, 23, 42, 0.7);
             padding: 20px 40px;
             display: flex;
@@ -88,14 +97,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 24px;
             box-shadow: 0 5px 15px rgba(30, 175, 117, 0.4);
             animation: pulse 3s ease-in-out infinite;
-            padding: 8px;
-        }
-
-        .logo-icon svg {
-            width: 100%;
-            height: 100%;
         }
 
         @keyframes pulse {
@@ -146,45 +150,29 @@
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
         }
 
-        /* HEADER */
-        .page-header {
-            text-align: center;
-            padding: 60px 20px 40px;
-        }
-
-        .page-header h1 {
-            font-size: 3.5em;
-            font-weight: 800;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, #1eaf75 0%, #667eea 50%, #8b5cf6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .page-header p {
-            font-size: 1.3em;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        /* REPORT FORM CONTAINER */
-        .report-container {
-            max-width: 900px;
-            margin: 0 auto;
+        /* ACCOUNT CONTAINER */
+        .account-container {
+            max-width: 1200px;
+            margin: 40px auto;
             padding: 0 20px;
         }
 
-        .report-form {
+        /* PROFILE HEADER */
+        .profile-header {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 25px;
             padding: 40px;
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
             position: relative;
             overflow: hidden;
         }
 
-        .report-form::before {
+        .profile-header::before {
             content: '';
             position: absolute;
             top: 0;
@@ -194,106 +182,160 @@
             background: linear-gradient(90deg, #1eaf75, #667eea, #8b5cf6);
         }
 
-        /* SERVICE SELECTOR */
-        .service-selector {
-            margin-bottom: 40px;
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1eaf75 0%, #667eea 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            box-shadow: 0 10px 40px rgba(30, 175, 117, 0.4);
+            position: relative;
         }
 
-        .service-selector h3 {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            color: rgba(255, 255, 255, 0.9);
+        .profile-avatar::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1eaf75, #667eea);
+            z-index: -1;
+            animation: rotate 3s linear infinite;
         }
 
-        .service-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .service-option {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.4s;
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #1eaf75 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
             text-align: center;
         }
 
-        .service-option:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-5px);
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #1eaf75 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .service-option.selected {
-            background: linear-gradient(135deg, rgba(30, 175, 117, 0.2) 0%, rgba(102, 126, 234, 0.2) 100%);
-            border-color: rgba(102, 126, 234, 0.5);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+            margin-top: 5px;
         }
 
-        .service-option input[type="radio"] {
-            display: none;
-        }
-
-        .service-icon {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-
-        .service-name {
-            font-size: 1.2em;
-            font-weight: 600;
-        }
-
-        /* FORM GROUPS */
-        .form-section {
-            margin-bottom: 35px;
-        }
-
-        .form-section h3 {
-            font-size: 1.3em;
-            margin-bottom: 20px;
-            color: rgba(255, 255, 255, 0.9);
-            display: flex;
+        .trust-badge-large {
+            display: inline-flex;
             align-items: center;
             gap: 10px;
+            background: linear-gradient(135deg, rgba(30, 175, 117, 0.2) 0%, rgba(34, 197, 94, 0.2) 100%);
+            border: 1px solid rgba(30, 175, 117, 0.4);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2em;
+            color: #10b981;
+            margin-top: 15px;
+        }
+
+        /* GRID LAYOUT */
+        .account-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .account-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s;
+        }
+
+        .account-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1eaf75 0%, #667eea 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            font-weight: 700;
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
             font-weight: 600;
-            font-size: 1em;
         }
 
         .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .form-group select {
             width: 100%;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px 20px;
+            padding: 14px 18px;
             border-radius: 12px;
             color: white;
             font-size: 1em;
             transition: all 0.3s;
-            font-family: inherit;
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
         }
 
         .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .form-group select:focus {
             outline: none;
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(102, 126, 234, 0.5);
@@ -304,194 +346,119 @@
             background: #1a1f3a;
         }
 
-        /* STATUS SELECTOR */
-        .status-options {
-            display: flex;
-            gap: 15px;
-        }
-
-        .status-option {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .status-option:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .status-option.selected {
-            border-color: rgba(102, 126, 234, 0.5);
-            background: linear-gradient(135deg, rgba(30, 175, 117, 0.2) 0%, rgba(102, 126, 234, 0.2) 100%);
-        }
-
-        .status-option input[type="radio"] {
-            display: none;
-        }
-
-        .status-icon {
-            font-size: 2em;
-            margin-bottom: 8px;
-        }
-
-        /* LOCATION SECTION */
-        .location-detector {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .location-btn {
+        .btn {
             background: linear-gradient(135deg, #1eaf75 0%, #667eea 100%);
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 14px 30px;
             border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .location-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(30, 175, 117, 0.4);
-        }
-
-        .location-text {
-            flex: 1;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        /* SUBMIT BUTTON */
-        .submit-section {
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        .submit-btn {
-            background: linear-gradient(135deg, #1eaf75 0%, #667eea 100%);
-            color: white;
-            border: none;
-            padding: 18px 60px;
-            border-radius: 50px;
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.4s;
+            width: 100%;
             box-shadow: 0 10px 30px rgba(30, 175, 117, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
         }
 
-        .submit-btn:hover {
-            transform: scale(1.08);
+        .btn:hover {
+            transform: scale(1.05);
             box-shadow: 0 15px 40px rgba(30, 175, 117, 0.5);
         }
 
-        .submit-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: none;
         }
 
-        /* SUCCESS MESSAGE */
-        .success-message {
-            display: none;
-            background: linear-gradient(135deg, rgba(30, 175, 117, 0.2) 0%, rgba(34, 197, 94, 0.2) 100%);
-            border: 2px solid rgba(30, 175, 117, 0.5);
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            margin-top: 30px;
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
         }
 
-        .success-message.show {
-            display: block;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .success-icon {
-            font-size: 4em;
-            margin-bottom: 15px;
-        }
-
-        /* BOTTOM BAR */
-        .bottom-bar {
-            background: rgba(15, 23, 42, 0.9);
-            padding: 20px 30px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
-            z-index: 100;
-            backdrop-filter: blur(20px) saturate(180%);
-            border-top: 1px solid rgba(102, 126, 234, 0.2);
-        }
-
-        .bottom-bar .menu-buttons {
+        /* ACTIVITY LIST */
+        .activity-item {
             display: flex;
-            justify-content: space-around;
-            max-width: 1200px;
-            margin: 0 auto;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
         }
 
-        .bottom-bar .menu-buttons a {
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(30, 175, 117, 0.2) 0%, rgba(102, 126, 234, 0.2) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        .activity-details {
             flex: 1;
-            min-width: 120px;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .activity-time {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85em;
+        }
+
+        /* ACHIEVEMENTS */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+        }
+
+        .achievement-item {
             text-align: center;
-            padding: 16px 25px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            transition: all 0.3s;
         }
 
-        .bottom-bar .menu-buttons a:hover {
-            transform: translateY(-8px);
+        .achievement-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.1);
         }
 
-        .bottom-bar .menu-buttons a i {
-            display: block;
-            font-size: 1.6em;
+        .achievement-icon {
+            font-size: 2.5em;
             margin-bottom: 8px;
+        }
+
+        .achievement-name {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.7);
         }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .page-header h1 {
-                font-size: 2.2em;
-            }
-
-            .report-form {
-                padding: 25px;
-            }
-
-            .service-options {
-                grid-template-columns: 1fr;
-            }
-
-            .status-options {
-                flex-direction: column;
-            }
-
-            .location-detector {
+            .profile-header {
                 flex-direction: column;
                 text-align: center;
+            }
+
+            .profile-stats {
+                justify-content: center;
+            }
+
+            .account-grid {
+                grid-template-columns: 1fr;
             }
 
             .top-bar {
@@ -514,10 +481,7 @@
                 width: 220px;
             }
 
-            .bottom-bar .menu-buttons a {
-                flex: 1 1 45%;
-                font-size: 0.85em;
-            }
+           
         }
 
         .menu-buttons.mobile-hidden {
