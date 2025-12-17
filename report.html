@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report an Issue</title>
+    <link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+    <div class="report-container">
+        <h1>Community Report</h1>
+        <p>Please report any issue affecting your area.</p>
+
+        <form>
+            <label for="title">Report Title</label>
+            <input type="text" id="title" placeholder="e.g. No light at Bastos" required>
+
+            <label for="location">Location</label>
+            <input type="text" id="location" placeholder="e.g. Bastos" required>
+
+            <label for="message">Report Details</label>
+            <textarea id="message" rows="5" placeholder="Describe the problem in detail..." required></textarea>
+
+            <label for="type">Issue Type</label>
+            <select id="type">
+                <option>Power</option>
+                <option>Water</option>
+                <option>Internet</option>
+            </select>
+
+            <button type="submit">Submit Report</button>
+        </form>
+    </div>
+
+</body>
+</html>

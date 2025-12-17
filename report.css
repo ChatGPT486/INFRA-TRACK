@@ -1,0 +1,119 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0a0e27, #1a1f3a);
+    color: #4727b9;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.report-container {
+    width: 420px;
+    padding: 30px;
+    background: linear-gradient(
+        135deg,
+        rgba(30, 175, 117, 0.12),
+        rgba(102, 126, 234, 0.12)
+    );
+    border-radius: 20px;
+    border: 2px dashed rgba(102, 126, 234, 0.35);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Card hover */
+.report-container:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
+}
+
+
+.report-container h1 {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 24px;
+    color: #ffffff;
+}
+
+.report-container p {
+    text-align: center;
+    margin-bottom: 22px;
+    color: #9a94f1;
+    font-size: 14px;
+}
+
+/* Labels */
+label {
+    display: block;
+    margin-top: 14px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #f8f9fc;
+}
+
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 11px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.1);
+    color: #6479f1;
+    font-size: 14px;
+    transition: all 0.25s ease;
+}
+
+
+input::placeholder,
+textarea::placeholder {
+    color: #8a88f8;
+}
+
+
+input:hover,
+textarea:hover,
+select:hover,
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #8c42ed;
+    background: rgba(255, 255, 255, 0.16);
+    outline: none;
+}
+
+textarea {
+    resize: none;
+}
+
+/* Submit button */
+button {
+    width: 100%;
+    margin-top: 22px;
+    padding: 13px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #f6f2f2;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Button hover */
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(107, 65, 222, 0.6);
+}
