@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> InfraTrack Global - Reports Feed</title>
+      <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+   <link rel="stylesheet" href="report_feeds.css">
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="content-wrapper">
+        <!-- TOP BAR -->
+      <div class="top-bar">
+            <div class="logo-section">
+                <button class="toggle-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <div class="logo-icon">🌍</div>
+            </div>
+            
+            <div class="menu-buttons" id="topMenu">
+                <a href="Account.html">
+                   <i class="fas fa-user"></i> <span>Account</span>
+                </a>
+                <a href="aboutUS.html">
+                   <i class="fas fa-info-circle"></i> <span>About</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📰 InfraTrack Reports</h1>
+            <p>Real-time infrastructure reports from your community</p>
+        </div>
+
+        <!-- FILTER SECTION -->
+        <div class="filter-section">
+            <label for="serviceFilter">Service:</label>
+            <select id="serviceFilter" onchange="filterReports()">
+                <option value="all">All Services</option>
+                <option value="power">⚡ Power</option>
+                <option value="water">💧 Water</option>
+                <option value="internet">📱 Internet</option>
+            </select>
+
+            <label for="statusFilter">Status:</label>
+            <select id="statusFilter" onchange="filterReports()">
+                <option value="all">All Status</option>
+                <option value="ongoing">🔴 Ongoing</option>
+                <option value="resolved">✅ Resolved</option>
+            </select>
+
+            <label for="neighborhoodFilter">Neighborhood:</label>
+            <select id="neighborhoodFilter" onchange="filterReports()">
+                <option value="all">All Neighborhoods</option>
+                <option value="bastos">Bastos</option>
+                <option value="melen">Melen</option>
+                <option value="ngousso">Ngousso</option>
+                <option value="essos">Essos</option>
+                <option value="mokolo">Mokolo</option>
+            </select>
+        </div>
+
+        <!-- REPORTS FEED -->
+        <div class="reports-feed">
+            <div class="feed-header">
+                <h2>Recent Reports</h2>
+                <div class="feed-stats">
+                    <span id="reportCount">Loading...</span>
+                </div>
+            </div>
+
+            <div id="reportsContainer">
+                <div class="loading" id="loadingState">
+                    <div class="spinner"></div>
+                    <p>Loading reports...</p>
+                </div>
+            </div>
+
+            <button class="load-more" id="loadMoreBtn" style="display: none;" onclick="loadMoreReports()">
+                Load More Reports
+            </button>
+        </div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="bottom-bar">
+        <div class="menu-buttons">
+            <a href="homepage.html">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="map.html">
+                <i class="fas fa-map-marker-alt"></i> Map
+            </a>
+            <a href="report.html">
+                <i class="fas fa-file-alt"></i> Report
+            </a>
+            <a href="report_feeds.html">
+                <i class="fas fa-rss"></i> Report Feeds
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const sampleReports = [
+            {
+                id: 1,
+                type: 'power',
+                title: 'Power Outage',
+                neighborhood: 'Bastos',
+                description: 'Power cut since 8pm, still no electricity. Entire street affected.',
+                user: 'Marie K.',
+                trustScore: 226,
+                trustLevel: 'high',
+                location: 'Bastos',
+                duration: '2h 15m',
+                status: 'ongoing',
+                verified: true,
+                confirmations: 5,
+                timeAgo: '2 min ago',
+                timestamp: Date.now() - 120000
+            },
+            {
+                id: 2,
+                type: 'water',
+                title: 'Water Outage',
+                neighborhood: 'Melen',
+                description: 'No water since morning, entire neighborhood without water supply.',
+                user: 'Jean P.',
+                trustScore: 189,
+                trustLevel: 'high',
+                location: 'Melen',
+                duration: '8h 30m',
+                status: 'ongoing',
+                verified: true,
+                confirmations: 12,
+                timeAgo: '15 min ago',
+                timestamp: Date.now() - 900000
+            },
+            {
+                id: 3,
+                type: 'power',
+                title: 'Power Restored',
+                neighborhood: 'Ngousso',
+                description: 'Power is back! Thank you for the updates.',
+                user: 'Paul M.',
+                trustScore: 175,
+                trustLevel: 'high',
+                location: 'Ngousso',
+                duration: '3h 45m',
+                status: 'resolved',
+                verified: true,
+                confirmations: 3,
+                timeAgo: '1 hour ago',
+                timestamp: Date.now() - 3600000
+            },
+            {
+                id: 4,
+                type: 'internet',
+                title: 'Slow Internet',
+                neighborhood: 'Essos',
+                description: 'MTN internet very slow, barely loading pages.',
+                user: 'Sarah L.',
+                trustScore: 142,
+                trustLevel: 'medium',
+                location: 'Essos',
+                provider: 'MTN',
+                status: 'ongoing',
+                verified: false,
+                confirmations: 2,
+                timeAgo: '3 hours ago',
+                timestamp: Date.now() - 10800000
+            },
+            {
+                id: 5,
+                type: 'water',
+                title: 'Water Restored',
+                neighborhood: 'Mokolo',
+                description: 'Water supply is back to normal.',
+                user: 'David N.',
+                trustScore: 158,
+                trustLevel: 'high',
+                location: 'Mokolo',
+                duration: '6h 20m',
+                status: 'resolved',
+                verified: true,
+                confirmations: 4,
+                timeAgo: '5 hours ago',
+                timestamp: Date.now() - 18000000
+            },
+            {
+                id: 6,
+                type: 'power',
+                title: 'Power Outage',
+                neighborhood: 'Bastos',
+                description: 'Transformer exploded, likely to be out for a while.',
+                user: 'Alice B.',
+                trustScore: 201,
+                trustLevel: 'high',
+                location: 'Bastos',
+                duration: '30m',
+                status: 'ongoing',
+                verified: true,
+                confirmations: 8,
+                timeAgo: '30 min ago',
+                timestamp: Date.now() - 1800000
+            }
+        ];
+
+        let currentReports = [];
+        let filteredReports = [];
+        let displayedCount = 0;
+        const reportsPerPage = 5;
+
+        window.onload = function() {
+            currentReports = [...sampleReports];
+            filteredReports = [...sampleReports];
+            loadInitialReports();
+            
+            // Mobile menu
+            if (window.innerWidth <= 768) {
+                document.getElementById('topMenu').classList.add('mobile-hidden');
+            }
+        };
+
+        function loadInitialReports() {
+            setTimeout(() => {
+                displayedCount = 0;
+                document.getElementById('loadingState').style.display = 'none';
+                loadMoreReports();
+            }, 1000);
+        }
+
+        function loadMoreReports() {
+            const container = document.getElementById('reportsContainer');
+            const endIndex = Math.min(displayedCount + reportsPerPage, filteredReports.length);
+            
+            for (let i = displayedCount; i < endIndex; i++) {
+                const report = filteredReports[i];
+                container.appendChild(createReportElement(report));
+            }
+            
+            displayedCount = endIndex;
+            
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (displayedCount >= filteredReports.length) {
+                loadMoreBtn.style.display = 'none';
+            } else {
+                loadMoreBtn.style.display = 'block';
+            }
+            
+            updateReportCount();
+        }
+
+        function createReportElement(report) {
+            const div = document.createElement('div');
+            div.className = `report-item ${report.type} ${report.status}`;
+            
+            const icon = {
+                power: '⚡',
+                water: '💧',
+                internet: '📱'
+            }[report.type];
+            
+            const trustStars = getTrustStars(report.trustLevel);
+            
+            div.innerHTML = `
+                <div class="report-header">
+                    <div class="report-title">
+                        <span class="report-icon">${icon}</span>
+                        <span>${report.title} - ${report.neighborhood}</span>
+                    </div>
+                    <div class="report-time">${report.timeAgo}</div>
+                </div>
+                
+                <div class="report-description">
+                    "${report.description}"
+                </div>
+                
+                <div class="report-meta">
+                    <div class="meta-item">
+                        <span>👤</span>
+                        <span>${report.user}</span>
+                    </div>
+                    
+                    <span class="trust-badge ${report.trustLevel}">
+                        ${trustStars} ${report.trustScore}pts
+                    </span>
+                    
+                    <div class="meta-item">
+                        <span>📍</span>
+                        <span>${report.location}</span>
+                    </div>
+                    
+                    ${report.duration ? `
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <span>${report.status === 'resolved' ? 'Was out:' : 'Duration:'} ${report.duration}</span>
+                        </div>
+                    ` : ''}
+                    
+                    ${report.provider ? `
+                        <div class="meta-item">
+                            <span>🔵</span>
+                            <span>${report.provider}</span>
+                        </div>
+                    ` : ''}
+                    
+                    ${report.verified ? `
+                        <span class="verified-badge">
+                            ✓ Verified by ${report.confirmations} users
+                        </span>
+                    ` : ''}
+                    
+                    <span class="status-badge ${report.status}">
+                        ${report.status === 'ongoing' ? '🔴 Ongoing' : '✅ Resolved'}
+                    </span>
+                </div>
+            `;
+            
+            return div;
+        }
+
+        function getTrustStars(level) {
+            const starCounts = {
+                high: 5,
+                medium: 3,
+                low: 2
+            };
+            
+            const count = starCounts[level] || 3;
+            let stars = '';
+            
+            for (let i = 0; i < count; i++) {
+                stars += '<i class="bi bi-star-fill" style="color: #fbbf24;"></i>';
+            }
+            
+            for (let i = count; i < 5; i++) {
+                stars += '<i class="bi bi-star" style="color: rgba(255,255,255,0.3);"></i>';
+            }
+            
+            return stars;
+        }
+
+        function filterReports() {
+            const serviceFilter = document.getElementById('serviceFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const neighborhoodFilter = document.getElementById('neighborhoodFilter').value;
+            
+            filteredReports = currentReports.filter(report => {
+                const serviceMatch = serviceFilter === 'all' || report.type === serviceFilter;
+                const statusMatch = statusFilter === 'all' || report.status === statusFilter;
+                const neighborhoodMatch = neighborhoodFilter === 'all' || 
+                    report.neighborhood.toLowerCase() === neighborhoodFilter;
+                
+                return serviceMatch && statusMatch && neighborhoodMatch;
+            });
+            
+            const container = document.getElementById('reportsContainer');
+            container.innerHTML = '';
+            displayedCount = 0;
+            
+            if (filteredReports.length === 0) {
+                showEmptyState();
+            } else {
+                loadMoreReports();
+            }
+        }
+
+        function showEmptyState() {
+            const container = document.getElementById('reportsContainer');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔍</div>
+                    <h3>No Reports Found</h3>
+                    <p>Try adjusting your filters</p>
+                </div>
+            `;
+            document.getElementById('loadMoreBtn').style.display = 'none';
+            updateReportCount();
+        }
+
+        function updateReportCount() {
+            const countElement = document.getElementById('reportCount');
+            countElement.textContent = `Showing ${displayedCount} of ${filteredReports.length} reports`;
+        }
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const topMenu = document.getElementById('topMenu');
+
+        menuToggle.addEventListener('click', function() {
+            topMenu.classList.toggle('mobile-hidden');
+            const icon = this.querySelector('i');
+            icon.className = topMenu.classList.contains('mobile-hidden') ? 'fas fa-bars' : 'fas fa-times';
+        });
+
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768) {
+                const isClickInsideMenu = topMenu.contains(event.target);
+                const isClickOnToggle = menuToggle.contains(event.target);
+                
+                if (!isClickInsideMenu && !isClickOnToggle && !topMenu.classList.contains('mobile-hidden')) {
+                    topMenu.classList.add('mobile-hidden');
+                    menuToggle.querySelector('i').className = 'fas fa-bars';
+                }
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                topMenu.classList.remove('mobile-hidden');
+                menuToggle.querySelector('i').className = 'fas fa-bars';
+            }
+        });
+    </script>
+</body>
+</html>

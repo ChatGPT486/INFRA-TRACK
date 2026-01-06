@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 InfraTrack Global - My Account</title>
+      <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <link rel="stylesheet" href="Account.css">
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="content-wrapper">
+        <!-- TOP BAR -->
+       <div class="top-bar">
+            <div class="logo-section">
+                <button class="toggle-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <div class="logo-icon">🌍</div>
+            </div>
+            
+            <div class="menu-buttons" id="topMenu">
+                <a href="homepage.html">
+                   <i class="fas fa-home"></i> <span>Home</span>
+                </a>
+                <a href="aboutUs.html">
+                   <i class="fas fa-info-circle"></i> <span>About</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ACCOUNT CONTAINER -->
+        <div class="account-container">
+            <!-- PROFILE HEADER -->
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    👤
+                </div>
+                <div class="profile-info">
+                    <h1 class="profile-name">Marie Kamga</h1>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 1.1em;">📍 Bastos, Yaoundé</p>
+                    
+                    <div class="trust-badge-large">
+                        <i class="fas fa-star"></i>
+                        <span>Trust Score: 226 pts</span>
+                        <span style="color: rgba(255,255,255,0.6);">| Level: High</span>
+                    </div>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">47</div>
+                            <div class="stat-label">Reports</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Verifications</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">3.2k</div>
+                            <div class="stat-label">Helped Users</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACCOUNT GRID -->
+            <div class="account-grid">
+                <!-- PERSONAL INFO -->
+                <div class="account-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-user-edit"></i>
+                        </div>
+                        <h2 class="card-title">Personal Info</h2>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" value="Marie Kamga" placeholder="Your name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" value="marie.k@email.com" placeholder="Your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" value="+237 6XX XXX XXX" placeholder="Your phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Neighborhood</label>
+                        <select>
+                            <option>Bastos</option>
+                            <option>Melen</option>
+                            <option>Ngousso</option>
+                            <option>Essos</option>
+                            <option>Mokolo</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn">Save Changes</button>
+                </div>
+
+                <!-- RECENT ACTIVITY -->
+                <div class="account-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h2 class="card-title">Recent Activity</h2>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">⚡</div>
+                        <div class="activity-details">
+                            <div class="activity-title">Reported power outage</div>
+                            <div class="activity-time">2 hours ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">✅</div>
+                        <div class="activity-details">
+                            <div class="activity-title">Verified water restoration</div>
+                            <div class="activity-time">1 day ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">📱</div>
+                        <div class="activity-details">
+                            <div class="activity-title">Reported slow internet</div>
+                            <div class="activity-time">3 days ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">💧</div>
+                        <div class="activity-details">
+                            <div class="activity-title">Reported water outage</div>
+                            <div class="activity-time">1 week ago</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-secondary" style="margin-top: 15px;">View All Activity</button>
+                </div>
+
+                <!-- ACHIEVEMENTS -->
+                <div class="account-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h2 class="card-title">Achievements</h2>
+                    </div>
+                    
+                    <div class="achievements-grid">
+                        <div class="achievement-item">
+                            <div class="achievement-icon">🌟</div>
+                            <div class="achievement-name">First Report</div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">🔥</div>
+                            <div class="achievement-name">10 Reports</div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">✅</div>
+                            <div class="achievement-name">Verified</div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">👥</div>
+                            <div class="achievement-name">Community Helper</div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">🏆</div>
+                            <div class="achievement-name">Top Reporter</div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">⭐</div>
+                            <div class="achievement-name">Trusted User</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SETTINGS -->
+                <div class="account-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <h2 class="card-title">Preferences</h2>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Notification Preferences</label>
+                        <select>
+                            <option>All notifications</option>
+                            <option>Only my area</option>
+                            <option>Critical only</option>
+                            <option>Off</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Language</label>
+                        <select>
+                            <option>English</option>
+                            <option>Français</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Privacy</label>
+                        <select>
+                            <option>Public profile</option>
+                            <option>Private profile</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn">Update Preferences</button>
+                    <button class="btn btn-secondary" style="margin-top: 10px;">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const topMenu = document.getElementById('topMenu');
+
+        if (window.innerWidth <= 768) {
+            topMenu.classList.add('mobile-hidden');
+        }
+
+        menuToggle.addEventListener('click', function() {
+            topMenu.classList.toggle('mobile-hidden');
+            const icon = this.querySelector('i');
+            icon.className = topMenu.classList.contains('mobile-hidden') ? 'fas fa-bars' : 'fas fa-times';
+        });
+
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768) {
+                const isClickInsideMenu = topMenu.contains(event.target);
+                const isClickOnToggle = menuToggle.contains(event.target);
+                
+                if (!isClickInsideMenu && !isClickOnToggle && !topMenu.classList.contains('mobile-hidden')) {
+                    topMenu.classList.add('mobile-hidden');
+                    menuToggle.querySelector('i').className = 'fas fa-bars';
+                }
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                topMenu.classList.remove('mobile-hidden');
+                menuToggle.querySelector('i').className = 'fas fa-bars';
+            }
+        });
+
+        // Service button interactions
+        const serviceButtons = document.querySelectorAll('.service-btn');
+        serviceButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                serviceButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Parallax effect on scroll
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.animated-bg');
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+
+</body>
+
+</html>
