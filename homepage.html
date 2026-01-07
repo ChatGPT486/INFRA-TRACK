@@ -38,17 +38,17 @@
 
             <div class="hero-stats">
                 <div class="stat-item">
-                    <div class="stat-number">2.4M</div>
+                    <div class="stat-number" id="stat-reports">2.4M</div>
                     <div class="stat-label">📊 Active Reports</div>
                 </div>
 
                 <div class="stat-item">
-                    <div class="stat-number">15</div>
+                    <div class="stat-number" id="stat-countries">15</div>
                     <div class="stat-label">🌍 Countries Covered</div>
                 </div>
 
                 <div class="stat-item">
-                    <div class="stat-number">150K</div>
+                    <div class="stat-number" id="stat-users">150K</div>
                     <div class="stat-label">👥 Active Users</div>
                 </div>
             </div>
@@ -182,6 +182,77 @@
                 parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
             }
         });
+    </script>
+
+    <script>
+        // Collect basic performance metrics and send to backend
+        (function sendMetrics() {
+            function gather() {
+                const perf = window.performance || null;
+                const timing = perf && perf.timing ? perf.timing.toJSON ? perf.timing : Object.assign({}, perf.timing) : {};
+                const navigation = perf && perf.getEntriesByType ? perf.getEntriesByType('navigation')[0] : null;
+                const metrics = {
+                    loadTime: navigation ? navigation.loadEventEnd - navigation.startTime : (timing.loadEventEnd && timing.navigationStart ? timing.loadEventEnd - timing.navigationStart : null),
+                    domContentLoaded: timing.domContentLoadedEventEnd && timing.navigationStart ? timing.domContentLoadedEventEnd - timing.navigationStart : null,
+                    firstPaint: null,
+                    time: Date.now()
+                };
+                try {
+                    const paints = perf.getEntriesByType && perf.getEntriesByType('paint') || [];
+                    paints.forEach(p => {
+                        if (p.name === 'first-paint') metrics.firstPaint = Math.round(p.startTime);
+                        if (p.name === 'first-contentful-paint') metrics.firstContentfulPaint = Math.round(p.startTime);
+                    });
+                } catch (e) {}
+
+                return metrics;
+            }
+
+            function post(m) {
+                navigator.sendBeacon = navigator.sendBeacon || function(url, data) {
+                    return fetch(url, { method: 'POST', body: data, credentials: 'omit', keepalive: true });
+                };
+
+                const payload = {
+                    path: location.pathname,
+                    metrics: m
+                };
+
+                try {
+                    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+                    navigator.sendBeacon('http://localhost:3000/metrics', blob);
+                } catch (e) {
+                    fetch('http://localhost:3000/metrics', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).catch(()=>{});
+                }
+            }
+
+            window.addEventListener('load', function() {
+                setTimeout(function() { post(gather()); }, 2000);
+            });
+            setInterval(function() { post({ time: Date.now(), heartbeat: true }); }, 60000);
+        })();
+    </script>
+
+    <script>
+        (function loadStats(){
+            function formatNumber(n){
+                if (n == null) return '--';
+                if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+                if (n >= 1000) return (n/1000).toFixed(0) + 'K';
+                return String(n);
+            }
+
+            fetch('http://localhost:3000/api/stats')
+                .then(r => { if(!r.ok) throw new Error('network'); return r.json(); })
+                .then(data => {
+                    if (data.activeReports !== undefined) document.getElementById('stat-reports').innerText = formatNumber(data.activeReports);
+                    if (data.countriesCovered !== undefined) document.getElementById('stat-countries').innerText = data.countriesCovered;
+                    if (data.activeUsers !== undefined) document.getElementById('stat-users').innerText = formatNumber(data.activeUsers);
+                })
+                .catch(err => {
+                    console.warn('Could not load live stats:', err);
+                });
+        })();
     </script>
 
 </body>
