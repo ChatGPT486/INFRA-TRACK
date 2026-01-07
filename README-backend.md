@@ -1,11 +1,10 @@
 # InfraTrack Backend
 
-This tiny backend exposes a single endpoint used by the homepage to load live statistics from PostgreSQL.
+This backend provides the endpoints used by the homepage and stores metrics in PostgreSQL.
 
-Setup
+Quick setup
 
-1. Create a PostgreSQL database and set the connection URL in an environment variable named `DATABASE_URL`.
-   Example local connection string:
+1. Create a PostgreSQL database and set `DATABASE_URL` in the environment. Example local connection string:
 
    postgres://username:password@localhost:5432/infratrack
 
@@ -15,40 +14,40 @@ Setup
 npm install
 ```
 
-3. Start the server:
+3. Create the database schema (run the migration):
+
+```
+psql "$DATABASE_URL" -f migrations/001_init.sql
+```
+
+4. Start the server:
 
 ```
 npm start
 ```
 
-Endpoint
+API Endpoints
 
 - `GET /api/stats` — returns JSON: `{ activeReports, countriesCovered, activeUsers }`
+- `POST /metrics` — accepts performance metrics (used by the homepage via `navigator.sendBeacon` or `fetch`) and stores payload in `metrics` table.
 
-Database schema (example)
+Database schema (migration)
 
--- reports table
-CREATE TABLE reports (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER,
-  country TEXT,
-  status TEXT DEFAULT 'active',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+See `migrations/001_init.sql` — it creates the following tables:
 
--- users table
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  name TEXT,
-  last_active TIMESTAMP WITH TIME ZONE
-);
+- `users` — basic user records with `last_active` timestamp
+- `reports` — recorded reports with `country` and `status`
+- `metrics` — JSON payloads collected from frontends, with `received_at` and `heartbeat` flag
 
 Seed example
 
+```
 INSERT INTO users (name, last_active) VALUES ('Alice', NOW()), ('Bob', NOW() - INTERVAL '40 days');
 INSERT INTO reports (user_id, country, status) VALUES (1, 'Kenya', 'active'), (1, 'Kenya', 'resolved'), (2, 'Ghana', 'active');
+```
 
 Notes
 
-- The server reads `DATABASE_URL` from the environment. For production use provide credentials securely.
-- Adjust the queries in `server.js` to match your real schema.
+- The server reads `DATABASE_URL` from the environment. For production, provide credentials securely.
+- To inspect recent metrics: `SELECT * FROM metrics ORDER BY received_at DESC LIMIT 50;`
+- Adjust the queries in `server.js` if your real schema differs.

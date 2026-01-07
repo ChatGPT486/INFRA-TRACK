@@ -4,51 +4,57 @@ const dotenv = require('dotenv');
 const db = require('./db');
 
 dotenv.config();
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.get('/api/stats', async (req, res) => {
   try {
-    const reportsRes = await db.query("SELECT COUNT(*) FROM reports WHERE status = 'active'");
-    const countriesRes = await db.query('SELECT COUNT(DISTINCT country) FROM reports');
-    const usersRes = await db.query("SELECT COUNT(*) FROM users WHERE last_active > NOW() - INTERVAL '30 days'");
-
-    const activeReports = parseInt(reportsRes.rows[0].count, 10) || 0;
-    const countriesCovered = parseInt(countriesRes.rows[0].count, 10) || 0;
-    const activeUsers = parseInt(usersRes.rows[0].count, 10) || 0;
-
-    res.json({ activeReports, countriesCovered, activeUsers });
-  } catch (err) {
-    console.error('Error fetching stats:', err.message || err);
-    res.status(500).json({ error: 'failed_to_fetch_stats' });
-  }
-});
-
-// Ingest performance metrics (supports navigator.sendBeacon and fetch)
-app.post('/metrics', async (req, res) => {
-  try {
-    const payload = req.body || {};
-
-    // If body was sent as a Blob by sendBeacon, express.json will parse it when Content-Type is application/json.
-    const time = payload.time ? new Date(payload.time) : new Date();
-    const path = payload.path || (req.body && req.body.path) || req.headers['referer'] || req.ip;
-    const heartbeat = !!payload.heartbeat;
-    const metrics = payload.metrics || payload;
-
-    // Store into metrics table; keep the JSON payload for later analysis
-    await db.query(
-      'INSERT INTO metrics(path, received_at, heartbeat, payload) VALUES($1, $2, $3, $4)',
-      [path, time, heartbeat, metrics]
+    const infraResult = await db.query(
+      'SELECT power, water, internet FROM stats ORDER BY updated_at DESC LIMIT 1'
     );
 
-    // sendBeacon doesn't expect JSON response; respond with 204 No Content
-    res.status(204).end();
+    const heroResult = await db.query(
+      'SELECT active_reports, countries_covered, active_users FROM hero_stats ORDER BY updated_at DESC LIMIT 1'
+    );
+
+    if (infraResult.rows.length === 0 || heroResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Stats not found' });
+    }
+
+    const { power, water, internet } = infraResult.rows[0];
+    const { active_reports, countries_covered, active_users } = heroResult.rows[0];
+
+    const overall = Math.round((power + water + internet) / 3);
+
+    const formatNumber = (value) => {
+      if (value >= 1_000_000) return (value / 1_000_000).toFixed(1) + 'M';
+      if (value >= 1_000) return Math.floor(value / 1_000) + 'K';
+      return value.toString();
+    };
+
+    res.json({
+      hero: {
+        activeReports: formatNumber(active_reports),
+        countriesCovered: countries_covered.toString(),
+        activeUsers: formatNumber(active_users),
+      },
+      infrastructure: {
+        power: `${power}%`,
+        water: `${water}%`,
+        internet: `${internet}%`,
+        overall: `${overall}/100`,
+      }
+    });
+
   } catch (err) {
-    console.error('Error saving metrics:', err.message || err);
-    res.status(500).json({ error: 'failed_to_save_metrics' });
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
   }
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`InfraTrack backend listening on ${port}`));
+app.listen(port, () =>
+  console.log(`🚀 InfraTrack backend listening on ${port}`)
+);

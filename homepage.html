@@ -89,25 +89,25 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <h2>⚡ Power Grid</h2>
-                <div class="big-number">87%</div>
+                <div class="big-number" id="stat-power">87%</div>
                 <p>Network Reliability</p>
             </div>
 
             <div class="stat-card">
                 <h2>💧 Water Systems</h2>
-                <div class="big-number">79%</div>
+                <div class="big-number" id="stat-water">79%</div>
                 <p>Supply Consistency</p>
             </div>
 
             <div class="stat-card">
                 <h2>📱 Internet</h2>
-                <div class="big-number">92%</div>
+                <div class="big-number" id="stat-internet">92%</div>
                 <p>Connection Uptime</p>
             </div>
 
             <div class="stat-card featured">
                 <h2>🏆 Overall Infrastructure Score</h2>
-                <div class="big-number">86/100</div>
+                <div class="big-number" id="stat-overall">86/100</div>
                 <p>Excellent Performance</p>
             </div>
         </div>
@@ -245,13 +245,43 @@
             fetch('http://localhost:3000/api/stats')
                 .then(r => { if(!r.ok) throw new Error('network'); return r.json(); })
                 .then(data => {
-                    if (data.activeReports !== undefined) document.getElementById('stat-reports').innerText = formatNumber(data.activeReports);
-                    if (data.countriesCovered !== undefined) document.getElementById('stat-countries').innerText = data.countriesCovered;
-                    if (data.activeUsers !== undefined) document.getElementById('stat-users').innerText = formatNumber(data.activeUsers);
+                    // support two shapes: { activeReports,... , } and { hero:{...}, infrastructure:{...} }
+                    const hero = data.hero || data;
+                    const infra = data.infrastructure || data;
+
+                    if (hero.activeReports !== undefined) document.getElementById('stat-reports').innerText = formatNumber(hero.activeReports);
+                    else if (hero.active_reports !== undefined) document.getElementById('stat-reports').innerText = formatNumber(hero.active_reports);
+
+                    if (hero.countriesCovered !== undefined) document.getElementById('stat-countries').innerText = hero.countriesCovered;
+                    else if (hero.countries_covered !== undefined) document.getElementById('stat-countries').innerText = hero.countries_covered;
+
+                    if (hero.activeUsers !== undefined) document.getElementById('stat-users').innerText = formatNumber(hero.activeUsers);
+                    else if (hero.active_users !== undefined) document.getElementById('stat-users').innerText = formatNumber(hero.active_users);
+
+                    // infrastructure values may be strings like "87%" or numbers
+                    if (infra.power !== undefined) document.getElementById('stat-power').innerText = infra.power;
+                    else if (infra.power_grid && infra.power_grid.value !== undefined) document.getElementById('stat-power').innerText = formatValue(infra.power_grid);
+
+                    if (infra.water !== undefined) document.getElementById('stat-water').innerText = infra.water;
+                    else if (infra.water_systems && infra.water_systems.value !== undefined) document.getElementById('stat-water').innerText = formatValue(infra.water_systems);
+
+                    if (infra.internet !== undefined) document.getElementById('stat-internet').innerText = infra.internet;
+                    else if (infra.internet && infra.internet.value !== undefined) document.getElementById('stat-internet').innerText = formatValue(infra.internet);
+
+                    if (infra.overall !== undefined) document.getElementById('stat-overall').innerText = infra.overall;
+                    else if (infra.overall_score && infra.overall_score.value !== undefined) document.getElementById('stat-overall').innerText = formatValue(infra.overall_score);
                 })
                 .catch(err => {
                     console.warn('Could not load live stats:', err);
                 });
+
+            function formatValue(obj){
+                if (!obj) return '--';
+                const v = obj.value;
+                const unit = obj.unit || '';
+                if (unit === '%') return (Number(v) % 1 === 0 ? String(Number(v)) : Number(v).toFixed(1)) + unit;
+                return String(v) + (unit ? (' ' + unit) : '');
+            }
         })();
     </script>
 
