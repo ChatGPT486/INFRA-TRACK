@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfraTrack Global - Trends Analysis</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="detailed-trends.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Trends Page Specific Styles */
+        .trends-header {
+            background: linear-gradient(135deg, var(--trends-primary), var(--trends-secondary));
+        }
+        
+        .trend-period select {
+            background: var(--bg-card);
+            color: white;
+            border: 2px solid var(--border-color);
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            min-width: 200px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        
+        .trend-period select:focus {
+            outline: none;
+            border-color: var(--trends-primary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+        
+        .trend-overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .trend-overview-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .trend-overview-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .trend-overview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--trends-primary), var(--trends-secondary));
+        }
+        
+        .trend-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .trend-card-header h4 {
+            font-size: 1.3rem;
+            color: white;
+            margin: 0;
+        }
+        
+        .trend-indicator {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .trend-indicator.positive {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+        }
+        
+        .trend-indicator.negative {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger-color);
+        }
+        
+        .trend-service {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .trend-service i {
+            font-size: 2rem;
+            color: var(--trends-primary);
+        }
+        
+        .trend-service span {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .trend-chart-mini {
+            height: 100px;
+            margin: 1.5rem 0;
+        }
+        
+        .long-term-container, .predictive-section, .analysis-tabs-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .long-term-chart {
+            height: 400px;
+            margin: 2rem 0;
+        }
+        
+        .monthly-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .monthly-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .monthly-card:hover {
+            border-color: var(--trends-primary);
+            transform: translateY(-5px);
+        }
+        
+        .monthly-card h4 {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .month-score {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--trends-primary), var(--trends-secondary));
+            background-clip: text;
+-webkit-background-clip: text;
+color: transparent;
+-webkit-text-fill-color: transparent;
+            margin: 1rem 0;
+        }
+        
+        .month-stats {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        .predictive-section::before {
+            content: 'AI PREDICTION';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--trends-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .prediction-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .prediction-chart-container, .prediction-details-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .prediction-details-card {
+            padding: 2rem;
+        }
+        
+        .prediction-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .prediction-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .prediction-item span:first-child {
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .prediction-value {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .analysis-chart-container {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            min-height: 300px;
+        }
+        
+        .trend-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @media (max-width: 1024px) {
+            .prediction-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .trend-overview-grid, .monthly-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .long-term-container, .predictive-section, .analysis-tabs-container {
+                padding: 1.5rem;
+            }
+            
+            .prediction-grid {
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo" id="homeLink">
+                <i class="fas fa-globe-africa"></i>
+                <span>InfraTrack Global</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detailed.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Detailed Analysis</span>
+                </a>
+                <a href="trends.html" class="nav-link active">
+                    <i class="fas fa-chart-area"></i>
+                    <span>Trends</span>
+                </a>
+                <a href="comparisons.html" class="nav-link">
+                    <i class="fas fa-balance-scale"></i>
+                    <span>Comparisons</span>
+                </a>
+                
+                <!-- Dropdown Menu for Monitor and Report -->
+                <div class="dropdown">
+                    <button class="nav-link dropdown-toggle">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Quick Actions</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="index.html#live-monitor" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i>
+                            Live Performance Monitor
+                        </a>
+                        <a href="index.html#add-report" class="dropdown-item">
+                            <i class="fas fa-plus-circle"></i>
+                            Add New Report
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#export" class="dropdown-item">
+                            <i class="fas fa-file-export"></i>
+                            Export Report
+                        </a>
+                        <a href="#alerts" class="dropdown-item">
+                            <i class="fas fa-bell"></i>
+                            Alert Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <h3>InfraTrack Global</h3>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html" class="mobile-menu-link">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="detailed.html" class="mobile-menu-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Detailed Analysis</span>
+            </a>
+            <a href="trends.html" class="mobile-menu-link active">
+                <i class="fas fa-chart-area"></i>
+                <span>Trends</span>
+            </a>
+            <a href="comparisons.html" class="mobile-menu-link">
+                <i class="fas fa-balance-scale"></i>
+                <span>Comparisons</span>
+            </a>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="reports-container">
+            <!-- Enhanced Header -->
+            <header class="trends-header">
+                <div class="header-title">
+                    <h1><i class="fas fa-chart-area trend-pulse"></i> Trends Analysis Dashboard</h1>
+                    <p>Discover long-term patterns, seasonal trends, and predictive insights for infrastructure performance optimization</p>
+                </div>
+                <div class="trend-period">
+                    <select id="trendPeriod">
+                        <option value="30">📅 Last 30 Days</option>
+                        <option value="90" selected>📊 Last 90 Days</option>
+                        <option value="180">📈 Last 6 Months</option>
+                        <option value="365">📋 Last Year</option>
+                    </select>
+                </div>
+            </header>
+
+            <!-- Trend Overview -->
+            <section class="long-term-container">
+                <h3 class="section-title">
+                    <i class="fas fa-tachometer-alt"></i> Trend Overview
+                </h3>
+                <div class="trend-overview-grid">
+                    <div class="trend-overview-card">
+                        <div class="trend-card-header">
+                            <h4><i class="fas fa-star"></i> Overall Trend</h4>
+                            <span class="trend-indicator positive">
+                                <i class="fas fa-arrow-up"></i> 5.2% Growth
+                            </span>
+                        </div>
+                        <div class="trend-chart-mini">
+                            <canvas id="overallTrendChart"></canvas>
+                        </div>
+                        <div class="trend-summary">
+                            <p><strong>Analysis:</strong> Steady improvement over the last 90 days with consistent upward trajectory. Current trajectory suggests continued growth.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="trend-overview-card">
+                        <div class="trend-card-header">
+                            <h4><i class="fas fa-trophy"></i> Best Performing Service</h4>
+                            <span class="trend-indicator positive">
+                                <i class="fas fa-arrow-up"></i> 3.1% Monthly
+                            </span>
+                        </div>
+                        <div class="trend-service">
+                            <i class="fas fa-wifi"></i>
+                            <span>Internet Infrastructure</span>
+                        </div>
+                        <div class="trend-summary">
+                            <p><strong>Performance:</strong> Consistent improvement in reliability with 98% uptime achieved in recent months. Network upgrades showing positive results.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="trend-overview-card">
+                        <div class="trend-card-header">
+                            <h4><i class="fas fa-chart-line"></i> Most Improved Region</h4>
+                            <span class="trend-indicator positive">
+                                <i class="fas fa-arrow-up"></i> 8.7% Improvement
+                            </span>
+                        </div>
+                        <div class="trend-service">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Melen District</span>
+                        </div>
+                        <div class="trend-summary">
+                            <p><strong>Progress:</strong> Significant infrastructure upgrades completed. Smart grid implementation showing immediate benefits with 40% reduction in outages.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Long-term Trends -->
+            <section class="long-term-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-line"></i> Long-term Performance Trends (12-Month View)
+                    </h3>
+                    <div class="chart-legend">
+                        <span class="legend-item"><span class="legend-dot power"></span> Power</span>
+                        <span class="legend-item"><span class="legend-dot water"></span> Water</span>
+                        <span class="legend-item"><span class="legend-dot internet"></span> Internet</span>
+                    </div>
+                </div>
+                <div class="long-term-chart">
+                    <canvas id="longTermChart"></canvas>
+                </div>
+                <div class="insight-grid">
+                    <div class="insight-card">
+                        <i class="fas fa-lightbulb" style="color: var(--trends-primary);"></i>
+                        <h4>Key Insight</h4>
+                        <p>Internet reliability has improved by <strong>15%</strong> over the past year due to network upgrades and fiber optic implementation across major districts.</p>
+                    </div>
+                    <div class="insight-card">
+                        <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
+                        <h4>Attention Needed</h4>
+                        <p>Water supply in Mokolo region shows <strong>declining trend</strong> (-3.2% monthly). Infrastructure assessment and maintenance recommended.</p>
+                    </div>
+                    <div class="insight-card">
+                        <i class="fas fa-calendar-check" style="color: #10b981;"></i>
+                        <h4>Seasonal Pattern</h4>
+                        <p>Power issues increase by <strong>20%</strong> during rainy season months (June-September). Pre-season maintenance recommended.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monthly Comparison -->
+            <section class="predictive-section">
+                <h3 class="section-title">
+                    <i class="fas fa-calendar-alt"></i> Monthly Performance Comparison
+                </h3>
+                <div class="monthly-grid">
+                    <div class="monthly-card">
+                        <h4><i class="fas fa-star current-month"></i> Current Month</h4>
+                        <div class="month-score">87.3</div>
+                        <div class="month-stats">
+                            <span class="positive">↑ 2.1% from last month</span><br>
+                            <small>May 2024</small>
+                        </div>
+                    </div>
+                    <div class="monthly-card">
+                        <h4><i class="fas fa-calendar"></i> Previous Month</h4>
+                        <div class="month-score">85.2</div>
+                        <div class="month-stats">
+                            <span class="positive">↑ 1.4% from 2 months ago</span><br>
+                            <small>April 2024</small>
+                        </div>
+                    </div>
+                    <div class="monthly-card">
+                        <h4><i class="fas fa-trophy"></i> Best Month (Last 12)</h4>
+                        <div class="month-score">89.1</div>
+                        <div class="month-stats">
+                            <span class="positive">Peak Performance</span><br>
+                            <small>April 2024</small>
+                        </div>
+                    </div>
+                    <div class="monthly-card">
+                        <h4><i class="fas fa-exclamation-circle"></i> Worst Month (Last 12)</h4>
+                        <div class="month-score">78.3</div>
+                        <div class="month-stats">
+                            <span class="negative">Rainy season impact</span><br>
+                            <small>September 2023</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Predictive Analytics -->
+            <section class="long-term-container">
+                <h3 class="section-title">
+                    <i class="fas fa-robot"></i> Predictive Analytics & Forecast
+                </h3>
+                <div class="prediction-grid">
+                    <div class="prediction-chart-container">
+                        <canvas id="predictionChart"></canvas>
+                    </div>
+                    <div class="prediction-details-card">
+                        <h4><i class="fas fa-crystal-ball"></i> Next 30 Days Forecast</h4>
+                        <div class="prediction-item">
+                            <span>Expected Overall Score</span>
+                            <span class="prediction-value">88.5 ± 2.0</span>
+                        </div>
+                        <div class="prediction-item">
+                            <span>High Risk Period</span>
+                            <span class="prediction-value" style="color: #ef4444;">June 15-20</span>
+                        </div>
+                        <div class="prediction-item">
+                            <span>Confidence Level</span>
+                            <span class="prediction-value" style="color: #10b981;">85%</span>
+                        </div>
+                        <div class="prediction-item">
+                            <span>Key Recommendation</span>
+                            <span class="prediction-value">Schedule maintenance before June 10</span>
+                        </div>
+                        <div class="prediction-item">
+                            <span>Expected Improvement</span>
+                            <span class="prediction-value" style="color: #10b981;">+1.2% month-over-month</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="trend-summary" style="margin-top: 2rem;">
+                    <p><strong>Forecast Analysis:</strong> Based on historical patterns and current trends, we predict continued improvement with minor seasonal fluctuations.</p>
+                </div>
+            </section>
+
+            <!-- Trend Analysis -->
+            <section class="analysis-tabs-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-bar"></i> Detailed Trend Analysis
+                    </h3>
+                    <div class="enhanced-tabs">
+                        <button class="enhanced-tab active" data-tab="weekly">
+                            <i class="fas fa-calendar-day"></i>
+                            Weekly Patterns
+                        </button>
+                        <button class="enhanced-tab" data-tab="seasonal">
+                            <i class="fas fa-cloud-sun"></i>
+                            Seasonal Trends
+                        </button>
+                        <button class="enhanced-tab" data-tab="correlation">
+                            <i class="fas fa-link"></i>
+                            Correlation Analysis
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="analysis-content">
+                    <div class="tab-content active" id="weekly">
+                        <div class="analysis-chart-container">
+                            <canvas id="weeklyPatternChart"></canvas>
+                        </div>
+                        <div class="trend-summary">
+                            <p><strong>Weekly Pattern Analysis:</strong> Higher infrastructure issues consistently observed on <strong>Mondays (25 avg issues)</strong> and <strong>Fridays (23 avg issues)</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="seasonal">
+                        <div class="analysis-chart-container">
+                            <canvas id="seasonalTrendChart"></canvas>
+                        </div>
+                        <div class="trend-summary">
+                            <p><strong>Seasonal Trend Analysis:</strong> Rainy season (June-September) shows <strong>20% higher outage rates</strong> across all services.</p>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="correlation">
+                        <div class="analysis-chart-container">
+                            <canvas id="correlationChart"></canvas>
+                        </div>
+                        <div class="trend-summary">
+                            <p><strong>Correlation Analysis:</strong> Strong positive correlation (r=0.82) between <strong>temperature extremes (>35°C or <15°C)</strong> and power outages.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Trends Analysis JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTrendsCharts();
+            setupTrendsTabs();
+            setupPeriodSelector();
+            setupMobileMenu();
+        });
+
+        function initializeTrendsCharts() {
+            // Overall Trend Mini Chart
+            const overallCtx = document.getElementById('overallTrendChart')?.getContext('2d');
+            if (overallCtx) {
+                new Chart(overallCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                        datasets: [{
+                            data: [82, 84, 85, 86, 87.3],
+                            borderColor: '#0ea5e9',
+                            backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#0ea5e9',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#cbd5e0' } },
+                            y: { display: false, beginAtZero: false, min: 80 }
+                        }
+                    }
+                });
+            }
+
+            // Long-term Chart
+            const longTermCtx = document.getElementById('longTermChart')?.getContext('2d');
+            if (longTermCtx) {
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                new Chart(longTermCtx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: 'Power',
+                                data: [78, 80, 82, 85, 87, 84, 79, 82, 85, 87, 86, 88],
+                                borderColor: '#f59e0b',
+                                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                tension: 0.4,
+                                fill: true,
+                                pointBackgroundColor: '#f59e0b',
+                                pointBorderColor: '#ffffff',
+                                pointBorderWidth: 2
+                            },
+                            {
+                                label: 'Water',
+                                data: [72, 75, 77, 79, 80, 76, 74, 76, 79, 81, 80, 82],
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                tension: 0.4,
+                                fill: true,
+                                pointBackgroundColor: '#3b82f6',
+                                pointBorderColor: '#ffffff',
+                                pointBorderWidth: 2
+                            },
+                            {
+                                label: 'Internet',
+                                data: [85, 87, 88, 90, 92, 87, 86, 88, 91, 93, 91, 93],
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                tension: 0.4,
+                                fill: true,
+                                pointBackgroundColor: '#10b981',
+                                pointBorderColor: '#ffffff',
+                                pointBorderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                                titleColor: '#f7fafc',
+                                bodyColor: '#cbd5e0',
+                                borderColor: '#2d3748',
+                                borderWidth: 1,
+                                padding: 12
+                            }
+                        },
+                        interaction: { intersect: false, mode: 'index' },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: { color: '#cbd5e0' }
+                            },
+                            y: {
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: {
+                                    color: '#cbd5e0',
+                                    callback: function(value) { return value + '%'; }
+                                },
+                                min: 70,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initialize other charts similarly...
+        }
+
+        function setupTrendsTabs() {
+            const tabs = document.querySelectorAll('.enhanced-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    showNotification(`Showing ${tab.textContent.trim()} analysis`, 'info');
+                });
+            });
+        }
+
+        function setupPeriodSelector() {
+            const trendPeriod = document.getElementById('trendPeriod');
+            if (trendPeriod) {
+                trendPeriod.addEventListener('change', function() {
+                    const period = this.value;
+                    const periods = {
+                        '30': 'Last 30 Days',
+                        '90': 'Last 90 Days',
+                        '180': 'Last 6 Months',
+                        '365': 'Last Year'
+                    };
+                    
+                    showNotification(`Loading trend data for ${periods[period]}`, 'info');
+                });
+            }
+        }
+
+        function setupMobileMenu() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+
+            if (mobileMenuToggle && mobileMenu && mobileMenuClose) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.add('active');
+                });
+
+                mobileMenuClose.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                });
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">${type === 'info' ? 'ℹ️' : type === 'success' ? '✅' : '⚠️'}</span>
+                    <span class="notification-text">${message}</span>
+                </div>
+            `;
+            
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = 'var(--bg-card)';
+            notification.style.color = 'var(--text-primary)';
+            notification.style.padding = '1rem 1.5rem';
+            notification.style.borderRadius = '8px';
+            notification.style.boxShadow = '0 4px 15px var(--shadow-color)';
+            notification.style.zIndex = '10000';
+            notification.style.borderLeft = `4px solid ${type === 'info' ? 'var(--info-color)' : type === 'success' ? 'var(--success-color)' : 'var(--warning-color)'}`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

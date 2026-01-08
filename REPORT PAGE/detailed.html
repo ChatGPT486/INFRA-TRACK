@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfraTrack Global - Detailed Analysis</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="detailed-trends.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Detailed Analysis Specific Styles */
+        .detailed-header {
+            background: linear-gradient(135deg, var(--detailed-primary), var(--detailed-secondary));
+        }
+        
+        .breakdown-container, .region-analysis-container,
+        .time-analysis-container, .metrics-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .breakdown-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .breakdown-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            border-color: var(--detailed-primary);
+        }
+        
+        .breakdown-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .breakdown-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+        
+        .breakdown-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .breakdown-stats {
+            margin: 1.5rem 0;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-row span:first-child {
+            color: var(--text-secondary);
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: white;
+        }
+        
+        .breakdown-chart {
+            height: 150px;
+            margin-top: 1.5rem;
+        }
+        
+        .region-comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .comparison-table-container, .region-chart-container {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .region-chart-container {
+            min-height: 400px;
+        }
+        
+        .time-filter-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .time-filter-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .time-filter-btn:hover {
+            background: var(--bg-card-hover);
+            color: white;
+        }
+        
+        .time-filter-btn.active {
+            background: var(--detailed-primary);
+            color: white;
+            border-color: var(--detailed-secondary);
+        }
+        
+        .time-analysis-chart {
+            height: 300px;
+            margin-top: 2rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .metric-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--detailed-primary);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
+        }
+        
+        .metric-card h4 {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--detailed-primary), var(--detailed-secondary));
+            background-clip: text;
+-webkit-background-clip: text;
+color: transparent;
+-webkit-text-fill-color: transparent;
+            margin: 1rem 0;
+        }
+        
+        .metric-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .trend-icon {
+            font-size: 1.2rem;
+        }
+        
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
+        
+        @media (max-width: 1024px) {
+            .region-comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .breakdown-grid, .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .breakdown-container, .region-analysis-container,
+            .time-analysis-container, .metrics-container {
+                padding: 1.5rem;
+            }
+            
+            .time-filter-buttons {
+                flex-direction: column;
+            }
+            
+            .time-filter-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo" id="homeLink">
+                <i class="fas fa-globe-africa"></i>
+                <span>InfraTrack Global</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detailed.html" class="nav-link active">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Detailed Analysis</span>
+                </a>
+                <a href="trends.html" class="nav-link">
+                    <i class="fas fa-chart-area"></i>
+                    <span>Trends</span>
+                </a>
+                <a href="comparisons.html" class="nav-link">
+                    <i class="fas fa-balance-scale"></i>
+                    <span>Comparisons</span>
+                </a>
+                
+                <!-- Dropdown Menu for Monitor and Report -->
+                <div class="dropdown">
+                    <button class="nav-link dropdown-toggle">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Quick Actions</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="index.html#live-monitor" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i>
+                            Live Performance Monitor
+                        </a>
+                        <a href="index.html#add-report" class="dropdown-item">
+                            <i class="fas fa-plus-circle"></i>
+                            Add New Report
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#export" class="dropdown-item">
+                            <i class="fas fa-file-export"></i>
+                            Export Report
+                        </a>
+                        <a href="#alerts" class="dropdown-item">
+                            <i class="fas fa-bell"></i>
+                            Alert Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <h3>InfraTrack Global</h3>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html" class="mobile-menu-link">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="detailed.html" class="mobile-menu-link active">
+                <i class="fas fa-chart-bar"></i>
+                <span>Detailed Analysis</span>
+            </a>
+            <a href="trends.html" class="mobile-menu-link">
+                <i class="fas fa-chart-area"></i>
+                <span>Trends</span>
+            </a>
+            <a href="comparisons.html" class="mobile-menu-link">
+                <i class="fas fa-balance-scale"></i>
+                <span>Comparisons</span>
+            </a>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="reports-container">
+            <!-- Enhanced Header -->
+            <header class="detailed-header">
+                <div class="header-title">
+                    <h1><i class="fas fa-chart-bar"></i> Detailed Analysis Dashboard</h1>
+                    <p>Comprehensive performance metrics, regional insights, and time-based analysis for infrastructure optimization</p>
+                </div>
+                <div class="date-selector">
+                    <button class="date-btn active" data-range="today">
+                        <i class="fas fa-calendar-day"></i> Today
+                    </button>
+                    <button class="date-btn" data-range="week">
+                        <i class="fas fa-calendar-week"></i> This Week
+                    </button>
+                    <button class="date-btn" data-range="month">
+                        <i class="fas fa-calendar-alt"></i> This Month
+                    </button>
+                    <button class="date-btn" data-range="quarter">
+                        <i class="fas fa-chart-line"></i> This Quarter
+                    </button>
+                </div>
+            </header>
+
+            <!-- Service Breakdown -->
+            <section class="breakdown-container">
+                <h3 class="section-title">
+                    <i class="fas fa-layer-group"></i> Service Performance Breakdown
+                </h3>
+                <div class="breakdown-grid">
+                    <!-- Power Card -->
+                    <div class="breakdown-card">
+                        <div class="breakdown-header">
+                            <div class="breakdown-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="breakdown-title">Power Infrastructure</div>
+                        </div>
+                        <div class="breakdown-stats">
+                            <div class="stat-row">
+                                <span><i class="fas fa-shield-alt"></i> Uptime</span>
+                                <span class="stat-value">87.3%</span>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fas fa-clock"></i> Avg. Outage Duration</span>
+                                <span class="stat-value">2.4h</span>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fas fa-bolt"></i> Response Time</span>
+                                <span class="stat-value">1.8h</span>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fas fa-users"></i> User Satisfaction</span>
+                                <span class="stat-value">84%</span>
+                            </div>
+                        </div>
+                        <div class="breakdown-chart">
+                            <canvas id="powerChart"></canvas>
+                        </div>
+                        <div class="trend-indicator positive" style="margin-top: 1rem; padding: 0.5rem; text-align: center;">
+                            <i class="fas fa-arrow-up"></i> 2.5% improvement this month
+                        </div>
+                    </div>
+
+                    <!-- Water Card -->
+                    <div class="breakdown-card">
+                        <div class="breakdown-header">
+                            <div class="breakdown-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="breakdown-title">Water Supply System</div>
+                        </div>
+                        <div class="breakdown-stats">
+                            <div class="stat-row">
+                                <span><i class="fas fa-shield-alt"></i> Availability</span>
+                                <span class="stat-value">79.8%</span>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fas fa-clock"></i> Avg. Outage Duration</span>
+                                <span class="stat-value">5.8h</span>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fas fa-bolt"></i> Response Time</span>
+                                <span class="stat-value">4.2h</span>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fas fa-users"></i> User Satisfaction</span>
+                                <span class="stat-value">76%</span>
+                            </div>
+                        </div>
+                        <div class="breakdown-chart">
+                            <canvas id="waterChart"></canvas>
+                        </div>
+                        <div class="trend-indicator negative" style="margin-top: 1rem; padding: 0.5rem; text-align: center;">
+                            <i class="fas fa-arrow-down"></i> 1.2% decline this month
+                        </div>
+                    </div>
+
+                    <!-- Internet Card -->
+                    <div class="breakdown-card">
+                        <div class="breakdown-header">
+                            <div class="breakdown-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <div class="breakdown-title">Internet Network</div>
+                        </div>
+                        <div class="breakdown-stats">
+                            <div class="stat-row">
+                                <span><i class="fas fa-shield-alt"></i> Reliability</span>
+                                <span class="stat-value">92.1%</span>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fas fa-clock"></i> Avg. Issue Duration</span>
+                                <span class="stat-value">1.2h</span>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fas fa-bolt"></i> Response Time</span>
+                                <span class="stat-value">0.8h</span>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fas fa-users"></i> User Satisfaction</span>
+                                <span class="stat-value">89%</span>
+                            </div>
+                        </div>
+                        <div class="breakdown-chart">
+                            <canvas id="internetChart"></canvas>
+                        </div>
+                        <div class="trend-indicator positive" style="margin-top: 1rem; padding: 0.5rem; text-align: center;">
+                            <i class="fas fa-arrow-up"></i> 3.1% improvement this month
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Regional Analysis -->
+            <section class="region-analysis-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">
+                        <i class="fas fa-map"></i> Regional Performance Analysis
+                    </h3>
+                    <div class="chart-legend">
+                        <span class="legend-item"><span class="legend-dot power"></span> Power</span>
+                        <span class="legend-item"><span class="legend-dot water"></span> Water</span>
+                        <span class="legend-item"><span class="legend-dot internet"></span> Internet</span>
+                    </div>
+                </div>
+                <div class="region-comparison-grid">
+                    <div class="comparison-table-container">
+                        <div class="enhanced-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><i class="fas fa-map-marker-alt"></i> Region</th>
+                                        <th><i class="fas fa-bolt"></i> Power</th>
+                                        <th><i class="fas fa-tint"></i> Water</th>
+                                        <th><i class="fas fa-wifi"></i> Internet</th>
+                                        <th><i class="fas fa-star"></i> Overall</th>
+                                        <th><i class="fas fa-trend-up"></i> Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><i class="fas fa-city"></i> Bastos</td>
+                                        <td>85%</td>
+                                        <td>78%</td>
+                                        <td>91%</td>
+                                        <td><strong>84.7%</strong></td>
+                                        <td><i class="fas fa-arrow-up trend-up trend-icon"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-home"></i> Melen</td>
+                                        <td>88%</td>
+                                        <td>82%</td>
+                                        <td>93%</td>
+                                        <td><strong>87.7%</strong></td>
+                                        <td><i class="fas fa-arrow-up trend-up trend-icon"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-building"></i> Ngousso</td>
+                                        <td>86%</td>
+                                        <td>81%</td>
+                                        <td>94%</td>
+                                        <td><strong>87.0%</strong></td>
+                                        <td><i class="fas fa-minus trend-icon"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-university"></i> Essos</td>
+                                        <td>90%</td>
+                                        <td>85%</td>
+                                        <td>92%</td>
+                                        <td><strong>89.0%</strong></td>
+                                        <td><i class="fas fa-arrow-up trend-up trend-icon"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-store"></i> Mokolo</td>
+                                        <td>83%</td>
+                                        <td>75%</td>
+                                        <td>89%</td>
+                                        <td><strong>82.3%</strong></td>
+                                        <td><i class="fas fa-arrow-down trend-down trend-icon"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="region-chart-container">
+                        <canvas id="regionChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Time Analysis -->
+            <section class="time-analysis-container">
+                <h3 class="section-title">
+                    <i class="fas fa-clock"></i> Time-Based Performance Analysis
+                </h3>
+                <div class="time-filter-buttons">
+                    <button class="time-filter-btn active" data-period="hour">
+                        <i class="fas fa-hourglass-half"></i> By Hour
+                    </button>
+                    <button class="time-filter-btn" data-period="day">
+                        <i class="fas fa-calendar-day"></i> By Day
+                    </button>
+                    <button class="time-filter-btn" data-period="week">
+                        <i class="fas fa-calendar-week"></i> By Week
+                    </button>
+                    <button class="time-filter-btn" data-period="month">
+                        <i class="fas fa-calendar-alt"></i> By Month
+                    </button>
+                </div>
+                <div class="time-analysis-chart">
+                    <canvas id="timeAnalysisChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Detailed Metrics -->
+            <section class="metrics-container">
+                <h3 class="section-title">
+                    <i class="fas fa-chart-pie"></i> Detailed Performance Metrics
+                </h3>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h4><i class="fas fa-chart-line"></i> Peak Usage Times</h4>
+                        <div class="metric-value">18:00 - 21:00</div>
+                        <p>Highest infrastructure demand period with 45% increase in usage</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4><i class="fas fa-tools"></i> Maintenance Windows</h4>
+                        <div class="metric-value">02:00 - 05:00</div>
+                        <p>Scheduled maintenance periods with 98% planned outage success rate</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4><i class="fas fa-clock"></i> Average Resolution Time</h4>
+                        <div class="metric-value">3.2h</div>
+                        <p>Mean time to fix reported issues across all services</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4><i class="fas fa-check-circle"></i> User Report Accuracy</h4>
+                        <div class="metric-value">92%</div>
+                        <p>Accuracy rate of user-reported infrastructure issues</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Detailed Analysis JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDetailedCharts();
+            setupTimeFilters();
+            setupDateSelector();
+            setupMobileMenu();
+        });
+
+        function initializeDetailedCharts() {
+            // Power Chart
+            const powerCtx = document.getElementById('powerChart')?.getContext('2d');
+            if (powerCtx) {
+                new Chart(powerCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Power Reliability',
+                            data: [85, 87, 86, 88, 87, 85, 86],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#f59e0b',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#cbd5e0' }
+                            },
+                            y: {
+                                display: false,
+                                beginAtZero: false,
+                                min: 80,
+                                max: 95
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Water Chart
+            const waterCtx = document.getElementById('waterChart')?.getContext('2d');
+            if (waterCtx) {
+                new Chart(waterCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Water Availability',
+                            data: [78, 79, 80, 79, 81, 78, 79],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#3b82f6',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#cbd5e0' }
+                            },
+                            y: {
+                                display: false,
+                                beginAtZero: false,
+                                min: 75,
+                                max: 85
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Internet Chart
+            const internetCtx = document.getElementById('internetChart')?.getContext('2d');
+            if (internetCtx) {
+                new Chart(internetCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Internet Reliability',
+                            data: [91, 92, 91, 93, 92, 91, 92],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#10b981',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#cbd5e0' }
+                            },
+                            y: {
+                                display: false,
+                                beginAtZero: false,
+                                min: 90,
+                                max: 95
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Region Chart
+            const regionCtx = document.getElementById('regionChart')?.getContext('2d');
+            if (regionCtx) {
+                new Chart(regionCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Bastos', 'Melen', 'Ngousso', 'Essos', 'Mokolo'],
+                        datasets: [
+                            {
+                                label: 'Power',
+                                data: [85, 88, 86, 90, 83],
+                                backgroundColor: '#f59e0b',
+                                borderRadius: 6,
+                                borderWidth: 0
+                            },
+                            {
+                                label: 'Water',
+                                data: [78, 82, 81, 85, 75],
+                                backgroundColor: '#3b82f6',
+                                borderRadius: 6,
+                                borderWidth: 0
+                            },
+                            {
+                                label: 'Internet',
+                                data: [91, 93, 94, 92, 89],
+                                backgroundColor: '#10b981',
+                                borderRadius: 6,
+                                borderWidth: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            tooltip: {
+                                backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                                titleColor: '#f7fafc',
+                                bodyColor: '#cbd5e0',
+                                borderColor: '#2d3748'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: { color: '#cbd5e0' }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: {
+                                    color: '#cbd5e0',
+                                    callback: function(value) { return value + '%'; }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Time Analysis Chart
+            const timeCtx = document.getElementById('timeAnalysisChart')?.getContext('2d');
+            if (timeCtx) {
+                new Chart(timeCtx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+                        datasets: [
+                            {
+                                label: 'Power Issues',
+                                data: Array.from({length: 24}, () => Math.floor(Math.random() * 20) + 5),
+                                borderColor: '#f59e0b',
+                                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                tension: 0.4,
+                                fill: true,
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Water Issues',
+                                data: Array.from({length: 24}, () => Math.floor(Math.random() * 15) + 3),
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                tension: 0.4,
+                                fill: true,
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Internet Issues',
+                                data: Array.from({length: 24}, () => Math.floor(Math.random() * 10) + 1),
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                tension: 0.4,
+                                fill: true,
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                backgroundColor: 'rgba(30, 41, 59, 0.95)'
+                            }
+                        },
+                        interaction: { intersect: false, mode: 'index' },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: { color: '#cbd5e0', maxTicksLimit: 12 },
+                                title: { display: true, text: 'Time of Day', color: '#cbd5e0' }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: { color: '#cbd5e0' },
+                                title: { display: true, text: 'Number of Issues', color: '#cbd5e0' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function setupTimeFilters() {
+            const filterButtons = document.querySelectorAll('.time-filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const period = button.getAttribute('data-period');
+                    updateTimeAnalysisChart(period);
+                });
+            });
+        }
+
+        function setupDateSelector() {
+            const dateButtons = document.querySelectorAll('.date-btn');
+            dateButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    dateButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const range = button.getAttribute('data-range');
+                    showNotification(`Loading data for: ${range}`, 'info');
+                });
+            });
+        }
+
+        function setupMobileMenu() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+
+            if (mobileMenuToggle && mobileMenu && mobileMenuClose) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.add('active');
+                });
+
+                mobileMenuClose.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                });
+            }
+        }
+
+        function updateTimeAnalysisChart(period) {
+            const chartContainer = document.querySelector('.time-analysis-chart');
+            chartContainer.style.opacity = '0.5';
+            setTimeout(() => {
+                chartContainer.style.opacity = '1';
+                showNotification(`Time analysis updated to: ${period} view`, 'success');
+            }, 500);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">${type === 'info' ? 'ℹ️' : type === 'success' ? '✅' : '⚠️'}</span>
+                    <span class="notification-text">${message}</span>
+                </div>
+            `;
+            
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = 'var(--bg-card)';
+            notification.style.color = 'var(--text-primary)';
+            notification.style.padding = '1rem 1.5rem';
+            notification.style.borderRadius = '8px';
+            notification.style.boxShadow = '0 4px 15px var(--shadow-color)';
+            notification.style.zIndex = '10000';
+            notification.style.borderLeft = `4px solid ${type === 'info' ? 'var(--info-color)' : type === 'success' ? 'var(--success-color)' : 'var(--warning-color)'}`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

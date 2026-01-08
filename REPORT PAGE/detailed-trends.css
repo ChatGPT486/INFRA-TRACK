@@ -1,0 +1,379 @@
+/* detailed-trends.css - Shared styles for Detailed Analysis and Trends pages */
+
+:root {
+    --detailed-primary: #8b5cf6;
+    --detailed-secondary: #7c3aed;
+    --trends-primary: #0ea5e9;
+    --trends-secondary: #0284c7;
+}
+
+/* ===== PAGE HEADERS ===== */
+.detailed-header, .trends-header {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    color: white;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.detailed-header::before, .trends-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+}
+
+.detailed-header h1, .trends-header h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.detailed-header h1 i {
+    color: var(--detailed-primary);
+}
+
+.trends-header h1 i {
+    color: var(--trends-primary);
+}
+
+.detailed-header p, .trends-header p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 800px;
+    line-height: 1.6;
+}
+
+/* ===== CARDS & GRIDS ===== */
+.enhanced-grid {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.enhanced-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.enhanced-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px var(--shadow-color);
+}
+
+.enhanced-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.detailed-card::before {
+    background: linear-gradient(90deg, var(--detailed-primary), var(--detailed-secondary));
+}
+
+.trends-card::before {
+    background: linear-gradient(90deg, var(--trends-primary), var(--trends-secondary));
+}
+
+/* ===== CHARTS ===== */
+.chart-container {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    position: relative;
+    min-height: 300px;
+    border: 1px solid var(--border-color);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.chart-title {
+    font-size: 1.3rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+/* ===== STATS & METRICS ===== */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.stat-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.2rem;
+    border-radius: 10px;
+    border-left: 3px solid;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+}
+
+.stat-item.power { border-left-color: var(--power-color); }
+.stat-item.water { border-left-color: var(--water-color); }
+.stat-item.internet { border-left-color: var(--internet-color); }
+.stat-item.overall { border-left-color: var(--overall-color); }
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    margin: 0.5rem 0;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===== TABLES ===== */
+.enhanced-table {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.enhanced-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.enhanced-table th {
+    background: var(--bg-card);
+    color: white;
+    padding: 1.2rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.enhanced-table td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.enhanced-table tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* ===== TABS & FILTERS ===== */
+.enhanced-tabs {
+    display: flex;
+    gap: 1rem;
+    background: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+}
+
+.enhanced-tab {
+    padding: 0.8rem 1.5rem;
+    background: var(--bg-card);
+    border: 2px solid transparent;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.enhanced-tab:hover {
+    background: var(--bg-card-hover);
+    color: white;
+}
+
+.enhanced-tab.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-light);
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ===== INSIGHTS & ANALYSIS ===== */
+.insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.insight-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.insight-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.insight-card i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+.insight-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+    color: white;
+}
+
+.insight-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* ===== PREDICTIVE ANALYTICS ===== */
+.prediction-container {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+}
+
+.prediction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.prediction-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+}
+
+.prediction-value {
+    font-weight: 600;
+    color: white;
+    font-size: 1.1rem;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+    .enhanced-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .detailed-header h1, .trends-header h1 {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .detailed-header, .trends-header {
+        padding: 1.5rem;
+    }
+    
+    .enhanced-tabs {
+        flex-direction: column;
+    }
+    
+    .enhanced-tab {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .insight-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .detailed-header h1, .trends-header h1 {
+        font-size: 1.8rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .enhanced-card {
+        padding: 1.5rem;
+    }
+    
+    .chart-container {
+        padding: 1rem;
+    }
+}
+/* Add this to your detailed-trends.css file */
+.stat-value, .metric-value, .region-score, 
+.month-score, .time-score, .benchmark-value {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+.gradient-text {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}

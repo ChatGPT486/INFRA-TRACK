@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfraTrack Global - Reports Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo" id="homeLink">
+                <i class="fas fa-globe-africa"></i>
+                <span>InfraTrack Global</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link active" id="reportsLink">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detailed.html" class="nav-link" id="detailedLink">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Detailed Analysis</span>
+                </a>
+                <a href="trends.html" class="nav-link" id="trendsLink">
+                    <i class="fas fa-chart-area"></i>
+                    <span>Trends</span>
+                </a>
+                <a href="comparisons.html" class="nav-link" id="comparisonsLink">
+                    <i class="fas fa-balance-scale"></i>
+                    <span>Comparisons</span>
+                </a>
+                
+                <!-- Dropdown Menu for Monitor and Report -->
+                <div class="dropdown">
+                    <button class="nav-link dropdown-toggle">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Quick Actions</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#live-monitor" class="dropdown-item" id="liveMonitorLink">
+                            <i class="fas fa-chart-line"></i>
+                            Live Performance Monitor
+                        </a>
+                        <a href="#add-report" class="dropdown-item" id="addReportLink">
+                            <i class="fas fa-plus-circle"></i>
+                            Add New Report
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#export" class="dropdown-item">
+                            <i class="fas fa-file-export"></i>
+                            Export Report
+                        </a>
+                        <a href="#alerts" class="dropdown-item">
+                            <i class="fas fa-bell"></i>
+                            Alert Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <h3>InfraTrack Global</h3>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html" class="mobile-menu-link active">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="detailed.html" class="mobile-menu-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Detailed Analysis</span>
+            </a>
+            <a href="trends.html" class="mobile-menu-link">
+                <i class="fas fa-chart-area"></i>
+                <span>Trends</span>
+            </a>
+            <a href="comparisons.html" class="mobile-menu-link">
+                <i class="fas fa-balance-scale"></i>
+                <span>Comparisons</span>
+            </a>
+            <a href="#live-monitor" class="mobile-menu-link">
+                <i class="fas fa-chart-line"></i>
+                <span>Live Monitor</span>
+            </a>
+            <a href="#add-report" class="mobile-menu-link">
+                <i class="fas fa-plus-circle"></i>
+                <span>Add Report</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="main-content" id="contentArea">
+        <!-- This will be dynamically loaded with different views -->
+        
+        <!-- Default: Main Reports Dashboard -->
+        <div class="reports-container" id="mainReports">
+            <!-- Header with Date Selector -->
+            <header class="reports-header">
+                <div class="header-title">
+                    <h1><i class="fas fa-chart-line"></i> Infrastructure Reports Dashboard</h1>
+                    <p>Comprehensive analytics and insights on infrastructure performance</p>
+                </div>
+                <div class="date-selector">
+                    <button class="date-btn active" data-range="today">Today</button>
+                    <button class="date-btn" data-range="yesterday">Yesterday</button>
+                    <button class="date-btn" data-range="week">Last 7 Days</button>
+                    <button class="date-btn" data-range="month">This Month</button>
+                    <button class="date-btn" data-range="custom">Custom Range</button>
+                </div>
+            </header>
+
+            <!-- Service Filter -->
+            <section class="service-filter">
+                <h3 class="filter-title">Filter by Service Type</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-service="all">
+                        <i class="fas fa-layer-group"></i> All Services
+                    </button>
+                    <button class="filter-btn" data-service="power">
+                        <i class="fas fa-bolt"></i> Power
+                    </button>
+                    <button class="filter-btn" data-service="water">
+                        <i class="fas fa-tint"></i> Water
+                    </button>
+                    <button class="filter-btn" data-service="internet">
+                        <i class="fas fa-wifi"></i> Internet
+                    </button>
+                    <button class="filter-btn" data-service="roads">
+                        <i class="fas fa-road"></i> Roads
+                    </button>
+                </div>
+            </section>
+
+            <!-- Main Stats Section -->
+            <section class="stats-highlights">
+                <!-- Power Stats -->
+                <article class="stat-card power clickable-card" data-section="power">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up"></i> 2.5%
+                        </div>
+                    </div>
+                    <div class="stat-value">87%</div>
+                    <div class="stat-label">Power Reliability</div>
+                    <p class="stat-description">Average uptime across all regions</p>
+                    <div class="stat-details">
+                        <div class="detail-item">
+                            <div class="detail-value">23</div>
+                            <div class="detail-label">Active Outages</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">2.4h</div>
+                            <div class="detail-label">Avg. Duration</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">1,247</div>
+                            <div class="detail-label">Reports Today</div>
+                        </div>
+                    </div>
+                    <div class="click-hint">
+                        <i class="fas fa-mouse-pointer"></i> Click for detailed analysis
+                    </div>
+                </article>
+
+                <!-- Water Stats -->
+                <article class="stat-card water clickable-card" data-section="water">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="stat-trend trend-down">
+                            <i class="fas fa-arrow-down"></i> 1.8%
+                        </div>
+                    </div>
+                    <div class="stat-value">79%</div>
+                    <div class="stat-label">Water Reliability</div>
+                    <p class="stat-description">Availability across service areas</p>
+                    <div class="stat-details">
+                        <div class="detail-item">
+                            <div class="detail-value">15</div>
+                            <div class="detail-label">Active Outages</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">5.8h</div>
+                            <div class="detail-label">Avg. Duration</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">892</div>
+                            <div class="detail-label">Reports Today</div>
+                        </div>
+                    </div>
+                    <div class="click-hint">
+                        <i class="fas fa-mouse-pointer"></i> Click for detailed analysis
+                    </div>
+                </article>
+
+                <!-- Internet Stats -->
+                <article class="stat-card internet clickable-card" data-section="internet">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up"></i> 3.1%
+                        </div>
+                    </div>
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label">Internet Reliability</div>
+                    <p class="stat-description">Network performance index</p>
+                    <div class="stat-details">
+                        <div class="detail-item">
+                            <div class="detail-value">8</div>
+                            <div class="detail-label">Active Issues</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">1.2h</div>
+                            <div class="detail-label">Avg. Duration</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">654</div>
+                            <div class="detail-label">Reports Today</div>
+                        </div>
+                    </div>
+                    <div class="click-hint">
+                        <i class="fas fa-mouse-pointer"></i> Click for detailed analysis
+                    </div>
+                </article>
+
+                <!-- Overall Stats -->
+                <article class="stat-card overall clickable-card" data-section="overall">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up"></i> 5.2%
+                        </div>
+                    </div>
+                    <div class="stat-value">86/100</div>
+                    <div class="stat-label">Overall Infrastructure Score</div>
+                    <p class="stat-description">Composite index of all services</p>
+                    <div class="stat-details">
+                        <div class="detail-item">
+                            <div class="detail-value">2,793</div>
+                            <div class="detail-label">Total Reports</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">86%</div>
+                            <div class="detail-label">Satisfaction</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">3.1h</div>
+                            <div class="detail-label">Avg. Response</div>
+                        </div>
+                    </div>
+                    <div class="click-hint">
+                        <i class="fas fa-mouse-pointer"></i> Click for overall analysis
+                    </div>
+                </article>
+            </section>
+
+            <!-- Quick Action Cards -->
+            <section class="action-cards">
+                <h3 class="section-title">Quick Actions</h3>
+                <div class="action-grid">
+                    <div class="action-card clickable-card" data-action="export">
+                        <div class="action-icon">
+                            <i class="fas fa-file-export"></i>
+                        </div>
+                        <h4>Export Report</h4>
+                        <p>Generate PDF/Excel reports</p>
+                    </div>
+                    
+                    <div class="action-card clickable-card" data-action="compare">
+                        <div class="action-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h4>Compare Regions</h4>
+                        <p>Compare performance across areas</p>
+                    </div>
+                    
+                    <div class="action-card clickable-card" data-action="alerts">
+                        <div class="action-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h4>Alert Settings</h4>
+                        <p>Configure notifications</p>
+                    </div>
+                    
+                    <div class="action-card clickable-card" data-action="schedule">
+                        <div class="action-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h4>Schedule Report</h4>
+                        <p>Automate report generation</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Activity -->
+            <section class="recent-activity">
+                <div class="activity-header">
+                    <h3 class="section-title">Recent Activity</h3>
+                    <a href="#" class="view-all" id="viewAllActivity">View All</a>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item clickable-item" data-id="1">
+                        <div class="activity-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Power outage reported in Bastos</h4>
+                            <p>2 hours ago • 142 reports</p>
+                        </div>
+                        <div class="activity-status critical">
+                            Critical
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item clickable-item" data-id="2">
+                        <div class="activity-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Water supply restored in Melen</h4>
+                            <p>4 hours ago • 89 reports resolved</p>
+                        </div>
+                        <div class="activity-status resolved">
+                            Resolved
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item clickable-item" data-id="3">
+                        <div class="activity-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Monthly performance report generated</h4>
+                            <p>Yesterday • Download available</p>
+                        </div>
+                        <div class="activity-status info">
+                            Info
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Chart Section (Hidden by default, shown via menu) -->
+            <section class="live-chart-section hidden-section" id="live-monitor">
+                <div class="chart-controls">
+                    <h3 class="section-title">
+                        <i class="fas fa-chart-line"></i> Live Performance Monitor
+                    </h3>
+                    <div class="chart-options">
+                        <div class="time-range">
+                            <label>Time Range:</label>
+                            <select id="chartRange">
+                                <option value="1h">Last Hour</option>
+                                <option value="6h" selected>Last 6 Hours</option>
+                                <option value="12h">Last 12 Hours</option>
+                                <option value="24h">Last 24 Hours</option>
+                                <option value="7d">Last 7 Days</option>
+                            </select>
+                        </div>
+                        <div class="refresh-control">
+                            <button id="refreshChart" class="refresh-btn">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                            <div class="auto-refresh">
+                                <input type="checkbox" id="autoRefresh">
+                                <label for="autoRefresh">Auto-refresh every 30s</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #f59e0b;"></span>
+                        <span>Power Reliability</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #3b82f6;"></span>
+                        <span>Water Availability</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #10b981;"></span>
+                        <span>Internet Speed</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #8b5cf6;"></span>
+                        <span>Overall Score</span>
+                    </div>
+                </div>
+                
+                <div class="chart-stats">
+                    <div class="chart-stat">
+                        <div class="stat-label">Current Avg:</div>
+                        <div class="stat-value" id="currentAvg">85.3%</div>
+                    </div>
+                    <div class="chart-stat">
+                        <div class="stat-label">Peak Today:</div>
+                        <div class="stat-value" id="peakToday">92.1%</div>
+                    </div>
+                    <div class="chart-stat">
+                        <div class="stat-label">Lowest Today:</div>
+                        <div class="stat-value" id="lowestToday">78.5%</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Report Submission Panel (Hidden by default, shown via menu) -->
+            <section class="report-panel hidden-section" id="add-report">
+                <div class="panel-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-plus-circle"></i> Add New Report
+                    </h3>
+                    <button class="panel-toggle" id="togglePanel">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                </div>
+                
+                <div class="panel-body" id="panelBody">
+                    <form id="reportForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="serviceType">
+                                    <i class="fas fa-bolt"></i> Service Type *
+                                </label>
+                                <select id="serviceType" required>
+                                    <option value="">Select service...</option>
+                                    <option value="power">⚡ Power</option>
+                                    <option value="water">💧 Water</option>
+                                    <option value="internet">📱 Internet</option>
+                                    <option value="roads">🛣️ Roads</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reportStatus">
+                                    <i class="fas fa-exclamation-circle"></i> Status *
+                                </label>
+                                <select id="reportStatus" required>
+                                    <option value="">Select status...</option>
+                                    <option value="outage">🔴 Outage/Issue</option>
+                                    <option value="restored">✅ Restored</option>
+                                    <option value="maintenance">🔧 Maintenance</option>
+                                    <option value="normal">🟢 Normal</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="region">
+                                    <i class="fas fa-map-marker-alt"></i> Region *
+                                </label>
+                                <select id="region" required>
+                                    <option value="">Select region...</option>
+                                    <option value="bastos">Bastos</option>
+                                    <option value="melen">Melen</option>
+                                    <option value="ngousso">Ngousso</option>
+                                    <option value="essos">Essos</option>
+                                    <option value="mokolo">Mokolo</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="severity">
+                                    <i class="fas fa-fire"></i> Severity *
+                                </label>
+                                <select id="severity" required>
+                                    <option value="">Select severity...</option>
+                                    <option value="critical" style="color: #ef4444;">🔥 Critical</option>
+                                    <option value="high" style="color: #f59e0b;">⚠️ High</option>
+                                    <option value="medium" style="color: #3b82f6;">ℹ️ Medium</option>
+                                    <option value="low" style="color: #10b981;">📗 Low</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="description">
+                                <i class="fas fa-comment-alt"></i> Description *
+                            </label>
+                            <textarea 
+                                id="description" 
+                                rows="3" 
+                                placeholder="Describe the issue or observation..."
+                                required
+                            ></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="duration">
+                                    <i class="fas fa-clock"></i> Duration (hours)
+                                </label>
+                                <input 
+                                    type="number" 
+                                    id="duration" 
+                                    min="0" 
+                                    step="0.5" 
+                                    placeholder="e.g., 2.5"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="affectedUsers">
+                                    <i class="fas fa-users"></i> Affected Users
+                                </label>
+                                <input 
+                                    type="number" 
+                                    id="affectedUsers" 
+                                    min="1" 
+                                    placeholder="Estimated number"
+                                >
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-paper-plane"></i> Submit Report
+                            </button>
+                            <button type="button" class="cancel-btn" id="cancelReport">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="recent-reports">
+                        <h4>
+                            <i class="fas fa-history"></i> Recently Added Reports
+                        </h4>
+                        <div id="recentReportsList">
+                            <!-- Reports will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Report Actions -->
+            <footer class="report-actions">
+                <div class="actions-info">
+                    <h3>Need to share this report?</h3>
+                    <p>Export, print, or share with stakeholders</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn export-btn" id="exportBtn">
+                        <i class="fas fa-file-export"></i> Export PDF
+                    </button>
+                    <button class="action-btn print-btn" id="printBtn">
+                        <i class="fas fa-print"></i> Print Report
+                    </button>
+                    <button class="action-btn share-btn" id="shareBtn">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </main>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

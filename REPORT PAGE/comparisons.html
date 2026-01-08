@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfraTrack Global - Performance Comparisons</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="detailed-trends.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Comparisons Page Specific Styles */
+        .comparisons-header {
+            background: linear-gradient(135deg, var(--comparisons-primary), var(--comparisons-secondary));
+        }
+        
+        .comparison-tabs {
+            display: flex;
+            gap: 1rem;
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .comparison-tab {
+            padding: 1rem 2rem;
+            background: var(--bg-card);
+            border: 2px solid transparent;
+            color: var(--text-secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .comparison-tab:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .comparison-tab.active {
+            background: var(--comparisons-primary);
+            color: white;
+            border-color: var(--comparisons-accent);
+            box-shadow: 0 5px 20px rgba(79, 70, 229, 0.4);
+        }
+        
+        .comparison-tab i {
+            font-size: 1.3rem;
+        }
+        
+        .comparison-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .comparison-content.active {
+            display: block;
+        }
+        
+        /* Region Comparison */
+        .region-comparison-container, .service-comparison-container,
+        .time-comparison-container, .benchmarking-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .comparison-filters {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .comparison-filters select {
+            background: var(--bg-secondary);
+            color: white;
+            border: 2px solid var(--border-color);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            min-width: 200px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .comparison-filters select:focus {
+            outline: none;
+            border-color: var(--comparisons-primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+        
+        .vs {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            background: var(--comparisons-accent);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            animation: pulse 2s infinite;
+        }
+        
+        .comparison-results {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .region-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .region-card:hover {
+            border-color: var(--comparisons-primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
+        }
+        
+        .region-card h4 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .region-score {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--comparisons-primary), var(--comparisons-secondary));
+            background-clip: text;
+-webkit-background-clip: text;
+color: transparent;
+-webkit-text-fill-color: transparent;
+            margin: 1rem 0;
+        }
+        
+        .region-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .region-trend {
+            margin-top: 1.5rem;
+            padding: 0.8rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            color: var(--success-color);
+            font-weight: 600;
+        }
+        
+        .comparison-chart-container {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+        
+        .comparison-analysis {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .comparison-analysis h4 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .key-differences {
+            background: rgba(79, 70, 229, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--comparisons-primary);
+        }
+        
+        /* Service Comparison */
+        .service-comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .service-radar-container, .service-metrics-container {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            min-height: 400px;
+        }
+        
+        .metric-row {
+            margin-bottom: 1.5rem;
+        }
+        
+        .metric-row span {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .metric-bars {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .metric-bar {
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-bar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .metric-bar.power {
+            background: linear-gradient(135deg, var(--power-color), #fbbf24);
+        }
+        
+        .metric-bar.water {
+            background: linear-gradient(135deg, var(--water-color), #60a5fa);
+        }
+        
+        .metric-bar.internet {
+            background: linear-gradient(135deg, var(--internet-color), #34d399);
+        }
+        
+        /* Benchmarking */
+        .benchmark-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .benchmark-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .benchmark-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .benchmark-card h4 {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .benchmark-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            margin: 1rem 0;
+        }
+        
+        .benchmark-progress {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--comparisons-primary), var(--comparisons-accent));
+            border-radius: 5px;
+            transition: width 1s ease;
+        }
+        
+        .benchmark-target {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .difference {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .difference.positive { color: var(--success-color); }
+        .difference.negative { color: var(--danger-color); }
+        
+        /* Performance Matrix */
+        .performance-matrix-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .matrix-container {
+            overflow-x: auto;
+            margin-top: 2rem;
+        }
+        
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .matrix-table th {
+            background: var(--comparisons-primary);
+            color: white;
+            padding: 1.2rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .matrix-table td {
+            padding: 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+        
+        .matrix-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .gap-negative, .gap-critical {
+            font-weight: 700;
+        }
+        
+        .gap-negative { color: #f59e0b; }
+        .gap-critical { color: #ef4444; }
+        
+        .priority-critical, .priority-high, .priority-medium {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .priority-critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .priority-high {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .priority-medium {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @media (max-width: 1024px) {
+            .comparison-results, .service-comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .benchmark-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-tabs {
+                flex-direction: column;
+            }
+            
+            .comparison-tab {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .comparison-filters {
+                flex-direction: column;
+            }
+            
+            .benchmark-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .region-comparison-container, .service-comparison-container,
+            .time-comparison-container, .benchmarking-container,
+            .performance-matrix-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo" id="homeLink">
+                <i class="fas fa-globe-africa"></i>
+                <span>InfraTrack Global</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detailed.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Detailed Analysis</span>
+                </a>
+                <a href="trends.html" class="nav-link">
+                    <i class="fas fa-chart-area"></i>
+                    <span>Trends</span>
+                </a>
+                <a href="comparisons.html" class="nav-link active">
+                    <i class="fas fa-balance-scale"></i>
+                    <span>Comparisons</span>
+                </a>
+                
+                <!-- Dropdown Menu for Monitor and Report -->
+                <div class="dropdown">
+                    <button class="nav-link dropdown-toggle">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Quick Actions</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="index.html#live-monitor" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i>
+                            Live Performance Monitor
+                        </a>
+                        <a href="index.html#add-report" class="dropdown-item">
+                            <i class="fas fa-plus-circle"></i>
+                            Add New Report
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#export" class="dropdown-item">
+                            <i class="fas fa-file-export"></i>
+                            Export Report
+                        </a>
+                        <a href="#alerts" class="dropdown-item">
+                            <i class="fas fa-bell"></i>
+                            Alert Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <h3>InfraTrack Global</h3>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html" class="mobile-menu-link">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="detailed.html" class="mobile-menu-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Detailed Analysis</span>
+            </a>
+            <a href="trends.html" class="mobile-menu-link">
+                <i class="fas fa-chart-area"></i>
+                <span>Trends</span>
+            </a>
+            <a href="comparisons.html" class="mobile-menu-link active">
+                <i class="fas fa-balance-scale"></i>
+                <span>Comparisons</span>
+            </a>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="reports-container">
+            <!-- Header -->
+            <header class="comparisons-header">
+                <div class="header-title">
+                    <h1><i class="fas fa-balance-scale"></i> Performance Comparisons Dashboard</h1>
+                    <p>Compare infrastructure performance across regions, services, and time periods. Gain insights through detailed benchmarking and analysis.</p>
+                </div>
+                <div class="comparison-tabs">
+                    <button class="comparison-tab active" data-tab="regions">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Region Comparison</span>
+                    </button>
+                    <button class="comparison-tab" data-tab="services">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Service Comparison</span>
+                    </button>
+                    <button class="comparison-tab" data-tab="time">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Time Analysis</span>
+                    </button>
+                    <button class="comparison-tab" data-tab="benchmarking">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Benchmarking</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Region Comparison -->
+            <section class="comparison-content active" id="regions">
+                <div class="region-comparison-container">
+                    <h3 class="section-title">
+                        <i class="fas fa-map"></i> Regional Performance Comparison
+                    </h3>
+                    
+                    <div class="comparison-filters">
+                        <select id="regionSelect1">
+                            <option value="bastos">🏙️ Bastos</option>
+                            <option value="melen">🏘️ Melen</option>
+                            <option value="ngousso">🏢 Ngousso</option>
+                            <option value="essos">🏛️ Essos</option>
+                            <option value="mokolo">🏬 Mokolo</option>
+                        </select>
+                        <span class="vs">VS</span>
+                        <select id="regionSelect2">
+                            <option value="melen">🏘️ Melen</option>
+                            <option value="bastos">🏙️ Bastos</option>
+                            <option value="ngousso">🏢 Ngousso</option>
+                            <option value="essos">🏛️ Essos</option>
+                            <option value="mokolo">🏬 Mokolo</option>
+                        </select>
+                    </div>
+
+                    <div class="comparison-results">
+                        <div class="region-card">
+                            <h4>Bastos</h4>
+                            <div class="region-score">84.7</div>
+                            <div class="region-stats">
+                                <div class="stat-item">
+                                    <span><i class="fas fa-bolt"></i> Power</span>
+                                    <span class="stat-value">85%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span><i class="fas fa-tint"></i> Water</span>
+                                    <span class="stat-value">78%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span><i class="fas fa-wifi"></i> Internet</span>
+                                    <span class="stat-value">91%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span><i class="fas fa-road"></i> Roads</span>
+                                    <span class="stat-value">73%</span>
+                                </div>
+                            </div>
+                            <div class="region-trend">
+                                <i class="fas fa-arrow-up trend-up"></i> 2.1% improvement this month
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-chart-container">
+                            <canvas id="regionComparisonChart"></canvas>
+                        </div>
+                        
+                        <div class="region-card">
+                            <h4>Melen</h4>
+                            <div class="region-score">87.7</div>
+                            <div class="region-stats">
+                                <div class="stat-item">
+                                    <span><i class="fas fa-bolt"></i> Power</span>
+                                    <span class="stat-value">88%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span><i class="fas fa-tint"></i> Water</span>
+                                    <span class="stat-value">82%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span><i class="fas fa-wifi"></i> Internet</span>
+                                    <span class="stat-value">93%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span><i class="fas fa-road"></i> Roads</span>
+                                    <span class="stat-value">78%</span>
+                                </div>
+                            </div>
+                            <div class="region-trend">
+                                <i class="fas fa-arrow-up trend-up"></i> 3.4% improvement this month
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-analysis">
+                        <h4><i class="fas fa-chart-bar"></i> Performance Analysis</h4>
+                        <p>Melen outperforms Bastos by <strong>3.0 points</strong> overall, with significant advantages in water availability (+4%) and internet reliability (+2%). Bastos shows stronger improvement trends recently due to infrastructure upgrades.</p>
+                        
+                        <div class="key-differences">
+                            <h5><i class="fas fa-lightbulb"></i> Key Differentiators</h5>
+                            <ul>
+                                <li>Water infrastructure in Melen is 5 years newer with modern filtration systems</li>
+                                <li>Bastos has 2x the population density affecting service distribution</li>
+                                <li>Melen implemented smart grid technology in 2023 reducing outages</li>
+                                <li>Bastos has ongoing road construction affecting infrastructure access</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Service Comparison -->
+            <section class="comparison-content" id="services">
+                <div class="service-comparison-container">
+                    <h3 class="section-title">
+                        <i class="fas fa-layer-group"></i> Service Performance Comparison
+                    </h3>
+                    
+                    <div class="service-comparison-grid">
+                        <div class="service-radar-container">
+                            <canvas id="serviceRadarChart"></canvas>
+                        </div>
+                        
+                        <div class="service-metrics-container">
+                            <h4>Service Performance Metrics</h4>
+                            <div class="metric-row">
+                                <span><i class="fas fa-shield-alt"></i> Reliability Score</span>
+                                <div class="metric-bars">
+                                    <div class="metric-bar power" style="width: 87%">87%</div>
+                                    <div class="metric-bar water" style="width: 79%">79%</div>
+                                    <div class="metric-bar internet" style="width: 92%">92%</div>
+                                </div>
+                            </div>
+                            <div class="metric-row">
+                                <span><i class="fas fa-clock"></i> Response Time (Avg)</span>
+                                <div class="metric-bars">
+                                    <div class="metric-bar power" style="width: 75%">1.8h</div>
+                                    <div class="metric-bar water" style="width: 60%">4.2h</div>
+                                    <div class="metric-bar internet" style="width: 90%">0.8h</div>
+                                </div>
+                            </div>
+                            <div class="metric-row">
+                                <span><i class="fas fa-users"></i> User Satisfaction</span>
+                                <div class="metric-bars">
+                                    <div class="metric-bar power" style="width: 84%">84%</div>
+                                    <div class="metric-bar water" style="width: 76%">76%</div>
+                                    <div class="metric-bar internet" style="width: 89%">89%</div>
+                                </div>
+                            </div>
+                            <div class="metric-row">
+                                <span><i class="fas fa-cogs"></i> Maintenance Efficiency</span>
+                                <div class="metric-bars">
+                                    <div class="metric-bar power" style="width: 80%">80%</div>
+                                    <div class="metric-bar water" style="width: 75%">75%</div>
+                                    <div class="metric-bar internet" style="width: 82%">82%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Time Comparison -->
+            <section class="comparison-content" id="time">
+                <div class="time-comparison-container">
+                    <h3 class="section-title">
+                        <i class="fas fa-chart-line"></i> Time Period Comparison
+                    </h3>
+                    
+                    <div class="time-selectors">
+                        <div class="time-selector">
+                            <h4>Current Month</h4>
+                            <div class="time-period">May 2024</div>
+                            <div class="time-score">87.3</div>
+                            <div class="trend-indicator positive">
+                                <i class="fas fa-arrow-up"></i> +2.1 from last month
+                            </div>
+                        </div>
+                        <div class="time-selector">
+                            <h4>Previous Month</h4>
+                            <div class="time-period">April 2024</div>
+                            <div class="time-score">85.2</div>
+                            <div class="trend-indicator positive">
+                                <i class="fas fa-arrow-up"></i> +3.7 from March
+                            </div>
+                        </div>
+                        <div class="time-selector">
+                            <h4>Same Month Last Year</h4>
+                            <div class="time-period">May 2023</div>
+                            <div class="time-score">81.5</div>
+                            <div class="trend-indicator positive">
+                                <i class="fas fa-arrow-up"></i> +5.8 YoY Growth
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-chart-container">
+                        <canvas id="timeComparisonChart"></canvas>
+                    </div>
+                    
+                    <div class="comparison-analysis">
+                        <h4><i class="fas fa-chart-bar"></i> Year-over-Year Improvement Analysis</h4>
+                        <div class="improvement-stats">
+                            <div class="improvement-item">
+                                <span><i class="fas fa-star"></i> Overall Score</span>
+                                <span class="improvement-value positive">+5.8 points</span>
+                            </div>
+                            <div class="improvement-item">
+                                <span><i class="fas fa-bolt"></i> Power Reliability</span>
+                                <span class="improvement-value positive">+6.2 points</span>
+                            </div>
+                            <div class="improvement-item">
+                                <span><i class="fas fa-tint"></i> Water Availability</span>
+                                <span class="improvement-value positive">+4.7 points</span>
+                            </div>
+                            <div class="improvement-item">
+                                <span><i class="fas fa-wifi"></i> Internet Speed</span>
+                                <span class="improvement-value positive">+7.1 points</span>
+                            </div>
+                        </div>
+                        <p><strong>Analysis:</strong> Significant improvements across all services year-over-year, with internet showing the most progress due to recent network upgrades and fiber optic implementation.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Benchmarking -->
+            <section class="comparison-content" id="benchmarking">
+                <div class="benchmarking-container">
+                    <h3 class="section-title">
+                        <i class="fas fa-bullseye"></i> Performance Benchmarking
+                    </h3>
+                    
+                    <div class="benchmark-grid">
+                        <div class="benchmark-card">
+                            <h4><i class="fas fa-star"></i> Overall Performance</h4>
+                            <div class="benchmark-value">87.3</div>
+                            <div class="benchmark-progress">
+                                <div class="progress-bar" style="width: 87.3%"></div>
+                            </div>
+                            <div class="benchmark-target">
+                                <span>Target: 90.0</span>
+                                <span class="difference negative">-2.7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="benchmark-card">
+                            <h4><i class="fas fa-bolt"></i> Power Reliability</h4>
+                            <div class="benchmark-value">87.0</div>
+                            <div class="benchmark-progress">
+                                <div class="progress-bar" style="width: 87%"></div>
+                            </div>
+                            <div class="benchmark-target">
+                                <span>Target: 90.0</span>
+                                <span class="difference negative">-3.0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="benchmark-card">
+                            <h4><i class="fas fa-tint"></i> Water Availability</h4>
+                            <div class="benchmark-value">79.8</div>
+                            <div class="benchmark-progress">
+                                <div class="progress-bar" style="width: 79.8%"></div>
+                            </div>
+                            <div class="benchmark-target">
+                                <span>Target: 85.0</span>
+                                <span class="difference critical">-5.2</span>
+                            </div>
+                        </div>
+                        
+                        <div class="benchmark-card">
+                            <h4><i class="fas fa-wifi"></i> Internet Reliability</h4>
+                            <div class="benchmark-value">92.1</div>
+                            <div class="benchmark-progress">
+                                <div class="progress-bar" style="width: 92.1%"></div>
+                            </div>
+                            <div class="benchmark-target">
+                                <span>Target: 95.0</span>
+                                <span class="difference negative">-2.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Performance Matrix -->
+                <div class="performance-matrix-container">
+                    <h3 class="section-title">
+                        <i class="fas fa-table"></i> Performance Gap Analysis Matrix
+                    </h3>
+                    
+                    <div class="matrix-container">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-ruler"></i> Metric</th>
+                                    <th><i class="fas fa-chart-line"></i> Current</th>
+                                    <th><i class="fas fa-bullseye"></i> Target</th>
+                                    <th><i class="fas fa-exchange-alt"></i> Gap</th>
+                                    <th><i class="fas fa-exclamation-circle"></i> Priority</th>
+                                    <th><i class="fas fa-trend-up"></i> Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><i class="fas fa-star"></i> Overall Score</td>
+                                    <td>87.3</td>
+                                    <td>90.0</td>
+                                    <td class="gap-negative">-2.7</td>
+                                    <td><span class="priority-medium">Medium</span></td>
+                                    <td><i class="fas fa-arrow-up trend-up"></i></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-bolt"></i> Power Uptime</td>
+                                    <td>87.0</td>
+                                    <td>90.0</td>
+                                    <td class="gap-negative">-3.0</td>
+                                    <td><span class="priority-high">High</span></td>
+                                    <td><i class="fas fa-arrow-up trend-up"></i></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-tint"></i> Water Availability</td>
+                                    <td>79.8</td>
+                                    <td>85.0</td>
+                                    <td class="gap-critical">-5.2</td>
+                                    <td><span class="priority-critical">Critical</span></td>
+                                    <td><i class="fas fa-minus"></i></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-wifi"></i> Internet Reliability</td>
+                                    <td>92.1</td>
+                                    <td>95.0</td>
+                                    <td class="gap-negative">-2.9</td>
+                                    <td><span class="priority-medium">Medium</span></td>
+                                    <td><i class="fas fa-arrow-up trend-up"></i></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-users"></i> User Satisfaction</td>
+                                    <td>83.0</td>
+                                    <td>88.0</td>
+                                    <td class="gap-negative">-5.0</td>
+                                    <td><span class="priority-high">High</span></td>
+                                    <td><i class="fas fa-arrow-up trend-up"></i></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-road"></i> Road Quality</td>
+                                    <td>71.5</td>
+                                    <td>80.0</td>
+                                    <td class="gap-critical">-8.5</td>
+                                    <td><span class="priority-critical">Critical</span></td>
+                                    <td><i class="fas fa-arrow-down"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Comparisons JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeComparisonCharts();
+            setupComparisonTabs();
+            setupRegionSelectors();
+            setupMobileMenu();
+        });
+
+        function initializeComparisonCharts() {
+            // Region Comparison Chart
+            const regionCompCtx = document.getElementById('regionComparisonChart')?.getContext('2d');
+            if (regionCompCtx) {
+                new Chart(regionCompCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Power', 'Water', 'Internet', 'Roads', 'Overall'],
+                        datasets: [
+                            {
+                                label: 'Bastos',
+                                data: [85, 78, 91, 73, 84.7],
+                                backgroundColor: 'rgba(30, 64, 175, 0.8)',
+                                borderColor: 'rgb(30, 64, 175)',
+                                borderWidth: 2,
+                                borderRadius: 6,
+                                barPercentage: 0.7
+                            },
+                            {
+                                label: 'Melen',
+                                data: [88, 82, 93, 78, 87.7],
+                                backgroundColor: 'rgba(245, 158, 11, 0.8)',
+                                borderColor: 'rgb(245, 158, 11)',
+                                borderWidth: 2,
+                                borderRadius: 6,
+                                barPercentage: 0.7
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#f7fafc',
+                                    font: { size: 14 }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: { color: '#cbd5e0' }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: {
+                                    color: '#cbd5e0',
+                                    callback: function(value) { return value + '%'; }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initialize other charts similarly...
+        }
+
+        function setupComparisonTabs() {
+            const tabs = document.querySelectorAll('.comparison-tab');
+            const contents = document.querySelectorAll('.comparison-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    showNotification(`Showing ${tab.textContent.trim()} analysis`, 'info');
+                });
+            });
+        }
+
+        function setupRegionSelectors() {
+            const regionSelect1 = document.getElementById('regionSelect1');
+            const regionSelect2 = document.getElementById('regionSelect2');
+            
+            if (regionSelect1 && regionSelect2) {
+                regionSelect1.addEventListener('change', updateRegionComparison);
+                regionSelect2.addEventListener('change', updateRegionComparison);
+                
+                function updateRegionComparison() {
+                    const region1 = regionSelect1.value;
+                    const region2 = regionSelect2.value;
+                    showNotification(`Comparing ${region1} vs ${region2}`, 'info');
+                }
+            }
+        }
+
+        function setupMobileMenu() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+
+            if (mobileMenuToggle && mobileMenu && mobileMenuClose) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.add('active');
+                });
+
+                mobileMenuClose.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                });
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">${type === 'info' ? 'ℹ️' : type === 'success' ? '✅' : '⚠️'}</span>
+                    <span class="notification-text">${message}</span>
+                </div>
+            `;
+            
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = 'var(--bg-card)';
+            notification.style.color = 'var(--text-primary)';
+            notification.style.padding = '1rem 1.5rem';
+            notification.style.borderRadius = '8px';
+            notification.style.boxShadow = '0 4px 15px var(--shadow-color)';
+            notification.style.zIndex = '10000';
+            notification.style.borderLeft = `4px solid ${type === 'info' ? 'var(--info-color)' : type === 'success' ? 'var(--success-color)' : 'var(--warning-color)'}`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
