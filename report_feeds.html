@@ -7,7 +7,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-<link rel="stylesheet" href="report_feeds.css">
+    <link rel="stylesheet" href="report_feeds.css">
 </head>
 <body>
     <div class="animated-bg"></div>
@@ -91,6 +91,28 @@
         let filteredReports = [];
         let displayedCount = 0;
         const reportsPerPage = 10;
+        
+        // Store user votes in localStorage (reportId: 'upvote' or 'downvote')
+        const VOTES_STORAGE_KEY = 'infratrack_user_votes';
+        
+        // Get user votes from localStorage
+        function getUserVotes() {
+            const votes = localStorage.getItem(VOTES_STORAGE_KEY);
+            return votes ? JSON.parse(votes) : {};
+        }
+        
+        // Save user vote
+        function saveUserVote(reportId, voteType) {
+            const votes = getUserVotes();
+            votes[reportId] = voteType;
+            localStorage.setItem(VOTES_STORAGE_KEY, JSON.stringify(votes));
+        }
+        
+        // Check if user has voted on a report
+        function hasUserVoted(reportId) {
+            const votes = getUserVotes();
+            return votes[reportId] || null;
+        }
 
         // Mobile menu toggle
         const menuToggle = document.getElementById('menuToggle');
@@ -156,7 +178,7 @@
 
         async function loadReportsFromDB() {
             try {
-                console.log('🔄 Loading reports from backend...');
+                console.log('📄 Loading reports from backend...');
                 const response = await fetch(`${API_BASE}/reports?limit=50`);
                 
                 if (!response.ok) {
@@ -261,6 +283,13 @@
             const statusIcon = report.status === 'restored' ? '✅' : 
                               report.status === 'partial' ? '🟡' : '🔴';
             
+            // Check if user has already voted
+            const userVote = hasUserVoted(report.id);
+            const upvoteDisabled = userVote ? 'disabled' : '';
+            const downvoteDisabled = userVote ? 'disabled' : '';
+            const upvoteActive = userVote === 'upvote' ? 'voted' : '';
+            const downvoteActive = userVote === 'downvote' ? 'voted' : '';
+            
             div.innerHTML = `
                 <div class="report-header">
                     <div class="report-title">
@@ -306,15 +335,24 @@
                 </div>
                 
                 <div class="report-actions">
-                    <button class="action-btn upvote" id="upvote-btn-${report.id}" onclick="upvoteReport(${report.id})">
-                        <i class="fas fa-thumbs-up"></i> Confirm (<span id="upvotes-${report.id}">${report.upvotes || 0}</span>)
+                    <button class="action-btn upvote ${upvoteActive}" id="upvote-btn-${report.id}" 
+                            onclick="upvoteReport(${report.id})" ${upvoteDisabled}>
+                        <i class="fas fa-thumbs-up"></i> ${userVote === 'upvote' ? 'Confirmed' : 'Confirm'} 
+                        (<span id="upvotes-${report.id}">${report.upvotes || 0}</span>)
                     </button>
-                    <button class="action-btn downvote" id="downvote-btn-${report.id}" onclick="downvoteReport(${report.id})">
-                        <i class="fas fa-thumbs-down"></i> Dispute (<span id="downvotes-${report.id}">${report.downvotes || 0}</span>)
+                    <button class="action-btn downvote ${downvoteActive}" id="downvote-btn-${report.id}" 
+                            onclick="downvoteReport(${report.id})" ${downvoteDisabled}>
+                        <i class="fas fa-thumbs-down"></i> ${userVote === 'downvote' ? 'Disputed' : 'Dispute'} 
+                        (<span id="downvotes-${report.id}">${report.downvotes || 0}</span>)
                     </button>
                     <button class="action-btn share" onclick="shareReport(${report.id})">
                         <i class="fas fa-share-alt"></i> Share
                     </button>
+                    ${userVote ? `
+                        <span style="color: rgba(255,255,255,0.6); font-size: 0.85em; margin-left: 10px;">
+                            ✓ You ${userVote}d this report
+                        </span>
+                    ` : ''}
                 </div>
                 ${report.image_path ? `
                     <div class="report-image">
@@ -332,15 +370,21 @@
         }
 
         async function upvoteReport(reportId) {
+            // Check if user has already voted
+            const existingVote = hasUserVoted(reportId);
+            if (existingVote) {
+                showMessage(`⚠️ You have already ${existingVote}d this report`, 'warning');
+                return;
+            }
+            
             const upvoteBtn = document.getElementById(`upvote-btn-${reportId}`);
             const downvoteBtn = document.getElementById(`downvote-btn-${reportId}`);
             
-            // Disable buttons during request
             upvoteBtn.disabled = true;
             downvoteBtn.disabled = true;
             
             try {
-                console.log(`🔄 Upvoting report #${reportId}`);
+                console.log(`📄 Upvoting report #${reportId}`);
                 
                 const response = await fetch(`${API_BASE}/reports/${reportId}`, {
                     method: 'PUT',
@@ -350,18 +394,18 @@
                     body: JSON.stringify({ action: 'upvote' })
                 });
                 
-                console.log('📥 Response status:', response.status);
-                
                 if (!response.ok) {
                     const errorText = await response.text();
                     throw new Error(`Server error ${response.status}: ${errorText}`);
                 }
                 
                 const data = await response.json();
-                console.log('✅ Response data:', data);
                 
                 if (data.success && data.data) {
-                    // Update UI directly with new counts
+                    // Save user vote
+                    saveUserVote(reportId, 'upvote');
+                    
+                    // Update UI
                     const upvoteCountSpan = document.getElementById(`upvotes-${reportId}`);
                     const upvoteMetaSpan = document.getElementById(`upvote-count-${reportId}`);
                     
@@ -372,6 +416,21 @@
                         upvoteMetaSpan.textContent = `${data.data.upvotes || 0} upvotes`;
                     }
                     
+                    // Update button appearance
+                    upvoteBtn.classList.add('voted');
+                    upvoteBtn.innerHTML = `<i class="fas fa-thumbs-up"></i> Confirmed (<span id="upvotes-${reportId}">${data.data.upvotes || 0}</span>)`;
+                    
+                    // Add voted message
+                    const actionsDiv = upvoteBtn.parentElement;
+                    const existingMsg = actionsDiv.querySelector('.vote-message');
+                    if (!existingMsg) {
+                        const msg = document.createElement('span');
+                        msg.className = 'vote-message';
+                        msg.style.cssText = 'color: rgba(255,255,255,0.6); font-size: 0.85em; margin-left: 10px;';
+                        msg.textContent = '✓ You upvoted this report';
+                        actionsDiv.appendChild(msg);
+                    }
+                    
                     showMessage('✅ Report confirmed!', 'success');
                 } else {
                     throw new Error(data.message || 'Failed to upvote');
@@ -379,23 +438,27 @@
             } catch (error) {
                 console.error('❌ Upvote error:', error);
                 showMessage(`❌ Error: ${error.message}`, 'error');
-            } finally {
-                // Re-enable buttons
                 upvoteBtn.disabled = false;
                 downvoteBtn.disabled = false;
             }
         }
 
         async function downvoteReport(reportId) {
+            // Check if user has already voted
+            const existingVote = hasUserVoted(reportId);
+            if (existingVote) {
+                showMessage(`⚠️ You have already ${existingVote}d this report`, 'warning');
+                return;
+            }
+            
             const upvoteBtn = document.getElementById(`upvote-btn-${reportId}`);
             const downvoteBtn = document.getElementById(`downvote-btn-${reportId}`);
             
-            // Disable buttons during request
             upvoteBtn.disabled = true;
             downvoteBtn.disabled = true;
             
             try {
-                console.log(`🔄 Downvoting report #${reportId}`);
+                console.log(`📄 Downvoting report #${reportId}`);
                 
                 const response = await fetch(`${API_BASE}/reports/${reportId}`, {
                     method: 'PUT',
@@ -405,22 +468,37 @@
                     body: JSON.stringify({ action: 'downvote' })
                 });
                 
-                console.log('📥 Response status:', response.status);
-                
                 if (!response.ok) {
                     const errorText = await response.text();
                     throw new Error(`Server error ${response.status}: ${errorText}`);
                 }
                 
                 const data = await response.json();
-                console.log('✅ Response data:', data);
                 
                 if (data.success && data.data) {
-                    // Update UI directly with new counts
+                    // Save user vote
+                    saveUserVote(reportId, 'downvote');
+                    
+                    // Update UI
                     const downvoteCountSpan = document.getElementById(`downvotes-${reportId}`);
                     
                     if (downvoteCountSpan) {
                         downvoteCountSpan.textContent = data.data.downvotes || 0;
+                    }
+                    
+                    // Update button appearance
+                    downvoteBtn.classList.add('voted');
+                    downvoteBtn.innerHTML = `<i class="fas fa-thumbs-down"></i> Disputed (<span id="downvotes-${reportId}">${data.data.downvotes || 0}</span>)`;
+                    
+                    // Add voted message
+                    const actionsDiv = downvoteBtn.parentElement;
+                    const existingMsg = actionsDiv.querySelector('.vote-message');
+                    if (!existingMsg) {
+                        const msg = document.createElement('span');
+                        msg.className = 'vote-message';
+                        msg.style.cssText = 'color: rgba(255,255,255,0.6); font-size: 0.85em; margin-left: 10px;';
+                        msg.textContent = '✓ You downvoted this report';
+                        actionsDiv.appendChild(msg);
                     }
                     
                     showMessage('📊 Report disputed', 'info');
@@ -430,8 +508,6 @@
             } catch (error) {
                 console.error('❌ Downvote error:', error);
                 showMessage(`❌ Error: ${error.message}`, 'error');
-            } finally {
-                // Re-enable buttons
                 upvoteBtn.disabled = false;
                 downvoteBtn.disabled = false;
             }
@@ -490,7 +566,7 @@
             const container = document.getElementById('reportsContainer');
             container.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-state-icon">📭</div>
+                    <div class="empty-state-icon">🔭</div>
                     <h3>No Reports Found</h3>
                     <p>Try adjusting your filters or check back later</p>
                 </div>
