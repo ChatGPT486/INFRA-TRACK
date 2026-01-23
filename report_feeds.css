@@ -1,4 +1,4 @@
-  
+
         * {
             margin: 0;
             padding: 0;
@@ -311,22 +311,27 @@
             font-weight: 600;
         }
 
-        .action-btn:hover {
+        .action-btn:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
 
-        .action-btn.upvote:hover {
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .action-btn.upvote:hover:not(:disabled) {
             border-color: #22c55e;
             color: #22c55e;
         }
 
-        .action-btn.downvote:hover {
+        .action-btn.downvote:hover:not(:disabled) {
             border-color: #ef4444;
             color: #ef4444;
         }
 
-        .action-btn.share:hover {
+        .action-btn.share:hover:not(:disabled) {
             border-color: #3b82f6;
             color: #3b82f6;
         }
@@ -427,28 +432,6 @@
             border-left: 4px solid #3b82f6;
         }
 
-        .trust-score-tooltip {
-            position: relative;
-            cursor: help;
-        }
-
-        .trust-score-tooltip:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10, 14, 39, 0.95);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.85em;
-            white-space: nowrap;
-            z-index: 1000;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 5px;
-        }
-
         @media (max-width: 768px) {
             .toggle-btn {
                 display: block;
@@ -495,3 +478,4 @@
                 width: 100%;
             }
         }
+  
