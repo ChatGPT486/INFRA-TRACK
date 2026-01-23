@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfraTrack Global - Login</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo-section">
+            <button class="toggle-btn" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo-icon">🌍</div>
+        </div>
+        
+        <div class="menu-buttons" id="topMenu">
+            <a href="homepage.html">
+                <i class="fas fa-home"></i> <span>Home</span>
+            </a>
+            <a href="aboutUs.html">
+                <i class="fas fa-info-circle"></i> <span>About</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="content-wrapper">
+        <div class="login-container">
+            <div class="login-left">
+                <h1>Welcome Back! 👋</h1>
+                <p>Report and track infrastructure issues in your area. Join our community to stay informed.</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <span>Real-time issue reports</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🗺️</div>
+                        <span>Interactive map view</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔔</div>
+                        <span>Instant notifications</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="login-right">
+                <div class="login-header">
+                    <h2>Account Access</h2>
+                    <p>Login or create a new account</p>
+                </div>
+
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="loginTab">Login</button>
+                    <button class="auth-tab" id="registerTab">Sign Up</button>
+                </div>
+
+                <!-- Login Form -->
+                <div class="form-container active" id="loginForm">
+                    <div id="loginMessage" class="message"></div>
+                    
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                                <i class="fas fa-eye" onclick="togglePassword('loginPassword')"></i>
+                            </div>
+                        </div>
+
+                        <!-- Admin Login Toggle -->
+                        <div class="admin-toggle" onclick="toggleAdminField()">
+                            <input type="checkbox" id="adminCheckbox">
+                            <label for="adminCheckbox">🛡️ Login as Administrator</label>
+                        </div>
+
+                        <!-- Admin Code Field -->
+                        <div class="admin-code-field" id="adminCodeField">
+                            <div class="form-group">
+                                <label>Admin Access Code</label>
+                                <input type="password" id="adminCode" placeholder="Enter admin code">
+                                <div class="admin-hint">💡 Contact system admin for access code</div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn" id="loginBtn">Sign In</button>
+                    </form>
+
+                    <div class="quick-login">
+                        <h3>🚀 Quick Test Login</h3>
+                        <div class="test-users">
+                            <button type="button" class="test-user-btn admin" onclick="quickLogin('admin@example.com', 'password123', true)">
+                                🛡️ Login as Admin
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div class="form-container" id="registerForm">
+                    <div id="registerMessage" class="message"></div>
+                    
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="registerUsername" placeholder="Choose a username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="registerFullName" placeholder="Your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="registerEmail" placeholder="Your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Phone Number (Optional)</label>
+                            <input type="tel" id="registerPhone" placeholder="+237 XXX XXX XXX">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="registerCity" placeholder="Your city" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="registerPassword" placeholder="Create a password" required>
+                                <i class="fas fa-eye" onclick="togglePassword('registerPassword')"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">I agree to the Terms and Conditions</label>
+                        </div>
+                        
+                        <button type="submit" class="btn">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:3000/api';
+        const ADMIN_CODE = 'INFRATRACK2025'; // Secret admin code
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const topMenu = document.getElementById('topMenu');
+
+        menuToggle.addEventListener('click', function() {
+            topMenu.classList.toggle('mobile-visible');
+            const icon = this.querySelector('i');
+            icon.className = topMenu.classList.contains('mobile-visible') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        // Tab switching
+        document.getElementById('loginTab').addEventListener('click', function() {
+            this.classList.add('active');
+            document.getElementById('registerTab').classList.remove('active');
+            document.getElementById('loginForm').classList.add('active');
+            document.getElementById('registerForm').classList.remove('active');
+        });
+
+        document.getElementById('registerTab').addEventListener('click', function() {
+            this.classList.add('active');
+            document.getElementById('loginTab').classList.remove('active');
+            document.getElementById('registerForm').classList.add('active');
+            document.getElementById('loginForm').classList.remove('active');
+        });
+
+        // Password toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+
+        // Admin field toggle
+        function toggleAdminField() {
+            const checkbox = document.getElementById('adminCheckbox');
+            const adminField = document.getElementById('adminCodeField');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                adminField.classList.add('show');
+                loginBtn.textContent = '🛡️ Login as Admin';
+                loginBtn.classList.add('admin-btn');
+            } else {
+                adminField.classList.remove('show');
+                loginBtn.textContent = 'Sign In';
+                loginBtn.classList.remove('admin-btn');
+            }
+        }
+
+        // Quick login
+        function quickLogin(email, password, isAdmin) {
+            document.getElementById('loginEmail').value = email;
+            document.getElementById('loginPassword').value = password;
+            
+            if (isAdmin) {
+                document.getElementById('adminCheckbox').checked = true;
+                document.getElementById('adminCodeField').classList.add('show');
+               // document.getElementById('adminCode').value = ADMIN_CODE;
+                document.getElementById('loginBtn').textContent = '🛡️ Login as Admin';
+                document.getElementById('loginBtn').classList.add('admin-btn');
+            }
+            
+            document.getElementById('login-form').dispatchEvent(new Event('submit'));
+        }
+
+        // Login form submission
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const isAdminLogin = document.getElementById('adminCheckbox').checked;
+            const adminCode = document.getElementById('adminCode').value;
+            const messageEl = document.getElementById('loginMessage');
+
+            // Check admin code if admin login
+            if (isAdminLogin) {
+                if (adminCode !== ADMIN_CODE) {
+                    messageEl.textContent = '⛔ Invalid admin access code!';
+                    messageEl.className = 'message error';
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    localStorage.setItem('userId', data.data.userId);
+                    localStorage.setItem('userName', data.data.fullName);
+                    localStorage.setItem('userEmail', data.data.email);
+                    localStorage.setItem('authToken', data.data.token);
+                    
+                    // Set admin flag if admin login with correct code
+                    if (isAdminLogin) {
+                        localStorage.setItem('isAdmin', 'true');
+                        messageEl.textContent = '✓ Admin login successful! Redirecting to admin dashboard...';
+                        messageEl.className = 'message success';
+                        
+                        setTimeout(() => {
+                            window.location.href = 'Admin.html';
+                        }, 1000);
+                    } else {
+                        localStorage.setItem('isAdmin', 'false');
+                        messageEl.textContent = '✓ Login successful! Redirecting...';
+                        messageEl.className = 'message success';
+                        
+                        setTimeout(() => {
+                            window.location.href = 'homepage.html';
+                        }, 1000);
+                    }
+                } else {
+                    messageEl.textContent = data.message || 'Login failed';
+                    messageEl.className = 'message error';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                messageEl.textContent = 'Connection error. Please try again.';
+                messageEl.className = 'message error';
+            }
+        });
+
+        // Register form submission
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                username: document.getElementById('registerUsername').value,
+                full_name: document.getElementById('registerFullName').value,
+                email: document.getElementById('registerEmail').value,
+                phone_number: document.getElementById('registerPhone').value,
+                city: document.getElementById('registerCity').value,
+                password: document.getElementById('registerPassword').value,
+                country: 'Cameroon'
+            };
+            
+            const messageEl = document.getElementById('registerMessage');
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    localStorage.setItem('userId', data.data.userId);
+                    localStorage.setItem('userName', formData.full_name);
+                    localStorage.setItem('userEmail', data.data.email);
+                    localStorage.setItem('authToken', data.data.token);
+                    localStorage.setItem('isAdmin', 'false'); // Regular users are not admin
+                    
+                    messageEl.textContent = '✓ Account created! Redirecting...';
+                    messageEl.className = 'message success';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'homepage.html';
+                    }, 1000);
+                } else {
+                    messageEl.textContent = data.message || 'Registration failed';
+                    messageEl.className = 'message error';
+                }
+            } catch (error) {
+                console.error('Register error:', error);
+                messageEl.textContent = 'Connection error. Please try again.';
+                messageEl.className = 'message error';
+            }
+        });
+    </script>
+</body>
+</html>

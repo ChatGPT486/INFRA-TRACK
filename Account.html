@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 InfraTrack Global - My Account</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="Account.css">
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="content-wrapper">
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div class="logo-section">
+                <button class="toggle-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <div class="logo-icon">🌍</div>
+            </div>
+            
+            <div class="menu-buttons" id="topMenu">
+                <a href="homepage.html">
+                   <i class="fas fa-home"></i> <span>Home</span>
+                </a>
+                <a href="report.html">
+                   <i class="fas fa-plus-circle"></i> <span>Report</span>
+                </a>
+                <a href="report_feeds.html">
+                   <i class="fas fa-list"></i> <span>Feed</span>
+                </a>
+                <a href="aboutUs.html">
+                   <i class="fas fa-info-circle"></i> <span>About</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- LOGIN REQUIRED MESSAGE -->
+        <div id="loginRequired" class="login-required" style="display: none;">
+            <i class="fas fa-lock"></i>
+            <h2>Login Required</h2>
+            <p>Please login to access your account page.</p>
+            <a href="login.html">
+                <i class="fas fa-sign-in-alt"></i> Go to Login
+            </a>
+            <button onclick="useDemoAccount()">
+                <i class="fas fa-user"></i> Use Demo Account Instead
+            </button>
+        </div>
+
+        <!-- ACCOUNT CONTENT -->
+        <div class="account-container" id="accountContent" style="display: none;">
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+                <h1>👤 My Account</h1>
+                <p>Manage your profile and track your contributions to the community</p>
+            </div>
+
+            <!-- PROFILE HEADER -->
+            <div class="profile-header">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar">👤</div>
+                </div>
+                <div class="profile-info">
+                    <h2 class="profile-name" id="profileName">Loading...</h2>
+                    <p class="profile-email" id="profileEmail">email@example.com</p>
+                    <p class="profile-location" id="profileLocation">📍 City, Country</p>
+
+                    <!-- STATS ROW -->
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="stat-number" id="statReports">0</div>
+                            <div class="stat-label">Reports</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="statVerifications">0</div>
+                            <div class="stat-label">Verifications</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="statTrustScore">0</div>
+                            <div class="stat-label">Trust Score</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="statHelpedUsers">0</div>
+                            <div class="stat-label">Users Helped</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENT GRID (2 COLUMNS) -->
+            <div class="content-grid">
+                <!-- PERSONAL INFO -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-user-edit"></i></div>
+                        <h3 class="section-title">Personal Information</h3>
+                    </div>
+                    
+                    <form id="personalInfoForm">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="inputName" placeholder="Your name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="inputEmail" placeholder="Your email" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" id="inputCountry" placeholder="Your country" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="inputCity" placeholder="Your city">
+                        </div>
+                        
+                        <button type="submit" class="btn">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <div id="saveMessage" class="message"></div>
+                    </form>
+                </div>
+
+                <!-- SETTINGS & PREFERENCES -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-cog"></i></div>
+                        <h3 class="section-title">Settings</h3>
+                    </div>
+                    
+                    <form id="preferencesForm">
+                        <div class="form-group">
+                            <label>Notifications</label>
+                            <select id="inputNotifications">
+                                <option value="all">All notifications</option>
+                                <option value="area">Only my area</option>
+                                <option value="critical">Critical only</option>
+                                <option value="off">Off</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Language</label>
+                            <select id="inputLanguage">
+                                <option value="English">English</option>
+                                <option value="Français">Français</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Privacy</label>
+                            <select id="inputPrivacy">
+                                <option value="public">Public profile</option>
+                                <option value="private">Private profile</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn">
+                            <i class="fas fa-check"></i> Update Settings
+                        </button>
+                        <button type="button" class="btn btn-danger" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                        <div id="prefsMessage" class="message"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SECOND ROW - FULL WIDTH SECTIONS -->
+            <div class="content-grid">
+                <!-- RECENT ACTIVITY -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-history"></i></div>
+                        <h3 class="section-title">Recent Activity</h3>
+                    </div>
+                    
+                    <div class="activity-list" id="activityList">
+                        <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.6);">
+                            <i class="fas fa-spinner fa-spin"></i> Loading activities...
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-secondary" onclick="window.location.href='report_feeds.html'">
+                        <i class="fas fa-list"></i> View All Reports
+                    </button>
+                </div>
+
+                <!-- ACHIEVEMENTS -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-trophy"></i></div>
+                        <h3 class="section-title">Achievements</h3>
+                    </div>
+                    
+                    <div class="achievements-grid" id="achievementsGrid">
+                        <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.6); grid-column: 1/-1;">
+                            <i class="fas fa-spinner fa-spin"></i> Loading achievements...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="section-card full-width">
+                <div class="section-header">
+                    <div class="section-icon"><i class="fas fa-bolt"></i></div>
+                    <h3 class="section-title">Quick Actions</h3>
+                </div>
+                
+                <div class="actions-grid">
+                    <div class="action-card" onclick="window.location.href='report.html'">
+                        <div class="action-icon">📝</div>
+                        <div class="action-label">Submit New Report</div>
+                    </div>
+                    <div class="action-card" onclick="window.location.href='map.html'">
+                        <div class="action-icon">🗺️</div>
+                        <div class="action-label">View Map</div>
+                    </div>
+                    <div class="action-card" onclick="window.location.href='report_feeds.html'">
+                        <div class="action-icon">📰</div>
+                        <div class="action-label">Browse Reports</div>
+                    </div>
+                    <div class="action-card" onclick="shareProfile()">
+                        <div class="action-icon">🔗</div>
+                        <div class="action-label">Share Profile</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://127.0.0.1:3000/api';
+        let currentUser = null;
+        let userStats = null;
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const topMenu = document.getElementById('topMenu');
+
+        menuToggle.addEventListener('click', function() {
+            topMenu.classList.toggle('mobile-visible');
+            const icon = this.querySelector('i');
+            icon.className = topMenu.classList.contains('mobile-visible') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        // Check if user is logged in
+        function checkAuth() {
+            const userId = getUserId();
+            if (!userId) {
+                document.getElementById('loginRequired').style.display = 'block';
+                document.getElementById('accountContent').style.display = 'none';
+                return false;
+            }
+            document.getElementById('loginRequired').style.display = 'none';
+            document.getElementById('accountContent').style.display = 'block';
+            return true;
+        }
+
+        // Use demo account
+        function useDemoAccount() {
+            localStorage.setItem('userId', '1');
+            localStorage.setItem('userName', 'Demo User');
+            localStorage.setItem('userEmail', 'demo@infratrack.com');
+            localStorage.setItem('isDemo', 'true');
+            window.location.reload();
+        }
+
+        function getUserId() {
+            return localStorage.getItem('userId') || null;
+        }
+
+        function showMessage(elementId, message, isError = false) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.className = isError ? 'message error' : 'message success';
+            el.style.display = 'block';
+            
+            setTimeout(() => {
+                el.style.display = 'none';
+            }, 5000);
+        }
+
+        function formatTimeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            return date.toLocaleDateString();
+        }
+
+        function getActivityIcon(serviceType) {
+            const icons = {
+                power: '⚡',
+                water: '💧',
+                internet: '📱'
+            };
+            return icons[serviceType] || '📍';
+        }
+
+        async function fetchUserProfile() {
+            const userId = getUserId();
+            if (!userId) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/users/${userId}`);
+                if (!response.ok) throw new Error('Failed to fetch profile');
+                
+                const data = await response.json();
+                currentUser = data.success ? data.data : data;
+                
+                updateProfileDisplay();
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+                currentUser = {
+                    id: userId,
+                    full_name: localStorage.getItem('userName') || 'User',
+                    email: localStorage.getItem('userEmail') || 'user@infratrack.com',
+                    country: 'Cameroon',
+                    city: 'Yaoundé'
+                };
+                updateProfileDisplay();
+            }
+        }
+
+        async function fetchUserStats() {
+            const userId = getUserId();
+            if (!userId) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/users/${userId}/stats`);
+                const data = await response.json();
+                userStats = data.success ? data.data : data;
+                
+                updateStatsDisplay();
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+                userStats = {
+                    total_reports: 0,
+                    total_verifications: 0,
+                    total_upvotes: 0
+                };
+                updateStatsDisplay();
+            }
+        }
+
+        async function fetchUserActivities() {
+            const userId = getUserId();
+            if (!userId) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/reports?user_id=${userId}&limit=5`);
+                const data = await response.json();
+                const reports = data.reports || [];
+                
+                updateActivitiesDisplay(reports);
+            } catch (error) {
+                console.error('Error fetching activities:', error);
+                document.getElementById('activityList').innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">
+                        No recent activity
+                    </div>
+                `;
+            }
+        }
+
+        function updateProfileDisplay() {
+            if (!currentUser) return;
+
+            document.getElementById('profileName').textContent = currentUser.full_name || 'User';
+            document.getElementById('profileEmail').textContent = currentUser.email || '';
+            document.getElementById('profileLocation').textContent = 
+                `📍 ${currentUser.city || 'City'}, ${currentUser.country || 'Country'}`;
+
+            document.getElementById('inputName').value = currentUser.full_name || '';
+            document.getElementById('inputEmail').value = currentUser.email || '';
+            document.getElementById('inputCountry').value = currentUser.country || '';
+            document.getElementById('inputCity').value = currentUser.city || '';
+        }
+
+        function updateStatsDisplay() {
+            if (!userStats) return;
+
+            const totalReports = userStats.total_reports || 0;
+            const totalVerifications = userStats.verifications_count || 0;
+            const helpedUsers = userStats.total_upvotes || 0;
+
+            document.getElementById('statReports').textContent = totalReports;
+            document.getElementById('statVerifications').textContent = totalVerifications;
+            document.getElementById('statHelpedUsers').textContent = 
+                helpedUsers >= 1000 ? (helpedUsers / 1000).toFixed(1) + 'k' : helpedUsers;
+
+            const trustScore = (totalReports * 5) + (totalVerifications * 10) + helpedUsers;
+            document.getElementById('statTrustScore').textContent = trustScore;
+        }
+
+        function updateActivitiesDisplay(reports) {
+            const activityList = document.getElementById('activityList');
+            
+            if (!reports || reports.length === 0) {
+                activityList.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">
+                        No recent activity
+                    </div>
+                `;
+                return;
+            }
+
+            activityList.innerHTML = reports.map(report => `
+                <div class="activity-item">
+                    <div class="activity-icon">${getActivityIcon(report.service_type)}</div>
+                    <div class="activity-details">
+                        <div class="activity-title">${report.title || `Reported ${report.service_type} issue`}</div>
+                        <div class="activity-time">${formatTimeAgo(report.created_at)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateAchievementsDisplay() {
+            const achievements = [
+                { icon: '🌟', name: 'First Report', earned: (userStats?.total_reports || 0) > 0 },
+                { icon: '🔥', name: '10 Reports', earned: (userStats?.total_reports || 0) >= 10 },
+                { icon: '✅', name: 'Verified User', earned: currentUser?.verified },
+                { icon: '👥', name: 'Helper', earned: (userStats?.total_reports || 0) >= 5 },
+                { icon: '🏆', name: 'Top Reporter', earned: (userStats?.total_reports || 0) >= 50 },
+                { icon: '⭐', name: 'Trusted', earned: currentUser?.verified }
+            ];
+
+            const achievementsGrid = document.getElementById('achievementsGrid');
+            achievementsGrid.innerHTML = achievements.map(achievement => `
+                <div class="achievement-item ${achievement.earned ? 'earned' : ''}" style="opacity: ${achievement.earned ? 1 : 0.4}">
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-name">${achievement.name}</div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('personalInfoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const userId = getUserId();
+            const formData = {
+                full_name: document.getElementById('inputName').value,
+                country: document.getElementById('inputCountry').value,
+                city: document.getElementById('inputCity').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) throw new Error('Failed to update profile');
+                
+                showMessage('saveMessage', '✓ Profile updated successfully!', false);
+                await fetchUserProfile();
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showMessage('saveMessage', '✗ Failed to update profile', true);
+            }
+        });
+
+        document.getElementById('preferencesForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            showMessage('prefsMessage', '✓ Settings updated successfully!', false);
+        });
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('userId');
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('isDemo');
+                localStorage.removeItem('isAdmin');
+                window.location.href = 'login.html';
+            }
+        }
+
+        function shareProfile() {
+            const profileUrl = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My InfraTrack Profile',
+                    text: 'Check out my contributions on InfraTrack!',
+                    url: profileUrl
+                }).catch(() => {
+                    copyToClipboard(profileUrl);
+                });
+            } else {
+                copyToClipboard(profileUrl);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✓ Profile link copied to clipboard!');
+            }).catch(() => {
+                alert('Could not copy link');
+            });
+        }
+
+        // Initialize page
+        async function initializePage() {
+            if (!checkAuth()) return;
+            
+            await fetchUserProfile();
+            await fetchUserStats();
+            await fetchUserActivities();
+            updateAchievementsDisplay();
+        }
+
+        window.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

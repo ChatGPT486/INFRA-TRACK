@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfraTrack Global - Reports Feed</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: -2;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .top-bar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toggle-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            font-size: 2em;
+        }
+
+        .menu-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .menu-buttons a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .menu-buttons a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1em;
+        }
+
+        .filter-section {
+            max-width: 1200px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-section label {
+            font-weight: 600;
+        }
+
+        .filter-section select,
+        .filter-section input {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1em;
+        }
+
+        .filter-section select option {
+            background: #1a1e3a;
+            color: white;
+        }
+
+        .filter-section input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .reports-feed {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .feed-header h2 {
+            font-size: 1.8em;
+        }
+
+        .feed-stats {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .report-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .report-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .report-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .report-icon {
+            font-size: 1.5em;
+        }
+
+        .report-time {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+        }
+
+        .report-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .report-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95em;
+        }
+
+        .trust-badge {
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trust-badge.low {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+            color: #fca5a5;
+        }
+
+        .trust-badge.moderate {
+            background: rgba(251, 191, 36, 0.2);
+            border: 2px solid #fbbf24;
+            color: #fde047;
+        }
+
+        .trust-badge.trusted {
+            background: rgba(34, 197, 94, 0.2);
+            border: 2px solid #22c55e;
+            color: #86efac;
+        }
+
+        .trust-badge.elite {
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.3), rgba(219, 39, 119, 0.3));
+            border: 2px solid #a855f7;
+            color: #e9d5ff;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .trust-stars {
+            display: inline-flex;
+            gap: 2px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-badge.outage {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+        }
+
+        .status-badge.partial {
+            background: rgba(251, 191, 36, 0.2);
+            border: 1px solid #fbbf24;
+        }
+
+        .status-badge.restored {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+        }
+
+        .verified-badge {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .action-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .action-btn.upvote:hover:not(:disabled) {
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+
+        .action-btn.downvote:hover:not(:disabled) {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .action-btn.share:hover:not(:disabled) {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .report-image {
+            margin-top: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .report-image img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .report-image img:hover {
+            transform: scale(1.02);
+        }
+
+        .load-more {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .load-more:hover {
+            transform: translateY(-3px);
+        }
+
+        .loading,
+        .empty-state,
+        .error-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state-icon,
+        .error-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-message.success {
+            border-left: 4px solid #22c55e;
+        }
+
+        .toast-message.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .toast-message.info {
+            border-left: 4px solid #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            .toggle-btn {
+                display: block;
+            }
+
+            .menu-buttons {
+                display: none;
+                position: absolute;
+                top: 70px;
+                right: 20px;
+                background: rgba(10, 14, 39, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+            }
+
+            .menu-buttons.mobile-visible {
+                display: flex;
+            }
+
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-section select,
+            .filter-section input {
+                width: 100%;
+            }
+
+            .report-meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .report-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="content-wrapper">
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div class="logo-section">
+                <button class="toggle-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <div class="logo-icon">🌍</div>
+            </div>
+            
+            <div class="menu-buttons" id="topMenu">
+                <a href="homepage.html">
+                    <i class="fas fa-home"></i> <span>Home</span>
+                </a>
+                <a href="Account.html">
+                    <i class="fas fa-user"></i> <span>Account</span>
+                </a>
+                <a href="aboutUs.html">
+                    <i class="fas fa-info-circle"></i> <span>About</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📰 InfraTrack Reports</h1>
+            <p>Real-time infrastructure reports from your community</p>
+        </div>
+
+        <!-- FILTER SECTION -->
+        <div class="filter-section">
+            <label for="serviceFilter">Service:</label>
+            <select id="serviceFilter" onchange="filterReports()">
+                <option value="all">All Services</option>
+                <option value="power">⚡ Power</option>
+                <option value="water">💧 Water</option>
+                <option value="internet">📡 Internet</option>
+            </select>
+
+            <label for="statusFilter">Status:</label>
+            <select id="statusFilter" onchange="filterReports()">
+                <option value="all">All Status</option>
+                <option value="outage">🔴 Outage</option>
+                <option value="partial">🟡 Partial</option>
+                <option value="restored">✅ Restored</option>
+            </select>
+
+            <label for="locationFilter">Location:</label>
+            <input type="text" id="locationFilter" placeholder="City or Country" onkeyup="filterReports()">
+        </div>
+
+        <!-- REPORTS FEED -->
+        <div class="reports-feed">
+            <div class="feed-header">
+                <h2>Recent Reports</h2>
+                <div class="feed-stats">
+                    <span id="reportCount">Loading...</span>
+                </div>
+            </div>
+
+            <div id="reportsContainer">
+                <div class="loading" id="loadingState">
+                    <div class="spinner"></div>
+                    <p>Loading reports from database...</p>
+                </div>
+            </div>
+
+            <button class="load-more" id="loadMoreBtn" style="display: none;" onclick="loadMoreReports()">
+                Load More Reports
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:3000/api';
+        
+        let currentReports = [];
+        let filteredReports = [];
+        let displayedCount = 0;
+        const reportsPerPage = 10;
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const topMenu = document.getElementById('topMenu');
+
+        menuToggle.addEventListener('click', function() {
+            topMenu.classList.toggle('mobile-visible');
+            const icon = this.querySelector('i');
+            icon.className = topMenu.classList.contains('mobile-visible') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        function calculateTrustScore(user) {
+            const V = user.verified ? 1 : 0;
+            const R = user.rating_average || 3;
+            const totalReports = user.total_reports || 1;
+            const verifiedReports = user.verified_reports || 0;
+            const disputes = user.disputes || 0;
+            const onTimeReports = user.on_time_reports || 0;
+            const C = totalReports > 0 ? verifiedReports / totalReports : 0;
+            const D = totalReports > 0 ? disputes / totalReports : 0;
+            const T = totalReports > 0 ? onTimeReports / totalReports : 0;
+            const upvotes = user.total_upvotes || 0;
+            const downvotes = user.total_downvotes || 0;
+            const totalVotes = upvotes + downvotes;
+            const F = totalVotes > 0 ? (upvotes - downvotes) / totalVotes : 0;
+            const engagement = user.app_engagement || 0.5;
+            const confirmationRate = user.confirmation_rate || 0.5;
+            const profileCompleteness = user.profile_completeness || 0.5;
+            const B = (engagement + confirmationRate + profileCompleteness) / 3;
+            
+            const currentScore = (10 * V) + (6 * R) + (20 * C) - (15 * D) + (10 * T) + (5 * F * 100) + (10 * B);
+            
+            let finalScore = currentScore;
+            if (user.previous_trust_score !== undefined && user.previous_trust_score > 0) {
+                finalScore = (0.8 * user.previous_trust_score) + (0.2 * currentScore);
+            }
+            
+            finalScore = Math.max(0, Math.min(100, finalScore));
+            
+            return Math.round(finalScore);
+        }
+
+        function getTrustLevel(score) {
+            if (score >= 90) return 'elite';
+            if (score >= 70) return 'trusted';
+            if (score >= 40) return 'moderate';
+            return 'low';
+        }
+
+        function getTrustStars(score) {
+            const starCount = score >= 90 ? 5 : score >= 70 ? 4 : score >= 40 ? 3 : score >= 20 ? 2 : 1;
+            let stars = '';
+            const starColor = score >= 90 ? '#a855f7' : score >= 70 ? '#22c55e' : score >= 40 ? '#fbbf24' : '#ef4444';
+            
+            for (let i = 0; i < starCount; i++) {
+                stars += `<i class="bi bi-star-fill" style="color: ${starColor};"></i>`;
+            }
+            for (let i = starCount; i < 5; i++) {
+                stars += '<i class="bi bi-star" style="color: rgba(255,255,255,0.3);"></i>';
+            }
+            return stars;
+        }
+
+        async function loadReportsFromDB() {
+            try {
+                console.log('🔄 Loading reports from backend...');
+                const response = await fetch(`${API_BASE}/reports?limit=50`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Reports loaded:', data);
+                const reports = data.reports || data.data || [];
+
+                if (Array.isArray(reports)) {
+                    currentReports = await Promise.all(reports.map(async (report) => {
+                        let user = {
+                            verified: false,
+                            rating_average: 3,
+                            total_reports: 1,
+                            verified_reports: 0,
+                            disputes: 0,
+                            on_time_reports: 0,
+                            total_upvotes: 0,
+                            total_downvotes: 0,
+                            app_engagement: 0.5,
+                            confirmation_rate: 0.5,
+                            profile_completeness: 0.5
+                        };
+
+                        if (report.user_id) {
+                            try {
+                                const userResponse = await fetch(`${API_BASE}/users/${report.user_id}`);
+                                if (userResponse.ok) {
+                                    const userData = await userResponse.json();
+                                    user = { ...user, ...(userData.data || userData) };
+                                }
+                            } catch (e) {
+                                console.warn('User fetch failed for user_id:', report.user_id);
+                            }
+                        }
+
+                        const trustScore = calculateTrustScore(user);
+
+                        return {
+                            ...report,
+                            trustScore: trustScore,
+                            trustLevel: getTrustLevel(trustScore),
+                            userName: user.full_name || 'Anonymous',
+                            userVerified: !!user.verified,
+                            timeAgo: getTimeAgo(report.created_at)
+                        };
+                    }));
+
+                    filteredReports = [...currentReports];
+                    displayReports();
+                } else {
+                    showError('Invalid reports format from server');
+                }
+            } catch (error) {
+                console.error('❌ Error loading reports:', error);
+                showError(`Connection error: ${error.message}. Please check if backend is running on http://127.0.0.1:3000`);
+            }
+        }
+
+        function displayReports() {
+            document.getElementById('loadingState').style.display = 'none';
+            displayedCount = 0;
+            document.getElementById('reportsContainer').innerHTML = '';
+            loadMoreReports();
+        }
+
+        function loadMoreReports() {
+            const container = document.getElementById('reportsContainer');
+            const endIndex = Math.min(displayedCount + reportsPerPage, filteredReports.length);
+            
+            for (let i = displayedCount; i < endIndex; i++) {
+                const report = filteredReports[i];
+                container.appendChild(createReportElement(report));
+            }
+            
+            displayedCount = endIndex;
+            
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (displayedCount >= filteredReports.length) {
+                loadMoreBtn.style.display = 'none';
+            } else {
+                loadMoreBtn.style.display = 'block';
+            }
+            
+            updateReportCount();
+        }
+
+        function createReportElement(report) {
+            const div = document.createElement('div');
+            div.className = 'report-item';
+            div.id = `report-${report.id}`;
+            
+            const icon = {
+                power: '⚡',
+                water: '💧',
+                internet: '📡'
+            }[report.service_type] || '📍';
+            
+            const trustStars = getTrustStars(report.trustScore);
+            const statusIcon = report.status === 'restored' ? '✅' : 
+                              report.status === 'partial' ? '🟡' : '🔴';
+            
+            div.innerHTML = `
+                <div class="report-header">
+                    <div class="report-title">
+                        <span class="report-icon">${icon}</span>
+                        <span>${report.title}</span>
+                    </div>
+                    <div class="report-time">${report.timeAgo}</div>
+                </div>
+                
+                <div class="report-description">
+                    "${report.description || 'No description provided'}"
+                </div>
+                
+                <div class="report-meta">
+                    <div class="meta-item">
+                        <span>👤</span>
+                        <span>${report.userName}</span>
+                    </div>
+                    
+                    <span class="trust-badge ${report.trustLevel}" title="Trust Score: ${report.trustScore}">
+                        ${trustStars} ${report.trustScore}pts
+                    </span>
+                    
+                    <div class="meta-item">
+                        <span>📍</span>
+                        <span>${report.city || report.location_address}, ${report.country}</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span>👍</span>
+                        <span id="upvote-count-${report.id}">${report.upvotes || 0} upvotes</span>
+                    </div>
+                    
+                    ${report.userVerified ? `
+                        <span class="verified-badge">
+                            ✓ Verified User
+                        </span>
+                    ` : ''}
+                    
+                    <span class="status-badge ${report.status}">
+                        ${statusIcon} ${report.status.charAt(0).toUpperCase() + report.status.slice(1)}
+                    </span>
+                </div>
+                
+                <div class="report-actions">
+                    <button class="action-btn upvote" id="upvote-btn-${report.id}" onclick="upvoteReport(${report.id})">
+                        <i class="fas fa-thumbs-up"></i> Confirm (<span id="upvotes-${report.id}">${report.upvotes || 0}</span>)
+                    </button>
+                    <button class="action-btn downvote" id="downvote-btn-${report.id}" onclick="downvoteReport(${report.id})">
+                        <i class="fas fa-thumbs-down"></i> Dispute (<span id="downvotes-${report.id}">${report.downvotes || 0}</span>)
+                    </button>
+                    <button class="action-btn share" onclick="shareReport(${report.id})">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+                ${report.image_path ? `
+                    <div class="report-image">
+                        <img 
+                            src="http://127.0.0.1:3000/${report.image_path}" 
+                            alt="Report image"
+                            loading="lazy"
+                            onclick="window.open(this.src, '_blank')"
+                        />
+                    </div>
+                ` : ''}
+            `;
+            
+            return div;
+        }
+
+        async function upvoteReport(reportId) {
+            const upvoteBtn = document.getElementById(`upvote-btn-${reportId}`);
+            const downvoteBtn = document.getElementById(`downvote-btn-${reportId}`);
+            
+            // Disable buttons during request
+            upvoteBtn.disabled = true;
+            downvoteBtn.disabled = true;
+            
+            try {
+                console.log(`🔄 Upvoting report #${reportId}`);
+                
+                const response = await fetch(`${API_BASE}/reports/${reportId}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'upvote' })
+                });
+                
+                console.log('📥 Response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Server error ${response.status}: ${errorText}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Response data:', data);
+                
+                if (data.success && data.data) {
+                    // Update UI directly with new counts
+                    const upvoteCountSpan = document.getElementById(`upvotes-${reportId}`);
+                    const upvoteMetaSpan = document.getElementById(`upvote-count-${reportId}`);
+                    
+                    if (upvoteCountSpan) {
+                        upvoteCountSpan.textContent = data.data.upvotes || 0;
+                    }
+                    if (upvoteMetaSpan) {
+                        upvoteMetaSpan.textContent = `${data.data.upvotes || 0} upvotes`;
+                    }
+                    
+                    showMessage('✅ Report confirmed!', 'success');
+                } else {
+                    throw new Error(data.message || 'Failed to upvote');
+                }
+            } catch (error) {
+                console.error('❌ Upvote error:', error);
+                showMessage(`❌ Error: ${error.message}`, 'error');
+            } finally {
+                // Re-enable buttons
+                upvoteBtn.disabled = false;
+                downvoteBtn.disabled = false;
+            }
+        }
+
+        async function downvoteReport(reportId) {
+            const upvoteBtn = document.getElementById(`upvote-btn-${reportId}`);
+            const downvoteBtn = document.getElementById(`downvote-btn-${reportId}`);
+            
+            // Disable buttons during request
+            upvoteBtn.disabled = true;
+            downvoteBtn.disabled = true;
+            
+            try {
+                console.log(`🔄 Downvoting report #${reportId}`);
+                
+                const response = await fetch(`${API_BASE}/reports/${reportId}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'downvote' })
+                });
+                
+                console.log('📥 Response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Server error ${response.status}: ${errorText}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Response data:', data);
+                
+                if (data.success && data.data) {
+                    // Update UI directly with new counts
+                    const downvoteCountSpan = document.getElementById(`downvotes-${reportId}`);
+                    
+                    if (downvoteCountSpan) {
+                        downvoteCountSpan.textContent = data.data.downvotes || 0;
+                    }
+                    
+                    showMessage('📊 Report disputed', 'info');
+                } else {
+                    throw new Error(data.message || 'Failed to downvote');
+                }
+            } catch (error) {
+                console.error('❌ Downvote error:', error);
+                showMessage(`❌ Error: ${error.message}`, 'error');
+            } finally {
+                // Re-enable buttons
+                upvoteBtn.disabled = false;
+                downvoteBtn.disabled = false;
+            }
+        }
+
+        function shareReport(reportId) {
+            const report = filteredReports.find(r => r.id === reportId);
+            if (report && navigator.share) {
+                navigator.share({
+                    title: report.title,
+                    text: report.description,
+                    url: window.location.href + '?report=' + reportId
+                }).catch(() => {
+                    copyToClipboard(window.location.href + '?report=' + reportId);
+                });
+            } else {
+                copyToClipboard(window.location.href + '?report=' + reportId);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showMessage('Link copied to clipboard!', 'success');
+            }).catch(() => {
+                showMessage('Failed to copy link', 'error');
+            });
+        }
+
+        function filterReports() {
+            const serviceFilter = document.getElementById('serviceFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const locationFilter = document.getElementById('locationFilter').value.toLowerCase();
+            
+            filteredReports = currentReports.filter(report => {
+                const serviceMatch = serviceFilter === 'all' || report.service_type === serviceFilter;
+                const statusMatch = statusFilter === 'all' || report.status === statusFilter;
+                const locationMatch = !locationFilter || 
+                    (report.city && report.city.toLowerCase().includes(locationFilter)) ||
+                    (report.country && report.country.toLowerCase().includes(locationFilter));
+                
+                return serviceMatch && statusMatch && locationMatch;
+            });
+            
+            const container = document.getElementById('reportsContainer');
+            container.innerHTML = '';
+            displayedCount = 0;
+            
+            if (filteredReports.length === 0) {
+                showEmptyState();
+            } else {
+                loadMoreReports();
+            }
+        }
+
+        function showEmptyState() {
+            const container = document.getElementById('reportsContainer');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <h3>No Reports Found</h3>
+                    <p>Try adjusting your filters or check back later</p>
+                </div>
+            `;
+            document.getElementById('loadMoreBtn').style.display = 'none';
+            updateReportCount();
+        }
+
+        function showError(message) {
+            const container = document.getElementById('reportsContainer');
+            container.innerHTML = `
+                <div class="error-state">
+                    <div class="error-icon">⚠️</div>
+                    <h3>Connection Error</h3>
+                    <p>${message}</p>
+                    <button onclick="loadReportsFromDB()" class="load-more">
+                        <i class="fas fa-redo"></i> Retry
+                    </button>
+                </div>
+            `;
+            document.getElementById('loadingState').style.display = 'none';
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `toast-message ${type}`;
+            messageDiv.textContent = message;
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => messageDiv.classList.add('show'), 100);
+            setTimeout(() => {
+                messageDiv.classList.remove('show');
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 3000);
+        }
+
+        function updateReportCount() {
+            document.getElementById('reportCount').textContent = 
+                `Showing ${displayedCount} of ${filteredReports.length} reports`;
+        }
+
+        function getTimeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+            
+            if (seconds < 60) return 'Just now';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes} min ago`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            const days = Math.floor(hours / 24);
+            if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+            return date.toLocaleDateString();
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Initializing Report Feeds page...');
+            loadReportsFromDB();
+        });
+        
+        // Refresh every 30 seconds
+        setInterval(loadReportsFromDB, 30000);
+    </script>
+</body>
+</html>
