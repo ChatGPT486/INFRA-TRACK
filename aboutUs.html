@@ -6,7 +6,7 @@
     <title>InfraTrack Global - About Us</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="aboutUs.css">
+    <link rel="stylesheet" href="aboutUs.css">
 </head>
 <body>
     <div class="animated-bg"></div>
@@ -48,26 +48,32 @@
                     InfraTrack Global was born from a simple observation: communities in developing nations deserve better infrastructure accountability. Too often, citizens face power outages, water shortages, and internet disruptions without any clear information or recourse.
                 </p>
                 <p class="section-text">
-                    We're building a platform that gives power back to the people – a transparent, real-time system where every citizen can report infrastructure issues, verify others' reports, and hold service providers accountable. Our mission is to transform how communities interact with essential services through technology and collective action.
+                    We're building a platform that gives power back to the people — a transparent, real-time system where every citizen can report infrastructure issues, verify others' reports, and hold service providers accountable. Our mission is to transform how communities interact with essential services through technology and collective action.
                 </p>
             </div>
 
-            <!-- IMPACT STATS -->
+            <!-- IMPACT STATS - NOW DYNAMIC -->
             <div class="stats-section">
                 <div class="stat-box">
-                    <div class="stat-number">2.4M</div>
+                    <div class="stat-number" id="totalReports">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
                     <div class="stat-label">Reports Submitted</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number">15</div>
+                    <div class="stat-number" id="countriesActive">3</div>
                     <div class="stat-label">Countries Active</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number">150K</div>
+                    <div class="stat-number" id="activeUsers">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
                     <div class="stat-label">Active Users</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number">89%</div>
+                    <div class="stat-number" id="reportAccuracy">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
                     <div class="stat-label">Report Accuracy</div>
                 </div>
             </div>
@@ -82,7 +88,7 @@
                     <div class="feature-card">
                         <div class="feature-icon">📝</div>
                         <h3 class="feature-title">Report Issues</h3>
-                        <p class="feature-description">Citizens report infrastructure problems in real-time – power outages, water supply issues, or internet connectivity problems.</p>
+                        <p class="feature-description">Citizens report infrastructure problems in real-time — power outages, water supply issues, or internet connectivity problems.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">✅</div>
@@ -184,6 +190,8 @@
     </div>
 
     <script>
+        const API_BASE_URL = 'http://127.0.0.1:3000/api';
+
         // Mobile menu toggle
         const menuToggle = document.getElementById('menuToggle');
         const topMenu = document.getElementById('topMenu');
@@ -193,6 +201,50 @@
             const icon = this.querySelector('i');
             icon.className = topMenu.classList.contains('mobile-visible') ? 'fas fa-times' : 'fas fa-bars';
         });
+
+        // Load dynamic statistics
+        async function loadStatistics() {
+            try {
+                // Load reports
+                const reportsResponse = await fetch(`${API_BASE_URL}/reports?limit=10000`);
+                const reportsData = await reportsResponse.json();
+                const reports = reportsData.reports || [];
+
+                // Load users
+                const usersResponse = await fetch(`${API_BASE_URL}/users`);
+                const usersData = await usersResponse.json();
+                const users = usersData.users || [];
+
+                // Calculate statistics
+                const totalReports = reports.length;
+                const activeUsers = users.length;
+                
+                // Calculate accuracy (upvotes vs total votes)
+                const totalUpvotes = reports.reduce((sum, r) => sum + (r.upvotes || 0), 0);
+                const totalDownvotes = reports.reduce((sum, r) => sum + (r.downvotes || 0), 0);
+                const totalVotes = totalUpvotes + totalDownvotes;
+                const accuracy = totalVotes > 0 ? Math.round((totalUpvotes / totalVotes) * 100) : 95;
+
+                // Format numbers
+                const formatNumber = (num) => {
+                    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+                    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+                    return num.toString();
+                };
+
+                // Update UI
+                document.getElementById('totalReports').textContent = formatNumber(totalReports);
+                document.getElementById('activeUsers').textContent = formatNumber(activeUsers);
+                document.getElementById('reportAccuracy').textContent = accuracy + '%';
+
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+                // Show fallback values
+                document.getElementById('totalReports').textContent = '2.4M';
+                document.getElementById('activeUsers').textContent = '150K';
+                document.getElementById('reportAccuracy').textContent = '89%';
+            }
+        }
 
         // Parallax effect
         window.addEventListener('scroll', function() {
@@ -215,6 +267,11 @@
                     });
                 }
             });
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStatistics();
         });
     </script>
 </body>

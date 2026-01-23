@@ -11,417 +11,68 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0a0e27;
-            color: white;
-        }
-
-        /* Animated Background */
-        .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: -2;
-        }
-
-        .grid-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            z-index: -1;
-        }
-
-        /* Top Bar */
-        .top-bar {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 1000;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .toggle-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5em;
-            cursor: pointer;
-        }
-
-        .logo-icon {
-            font-size: 2em;
-        }
-
-        .logo-text {
-            font-weight: 700;
-            font-size: 1.2em;
-        }
-
-        .menu-buttons {
-            display: flex;
-            gap: 20px;
-        }
-
-        .menu-buttons a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .menu-buttons a:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Map Container */
-        .map-container {
-            height: calc(100vh - 60px);
-            display: flex;
-            position: relative;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 350px;
-            background: rgba(10, 14, 39, 0.95);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: transform 0.3s;
-            z-index: 900;
-        }
-
-        .sidebar-toggle {
-            display: none;
-            background: rgba(102, 126, 234, 0.9);
-            color: white;
-            padding: 10px;
-            cursor: pointer;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar-header h2 {
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        .search-box {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 40px 12px 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: white;
-        }
-
-        .search-box input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .search-box i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .filter-chips {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .filter-chip {
-            padding: 8px 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            color: white;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s;
-        }
-
-        .filter-chip.active,
-        .filter-chip:hover {
-            background: rgba(102, 126, 234, 0.5);
-            border-color: #667eea;
-        }
-
-        .report-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-        }
-
-        .report-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .report-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateX(5px);
-        }
-
-        .report-item.active {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.2);
-        }
-
-        .report-item-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .report-item-title {
-            color: white;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .report-item-time {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.85em;
-        }
-
-        .report-item-location {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
-
-        .report-item-status {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: 600;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', sans-serif; background: #0a0e27; color: white; }
+        .animated-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); z-index: -2; }
+        .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 50px 50px; z-index: -1; }
+        .top-bar { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); z-index: 1000; }
+        .logo-section { display: flex; align-items: center; gap: 15px; }
+        .toggle-btn { display: none; background: none; border: none; color: white; font-size: 1.5em; cursor: pointer; }
+        .logo-icon { font-size: 2em; }
+        .logo-text { font-weight: 700; font-size: 1.2em; }
+        .menu-buttons { display: flex; gap: 20px; }
+        .menu-buttons a { color: white; text-decoration: none; padding: 10px 20px; border-radius: 8px; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
+        .menu-buttons a:hover { background: rgba(255, 255, 255, 0.2); }
+        .map-container { height: calc(100vh - 60px); display: flex; position: relative; }
+        .sidebar { width: 350px; background: rgba(10, 14, 39, 0.95); backdrop-filter: blur(10px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; overflow: hidden; transition: transform 0.3s; z-index: 900; }
+        .sidebar-toggle { display: none; background: rgba(102, 126, 234, 0.9); color: white; padding: 10px; cursor: pointer; text-align: center; font-weight: 600; }
+        .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .sidebar-header h2 { color: white; margin-bottom: 15px; }
+        .search-box { position: relative; margin-bottom: 15px; }
+        .search-box input { width: 100%; padding: 12px 40px 12px 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: white; }
+        .search-box input::placeholder { color: rgba(255, 255, 255, 0.5); }
+        .search-box i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: rgba(255, 255, 255, 0.5); }
+        .filter-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+        .filter-chip { padding: 8px 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; color: white; cursor: pointer; font-size: 0.9em; transition: all 0.3s; }
+        .filter-chip.active, .filter-chip:hover { background: rgba(102, 126, 234, 0.5); border-color: #667eea; }
+        .report-list { flex: 1; overflow-y: auto; padding: 15px; }
+        .report-item { background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+        .report-item:hover { background: rgba(255, 255, 255, 0.15); transform: translateX(5px); }
+        .report-item.active { border-color: #667eea; background: rgba(102, 126, 234, 0.2); }
+        .report-item-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .report-item-title { color: white; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .report-item-time { color: rgba(255, 255, 255, 0.6); font-size: 0.85em; }
+        .report-item-location { color: rgba(255, 255, 255, 0.7); font-size: 0.9em; margin-bottom: 5px; }
+        .report-item-status { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.8em; font-weight: 600; }
         .status-outage { background: rgba(239, 68, 68, 0.3); color: #ef4444; }
         .status-partial { background: rgba(251, 191, 36, 0.3); color: #fbbf24; }
         .status-restored { background: rgba(34, 197, 94, 0.3); color: #22c55e; }
-
-        /* Map */
-        .map {
-            flex: 1;
-            position: relative;
-        }
-
-        #map {
-            width: 100%;
-            height: 100%;
-        }
-
-        .map-controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .control-btn {
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s;
-            color: #667eea;
-        }
-
-        .control-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            background: white;
-        }
-
-        .stats-overlay {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-
-        .stats-grid {
-            display: flex;
-            gap: 15px;
-        }
-
-        .stat-box {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .legend {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-
-        .legend-title {
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 5px;
-            color: #666;
-        }
-
-        .legend-icon {
-            font-size: 1.2em;
-        }
-
-        /* Mobile Styles */
+        .map { flex: 1; position: relative; }
+        #map { width: 100%; height: 100%; }
+        .map-controls { position: absolute; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
+        .control-btn { padding: 12px 20px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); transition: all 0.3s; color: #667eea; }
+        .control-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); background: white; }
+        .stats-overlay { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); z-index: 1000; }
+        .stats-grid { display: flex; gap: 15px; }
+        .stat-box { text-align: center; }
+        .stat-number { font-size: 1.8em; font-weight: 700; color: #667eea; }
+        .stat-label { color: #666; font-size: 0.9em; }
+        .legend { position: absolute; bottom: 20px; left: 20px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); z-index: 1000; }
+        .legend-title { font-weight: 700; margin-bottom: 10px; color: #333; }
+        .legend-item { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; color: #666; }
+        .legend-icon { font-size: 1.2em; }
+        .custom-marker { background: none; border: none; }
+        .marker-icon { font-size: 2em; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); }
         @media (max-width: 768px) {
-            .toggle-btn {
-                display: block;
-            }
-
-            .menu-buttons {
-                display: none;
-                position: absolute;
-                top: 70px;
-                right: 20px;
-                background: rgba(10, 14, 39, 0.95);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            }
-
-            .menu-buttons.mobile-visible {
-                display: flex;
-            }
-
-            .sidebar {
-                position: absolute;
-                left: 0;
-                top: 0;
-                height: 100%;
-                transform: translateX(-100%);
-            }
-
-            .sidebar.mobile-visible {
-                transform: translateX(0);
-            }
-
-            .sidebar-toggle {
-                display: block;
-            }
-
-            .menu-buttons span {
-                display: none;
-            }
-
-            .stats-overlay,
-            .legend {
-                font-size: 0.85em;
-                padding: 10px;
-            }
-
-            .stat-number {
-                font-size: 1.4em;
-            }
-        }
-
-        /* Custom Marker Styles */
-        .custom-marker {
-            background: none;
-            border: none;
-        }
-
-        .marker-icon {
-            font-size: 2em;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            .toggle-btn { display: block; }
+            .menu-buttons { display: none; position: absolute; top: 70px; right: 20px; background: rgba(10, 14, 39, 0.95); backdrop-filter: blur(10px); flex-direction: column; padding: 20px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+            .menu-buttons.mobile-visible { display: flex; }
+            .sidebar { position: absolute; left: 0; top: 0; height: 100%; transform: translateX(-100%); }
+            .sidebar.mobile-visible { transform: translateX(0); }
+            .sidebar-toggle { display: block; }
+            .menu-buttons span { display: none; }
+            .stats-overlay, .legend { font-size: 0.85em; padding: 10px; }
+            .stat-number { font-size: 1.4em; }
         }
     </style>
 </head>
@@ -429,56 +80,32 @@
     <div class="animated-bg"></div>
     <div class="grid-overlay"></div>
 
-    <!-- Top Bar -->
     <div class="top-bar">
         <div class="logo-section">
-            <button class="toggle-btn" id="menuToggle">
-                <i class="fas fa-bars"></i>
-            </button>
+            <button class="toggle-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
             <div class="logo-icon">🌍</div>
             <span class="logo-text">InfraTrack Map</span>
         </div>
-
         <div class="menu-buttons" id="topMenu">
-            <a href="homepage.html">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </a>
-            <a href="report.html">
-                <i class="fas fa-plus-circle"></i>
-                <span>Report</span>
-            </a>
-            <a href="report_feeds.html">
-                <i class="fas fa-list"></i>
-                <span>Feed</span>
-            </a>
-            <a href="Account.html">
-                <i class="fas fa-user"></i>
-                <span>Account</span>
-            </a>
-            <a href="aboutUs.html">
-                <i class="fas fa-info-circle"></i>
-                <span>About</span>
-            </a>
+            <a href="homepage.html"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="report.html"><i class="fas fa-plus-circle"></i><span>Report</span></a>
+            <a href="report_feeds.html"><i class="fas fa-list"></i><span>Feed</span></a>
+            <a href="Account.html"><i class="fas fa-user"></i><span>Account</span></a>
+            <a href="aboutUs.html"><i class="fas fa-info-circle"></i><span>About</span></a>
         </div>
     </div>
 
-    <!-- Map Container -->
     <div class="map-container">
-        <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-toggle" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i> Reports
             </div>
-
             <div class="sidebar-header">
                 <h2>📍 Active Reports</h2>
-                
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="Search location..." onkeyup="filterReports()">
                     <i class="fas fa-search"></i>
                 </div>
-
                 <div class="filter-chips">
                     <div class="filter-chip active" data-service="all" onclick="filterByService('all', this)">
                         <i class="fas fa-circle"></i> All
@@ -494,7 +121,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="report-list" id="reportList">
                 <p style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">
                     Loading reports...
@@ -502,11 +128,8 @@
             </div>
         </div>
 
-        <!-- Map -->
         <div class="map">
             <div id="map"></div>
-
-            <!-- Map Controls -->
             <div class="map-controls">
                 <button class="control-btn" onclick="goToMyLocation()">
                     <i class="fas fa-crosshairs"></i> My Location
@@ -515,8 +138,6 @@
                     <i class="fas fa-sync-alt"></i> Refresh
                 </button>
             </div>
-
-            <!-- Stats Overlay -->
             <div class="stats-overlay">
                 <div class="stats-grid">
                     <div class="stat-box">
@@ -529,19 +150,11 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Legend -->
             <div class="legend">
                 <div class="legend-title">Legend</div>
-                <div class="legend-item">
-                    <span class="legend-icon">⚡</span> Power Outage
-                </div>
-                <div class="legend-item">
-                    <span class="legend-icon">💧</span> Water Issue
-                </div>
-                <div class="legend-item">
-                    <span class="legend-icon">📡</span> Internet Down
-                </div>
+                <div class="legend-item"><span class="legend-icon">⚡</span> Power Outage</div>
+                <div class="legend-item"><span class="legend-icon">💧</span> Water Issue</div>
+                <div class="legend-item"><span class="legend-icon">📡</span> Internet Down</div>
             </div>
         </div>
     </div>
@@ -557,30 +170,26 @@
         let allReports = [];
         let filteredReports = [];
         let currentFilter = 'all';
+        let defaultLocations = {
+            'Yaoundé': [3.8480, 11.5021],
+            'Douala': [4.0511, 9.7679],
+            'Cameroon': [7.3697, 12.3547]
+        };
 
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const topMenu = document.getElementById('topMenu');
-
-        menuToggle.addEventListener('click', function() {
-            topMenu.classList.toggle('mobile-visible');
-            const icon = this.querySelector('i');
-            icon.className = topMenu.classList.contains('mobile-visible') ? 'fas fa-times' : 'fas fa-bars';
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('topMenu').classList.toggle('mobile-visible');
+            this.querySelector('i').className = document.getElementById('topMenu').classList.contains('mobile-visible') ? 'fas fa-times' : 'fas fa-bars';
         });
 
-        // Initialize map
         function initMap() {
             map = L.map('map').setView([3.8480, 11.5021], 13);
-
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors',
                 maxZoom: 19
             }).addTo(map);
-
             loadReports();
         }
 
-        // Load reports from API
         async function loadReports() {
             try {
                 const response = await fetch(`${API_BASE}/reports?limit=100`);
@@ -601,7 +210,6 @@
             }
         }
 
-        // Display reports in sidebar
         function displayReports() {
             const reportList = document.getElementById('reportList');
             
@@ -638,56 +246,64 @@
             }).join('');
         }
 
-        // Add markers to map
         function addMarkersToMap() {
             markers.forEach(marker => map.removeLayer(marker));
             markers = [];
 
             filteredReports.forEach(report => {
+                let lat, lng;
+
                 if (report.location_latitude && report.location_longitude) {
-                    const icon = getServiceIcon(report.service_type);
-                    
-                    const customIcon = L.divIcon({
-                        html: `<div class="marker-icon">${icon}</div>`,
-                        className: 'custom-marker',
-                        iconSize: [40, 40]
-                    });
-
-                    const marker = L.marker(
-                        [report.location_latitude, report.location_longitude],
-                        { icon: customIcon }
-                    ).addTo(map);
-
-                    marker.bindPopup(`
-                        <div style="min-width: 200px;">
-                            <h3 style="margin-bottom: 10px;">${icon} ${report.title || 'Report'}</h3>
-                            <p style="margin-bottom: 8px;">${report.description || 'No description'}</p>
-                            <p style="color: #666; margin-bottom: 8px;">
-                                <strong>Location:</strong> ${report.city}, ${report.country}
-                            </p>
-                            <p style="color: #666; margin-bottom: 8px;">
-                                <strong>Status:</strong> <span style="color: ${getStatusColor(report.status)}">${report.status}</span>
-                            </p>
-                            <p style="color: #999; font-size: 0.85em;">
-                                ${getTimeAgo(report.created_at)}
-                            </p>
-                        </div>
-                    `);
-
-                    markers.push(marker);
+                    lat = parseFloat(report.location_latitude);
+                    lng = parseFloat(report.location_longitude);
+                } else if (report.city && defaultLocations[report.city]) {
+                    [lat, lng] = defaultLocations[report.city];
+                    lat += (Math.random() - 0.5) * 0.02;
+                    lng += (Math.random() - 0.5) * 0.02;
+                } else if (report.country && defaultLocations[report.country]) {
+                    [lat, lng] = defaultLocations[report.country];
+                    lat += (Math.random() - 0.5) * 0.5;
+                    lng += (Math.random() - 0.5) * 0.5;
+                } else {
+                    return;
                 }
+
+                const icon = getServiceIcon(report.service_type);
+                const customIcon = L.divIcon({
+                    html: `<div class="marker-icon">${icon}</div>`,
+                    className: 'custom-marker',
+                    iconSize: [40, 40]
+                });
+
+                const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+                marker.bindPopup(`
+                    <div style="min-width: 200px;">
+                        <h3 style="margin-bottom: 10px;">${icon} ${report.title || 'Report'}</h3>
+                        <p style="margin-bottom: 8px;">${report.description || 'No description'}</p>
+                        <p style="color: #666; margin-bottom: 8px;">
+                            <strong>Location:</strong> ${report.city}, ${report.country}
+                        </p>
+                        <p style="color: #666; margin-bottom: 8px;">
+                            <strong>Status:</strong> <span style="color: ${getStatusColor(report.status)}">${report.status}</span>
+                        </p>
+                        <p style="color: #999; font-size: 0.85em;">
+                            ${getTimeAgo(report.created_at)}
+                        </p>
+                    </div>
+                `);
+                markers.push(marker);
             });
+
+            if (markers.length > 0) {
+                const group = L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
         }
 
-        // Filter functions
         function filterByService(service, element) {
             currentFilter = service;
-            
-            document.querySelectorAll('.filter-chip').forEach(chip => {
-                chip.classList.remove('active');
-            });
+            document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
             element.classList.add('active');
-
             applyFilters();
         }
 
@@ -704,7 +320,6 @@
                     (report.title && report.title.toLowerCase().includes(searchTerm)) ||
                     (report.city && report.city.toLowerCase().includes(searchTerm)) ||
                     (report.country && report.country.toLowerCase().includes(searchTerm));
-                
                 return serviceMatch && searchMatch;
             });
 
@@ -713,93 +328,71 @@
             updateStats();
         }
 
-        // Focus on specific report
         function focusReport(reportId) {
             const report = allReports.find(r => r.id === reportId);
-            if (report && report.location_latitude && report.location_longitude) {
-                map.setView([report.location_latitude, report.location_longitude], 15);
-                
-                const marker = markers.find(m => 
-                    m.getLatLng().lat === report.location_latitude &&
-                    m.getLatLng().lng === report.location_longitude
-                );
-                
-                if (marker) {
-                    marker.openPopup();
+            if (report) {
+                let lat, lng;
+                if (report.location_latitude && report.location_longitude) {
+                    lat = parseFloat(report.location_latitude);
+                    lng = parseFloat(report.location_longitude);
+                } else if (report.city && defaultLocations[report.city]) {
+                    [lat, lng] = defaultLocations[report.city];
+                } else if (report.country && defaultLocations[report.country]) {
+                    [lat, lng] = defaultLocations[report.country];
+                } else {
+                    return;
                 }
+
+                map.setView([lat, lng], 15);
+                const marker = markers.find(m => {
+                    const mLat = m.getLatLng().lat;
+                    const mLng = m.getLatLng().lng;
+                    return Math.abs(mLat - lat) < 0.1 && Math.abs(mLng - lng) < 0.1;
+                });
+                if (marker) marker.openPopup();
             }
         }
 
-        // Go to user location
         function goToMyLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     position => {
-                        map.setView([position.coords.latitude, position.coords.longitude], 15);
-                        
-                        L.marker([position.coords.latitude, position.coords.longitude])
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        map.setView([lat, lng], 15);
+                        L.marker([lat, lng])
                             .addTo(map)
                             .bindPopup('You are here')
                             .openPopup();
                     },
-                    error => {
-                        alert('Unable to get your location');
-                    }
+                    error => alert('Unable to get your location')
                 );
             }
         }
 
-        // Refresh map
-        function refreshMap() {
-            loadReports();
-        }
-
-        // Toggle sidebar on mobile
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('mobile-visible');
-        }
-
-        // Update statistics
+        function refreshMap() { loadReports(); }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('mobile-visible'); }
         function updateStats() {
             const ongoing = filteredReports.filter(r => r.status !== 'restored').length;
             document.getElementById('totalStat').textContent = filteredReports.length;
             document.getElementById('ongoingStat').textContent = ongoing;
         }
-
-        // Helper functions
         function getServiceIcon(service) {
-            const icons = {
-                power: '⚡',
-                water: '💧',
-                internet: '📡'
-            };
-            return icons[service] || '📍';
+            return { power: '⚡', water: '💧', internet: '📡' }[service] || '📍';
         }
-
         function getStatusColor(status) {
-            const colors = {
-                outage: '#ef4444',
-                partial: '#fbbf24',
-                restored: '#22c55e'
-            };
-            return colors[status] || '#666';
+            return { outage: '#ef4444', partial: '#fbbf24', restored: '#22c55e' }[status] || '#666';
         }
-
         function getTimeAgo(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const seconds = Math.floor((now - date) / 1000);
-            
+            const seconds = Math.floor((new Date() - new Date(dateString)) / 1000);
             if (seconds < 60) return 'Just now';
             const minutes = Math.floor(seconds / 60);
             if (minutes < 60) return `${minutes}m ago`;
             const hours = Math.floor(minutes / 60);
             if (hours < 24) return `${hours}h ago`;
-            const days = Math.floor(hours / 24);
-            return `${days}d ago`;
+            return `${Math.floor(hours / 24)}d ago`;
         }
 
-        // Initialize
         window.addEventListener('DOMContentLoaded', initMap);
         setInterval(loadReports, 30000);
     </script>
