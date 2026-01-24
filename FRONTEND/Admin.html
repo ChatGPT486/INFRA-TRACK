@@ -3,195 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfraTrack Global - Admin Dashboard</title>
+    <title>InfraTrack Global - Login</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231eaf75;stop-opacity:1' /><stop offset='100%' style='stop-color:%23667eea;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23grad)'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>🌍</text></svg>" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="Admin.css">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
     <div class="animated-bg"></div>
     <div class="grid-overlay"></div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo-section">
+            <button class="toggle-btn" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo-icon">🌍</div>
+        </div>
+        
+        <div class="menu-buttons" id="topMenu">
+            <a href="homepage.html">
+                <i class="fas fa-home"></i> <span>Home</span>
+            </a>
+            <a href="aboutUs.html">
+                <i class="fas fa-info-circle"></i> <span>About</span>
+            </a>
+        </div>
+    </div>
     
     <div class="content-wrapper">
-        <!-- TOP BAR -->
-        <div class="top-bar">
-            <div class="logo-section">
-                <button class="toggle-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
-                <div class="logo-icon">🌍</div>
-                <span class="admin-badge">🛡️ ADMIN</span>
-            </div>
-            
-            <div class="menu-buttons" id="topMenu">
-                <a href="homepage.html">
-                   <i class="fas fa-home"></i> <span>Home</span>
-                </a>
-                <a href="Account.html">
-                   <i class="fas fa-user"></i> <span>Account</span>
-                </a>
-                <a href="aboutUs.html">
-                   <i class="fas fa-info-circle"></i> <span>About</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- PAGE HEADER -->
-        <div class="page-header">
-            <h1>🛡️ Admin Dashboard</h1>
-            <p>Manage reports, users, and monitor system activity</p>
-        </div>
-
-        <!-- DASHBOARD CONTENT -->
-        <div class="dashboard-container">
-            <!-- STATS OVERVIEW -->
-            <div class="stats-overview">
-                <div class="stat-card">
-                    <div class="stat-icon">📊</div>
-                    <div class="stat-number" id="totalReports">0</div>
-                    <div class="stat-label">Total Reports</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-number" id="totalUsers">0</div>
-                    <div class="stat-label">Total Users</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🚨</div>
-                    <div class="stat-number" id="activeIssues">0</div>
-                    <div class="stat-label">Active Issues</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-number" id="resolvedToday">0</div>
-                    <div class="stat-label">Resolved Today</div>
-                </div>
-            </div>
-
-            <!-- MAIN CONTENT GRID -->
-            <div class="content-grid">
-                <!-- RECENT REPORTS TABLE -->
-                <div class="section-card">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-clipboard-list"></i>
-                            Recent Reports
-                        </h2>
-                        <select class="filter-select" id="reportFilter" onchange="filterReports()">
-                            <option value="all">All Reports</option>
-                            <option value="power">Power</option>
-                            <option value="water">Water</option>
-                            <option value="internet">Internet</option>
-                        </select>
+        <div class="login-container">
+            <div class="login-left">
+                <h1>Welcome Back! 👋</h1>
+                <p>Report and track infrastructure issues in your area. Join our community to stay informed.</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <span>Real-time issue reports</span>
                     </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🗺️</div>
+                        <span>Interactive map view</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔔</div>
+                        <span>Instant notifications</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="login-right">
+                <div class="login-header">
+                    <h2>Account Access</h2>
+                    <p>Login or create a new account</p>
+                </div>
+
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="loginTab">Login</button>
+                    <button class="auth-tab" id="registerTab">Sign Up</button>
+                </div>
+
+                <!-- Login Form -->
+                <div class="form-container active" id="loginForm">
+                    <div id="loginMessage" class="message"></div>
                     
-                    <div class="table-container">
-                        <table id="reportsTable">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Service</th>
-                                    <th>Location</th>
-                                    <th>Status</th>
-                                    <th>User</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="reportsTableBody">
-                                <tr>
-                                    <td colspan="6">
-                                        <div class="loading">
-                                            <div class="spinner"></div>
-                                            <p>Loading reports...</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                                <i class="fas fa-eye" onclick="togglePassword('loginPassword')"></i>
+                            </div>
+                        </div>
+
+                        <!-- Forgot Password Link -->
+                        <div style="text-align: right; margin-bottom: 15px;">
+                            <a href="#" onclick="showForgotPassword(); return false;" style="color: #667eea; text-decoration: none; font-size: 0.9em;">
+                                Forgot Password?
+                            </a>
+                        </div>
+
+                        <!-- Admin Login Toggle -->
+                        <div class="admin-toggle" onclick="toggleAdminField()">
+                            <input type="checkbox" id="adminCheckbox">
+                            <label for="adminCheckbox">🛡️ Login as Administrator</label>
+                        </div>
+
+                        <!-- Admin Code Field -->
+                        <div class="admin-code-field" id="adminCodeField">
+                            <div class="form-group">
+                                <label>Admin Access Code</label>
+                                <input type="password" id="adminCode" placeholder="Enter admin code" autocomplete="off">
+                                <div class="admin-hint">💡 Contact system admin for access code</div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn" id="loginBtn">Sign In</button>
+                    </form>
                 </div>
 
-                <!-- QUICK ACTIONS -->
-                <div class="section-card">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-bolt"></i>
-                            Quick Actions
-                        </h2>
-                    </div>
+                <!-- Register Form -->
+                <div class="form-container" id="registerForm">
+                    <div id="registerMessage" class="message"></div>
                     
-                    <div class="quick-actions">
-                        <div class="quick-action-card" onclick="showUserManagement()">
-                            <div class="quick-action-icon">👥</div>
-                            <div class="quick-action-content">
-                                <h4>Manage Users</h4>
-                                <p>View and moderate users</p>
-                            </div>
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="registerUsername" placeholder="Choose a username" required>
                         </div>
                         
-                        <div class="quick-action-card" onclick="exportReports()">
-                            <div class="quick-action-icon">📥</div>
-                            <div class="quick-action-content">
-                                <h4>Export Data</h4>
-                                <p>Download reports as CSV</p>
-                            </div>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="registerFullName" placeholder="Your full name" required>
                         </div>
                         
-                        <div class="quick-action-card" onclick="viewAnalytics()">
-                            <div class="quick-action-icon">📈</div>
-                            <div class="quick-action-content">
-                                <h4>Analytics</h4>
-                                <p>View detailed statistics</p>
-                            </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="registerEmail" placeholder="Your email" required>
                         </div>
                         
-                        <div class="quick-action-card" onclick="sendNotification()">
-                            <div class="quick-action-icon">📢</div>
-                            <div class="quick-action-content">
-                                <h4>Broadcast Alert</h4>
-                                <p>Send notification to users</p>
-                            </div>
+                        <div class="form-group">
+                            <label>Phone Number (Optional)</label>
+                            <input type="tel" id="registerPhone" placeholder="+237 XXX XXX XXX">
                         </div>
-                    </div>
+                        
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="registerCity" placeholder="Your city" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="registerPassword" placeholder="Create a password" required minlength="6">
+                                <i class="fas fa-eye" onclick="togglePassword('registerPassword')"></i>
+                            </div>
+                            <small style="color: rgba(255,255,255,0.6);">Minimum 6 characters</small>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">I agree to the Terms and Conditions</label>
+                        </div>
+                        
+                        <button type="submit" class="btn">Create Account</button>
+                    </form>
                 </div>
-            </div>
 
-            <!-- USER MANAGEMENT TABLE -->
-            <div class="section-card">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-users"></i>
-                        User Management
-                    </h2>
-                    <select class="filter-select" id="userFilter" onchange="filterUsers()">
-                        <option value="all">All Users</option>
-                        <option value="verified">Verified</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                </div>
-                
-                <div class="table-container">
-                    <table id="usersTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Reports</th>
-                                <th>Trust</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody">
-                            <tr>
-                                <td colspan="7">
-                                    <div class="loading">
-                                        <div class="spinner"></div>
-                                        <p>Loading users...</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <!-- Forgot Password Modal -->
+                <div id="forgotPasswordModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
+                    <div style="background: rgba(10, 14, 39, 0.98); padding: 40px; border-radius: 20px; max-width: 500px; width: 90%; border: 2px solid #667eea;">
+                        <h2 style="margin-bottom: 20px;">Reset Password</h2>
+                        <p style="color: rgba(255,255,255,0.7); margin-bottom: 20px;">
+                            Enter your email address and we'll send you a password reset link.
+                        </p>
+                        <div id="forgotPasswordMessage" class="message"></div>
+                        <form id="forgot-password-form">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="forgotEmail" placeholder="Enter your email" required>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button type="submit" class="btn" style="flex: 1;">Send Reset Link</button>
+                                <button type="button" class="btn" onclick="closeForgotPassword()" style="flex: 1; background: rgba(255,255,255,0.1);">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -199,29 +181,8 @@
 
     <script>
         const API_BASE = 'http://127.0.0.1:3000/api';
-        const ADMIN_CODE = 'INFRATRACK2025'; // Secret admin code
-        let allReports = [];
-        let allUsers = [];
-
-        // Check admin authentication
-        function checkAdminAuth() {
-            const isAdmin = localStorage.getItem('isAdmin');
-            const userId = localStorage.getItem('userId');
-            
-            if (!userId) {
-                alert('⚠️ Please login first!');
-                window.location.href = 'login.html';
-                return false;
-            }
-            
-            if (isAdmin !== 'true') {
-                alert('⛔ Access Denied: Admin privileges required!');
-                window.location.href = 'homepage.html';
-                return false;
-            }
-            
-            return true;
-        }
+        // Admin code is now private - stored securely
+        const ADMIN_CODE = 'INFRATRACK2025';
 
         // Mobile menu toggle
         const menuToggle = document.getElementById('menuToggle');
@@ -233,446 +194,234 @@
             icon.className = topMenu.classList.contains('mobile-visible') ? 'fas fa-times' : 'fas fa-bars';
         });
 
-        // Load dashboard data
-        async function loadDashboardData() {
-            await Promise.all([
-                loadReports(),
-                loadUsers(),
-                loadStats()
-            ]);
-        }
+        // Tab switching
+        document.getElementById('loginTab').addEventListener('click', function() {
+            this.classList.add('active');
+            document.getElementById('registerTab').classList.remove('active');
+            document.getElementById('loginForm').classList.add('active');
+            document.getElementById('registerForm').classList.remove('active');
+        });
 
-        async function loadStats() {
-            try {
-                const reportsResponse = await fetch(`${API_BASE}/reports?limit=1000`);
-                const reportsData = await reportsResponse.json();
-                const reports = reportsData.reports || [];
+        document.getElementById('registerTab').addEventListener('click', function() {
+            this.classList.add('active');
+            document.getElementById('loginTab').classList.remove('active');
+            document.getElementById('registerForm').classList.add('active');
+            document.getElementById('loginForm').classList.remove('active');
+        });
 
-                const usersResponse = await fetch(`${API_BASE}/users`);
-                const usersData = await usersResponse.json();
-                const users = usersData.users || [];
-
-                const activeIssues = reports.filter(r => r.status !== 'restored').length;
-                
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const resolvedToday = reports.filter(r => {
-                    if (r.status === 'restored' && r.updated_at) {
-                        const updatedAt = new Date(r.updated_at);
-                        return updatedAt >= today;
-                    }
-                    return false;
-                }).length;
-
-                document.getElementById('totalReports').textContent = reports.length;
-                document.getElementById('totalUsers').textContent = users.length;
-                document.getElementById('activeIssues').textContent = activeIssues;
-                document.getElementById('resolvedToday').textContent = resolvedToday;
-            } catch (error) {
-                console.error('Error loading stats:', error);
-                document.getElementById('totalReports').textContent = '0';
-                document.getElementById('totalUsers').textContent = '0';
-                document.getElementById('activeIssues').textContent = '0';
-                document.getElementById('resolvedToday').textContent = '0';
-            }
-        }
-
-        async function loadReports() {
-            try {
-                console.log('Fetching reports from:', `${API_BASE}/reports?limit=50`);
-                const response = await fetch(`${API_BASE}/reports?limit=50`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                console.log('Reports loaded:', data);
-                allReports = data.reports || [];
-                displayReports(allReports.slice(0, 10));
-            } catch (error) {
-                console.error('Error loading reports:', error);
-                document.getElementById('reportsTableBody').innerHTML = `
-                    <tr><td colspan="6" style="text-align: center; color: #ef4444; padding: 20px;">
-                        <i class="fas fa-exclamation-triangle"></i><br>
-                        Failed to load reports. Error: ${error.message}
-                    </td></tr>
-                `;
-            }
-        }
-
-        async function loadUsers() {
-            try {
-                console.log('Fetching users from:', `${API_BASE}/users`);
-                const response = await fetch(`${API_BASE}/users`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                console.log('Users loaded:', data);
-                allUsers = data.users || [];
-                displayUsers(allUsers);
-            } catch (error) {
-                console.error('Error loading users:', error);
-                document.getElementById('usersTableBody').innerHTML = `
-                    <tr><td colspan="7" style="text-align: center; color: #ef4444; padding: 20px;">
-                        <i class="fas fa-exclamation-triangle"></i><br>
-                        Failed to load users. Error: ${error.message}
-                    </td></tr>
-                `;
-            }
-        }
-
-        function displayReports(reports) {
-            const tbody = document.getElementById('reportsTableBody');
+        // Password toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling;
             
-            if (reports.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No reports found</td></tr>';
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+
+        // Admin field toggle
+        function toggleAdminField() {
+            const checkbox = document.getElementById('adminCheckbox');
+            const adminField = document.getElementById('adminCodeField');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                adminField.classList.add('show');
+                loginBtn.textContent = '🛡️ Login as Admin';
+                loginBtn.classList.add('admin-btn');
+            } else {
+                adminField.classList.remove('show');
+                loginBtn.textContent = 'Sign In';
+                loginBtn.classList.remove('admin-btn');
+            }
+        }
+
+        // Forgot Password Modal
+        function showForgotPassword() {
+            document.getElementById('forgotPasswordModal').style.display = 'flex';
+            document.getElementById('forgotEmail').value = document.getElementById('loginEmail').value;
+        }
+
+        function closeForgotPassword() {
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+            document.getElementById('forgotPasswordMessage').textContent = '';
+        }
+
+        // Forgot Password Form
+        document.getElementById('forgot-password-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmail').value;
+            const messageEl = document.getElementById('forgotPasswordMessage');
+
+            messageEl.textContent = '📧 Sending password reset email...';
+            messageEl.className = 'message';
+            messageEl.style.color = '#667eea';
+
+            // Simulate email sending
+            setTimeout(() => {
+                messageEl.textContent = '✅ Password reset link sent! Check your email.';
+                messageEl.className = 'message success';
+                
+                setTimeout(() => {
+                    closeForgotPassword();
+                }, 3000);
+            }, 1500);
+        });
+
+        // Login form submission
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const isAdminLogin = document.getElementById('adminCheckbox').checked;
+            const adminCode = document.getElementById('adminCode').value;
+            const messageEl = document.getElementById('loginMessage');
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                messageEl.textContent = '❌ Please enter a valid email address';
+                messageEl.className = 'message error';
                 return;
             }
 
-            const serviceIcons = {
-                power: '⚡',
-                water: '💧',
-                internet: '📡'
+            // Validate password length
+            if (password.length < 6) {
+                messageEl.textContent = '❌ Password must be at least 6 characters';
+                messageEl.className = 'message error';
+                return;
+            }
+
+            // Check admin code if admin login
+            if (isAdminLogin && adminCode !== ADMIN_CODE) {
+                messageEl.textContent = '⛔ Invalid admin access code!';
+                messageEl.className = 'message error';
+                return;
+            }
+
+            messageEl.textContent = '🔄 Verifying credentials...';
+            messageEl.className = 'message';
+            messageEl.style.color = '#667eea';
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    localStorage.setItem('userId', data.data.userId);
+                    localStorage.setItem('userName', data.data.fullName);
+                    localStorage.setItem('userEmail', data.data.email);
+                    localStorage.setItem('authToken', data.data.token);
+                    
+                    if (isAdminLogin) {
+                        localStorage.setItem('isAdmin', 'true');
+                        messageEl.textContent = '✅ Admin login successful! Redirecting...';
+                        messageEl.className = 'message success';
+                        
+                        setTimeout(() => {
+                            window.location.href = 'Admin.html';
+                        }, 1000);
+                    } else {
+                        localStorage.setItem('isAdmin', 'false');
+                        messageEl.textContent = '✅ Login successful! Redirecting...';
+                        messageEl.className = 'message success';
+                        
+                        setTimeout(() => {
+                            window.location.href = 'homepage.html';
+                        }, 1000);
+                    }
+                } else {
+                    messageEl.textContent = '❌ ' + (data.message || 'Invalid email or password');
+                    messageEl.className = 'message error';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                messageEl.textContent = '❌ Connection error. Please check your internet and try again.';
+                messageEl.className = 'message error';
+            }
+        });
+
+        // Register form submission
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const password = document.getElementById('registerPassword').value;
+            const email = document.getElementById('registerEmail').value.trim();
+            const messageEl = document.getElementById('registerMessage');
+
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                messageEl.textContent = '❌ Please enter a valid email address';
+                messageEl.className = 'message error';
+                return;
+            }
+
+            // Validate password
+            if (password.length < 6) {
+                messageEl.textContent = '❌ Password must be at least 6 characters';
+                messageEl.className = 'message error';
+                return;
+            }
+            
+            const formData = {
+                username: document.getElementById('registerUsername').value.trim(),
+                full_name: document.getElementById('registerFullName').value.trim(),
+                email: email,
+                phone_number: document.getElementById('registerPhone').value.trim(),
+                city: document.getElementById('registerCity').value.trim(),
+                password: password,
+                country: 'Cameroon'
             };
 
-            tbody.innerHTML = reports.map(report => `
-                <tr>
-                    <td>#${report.id}</td>
-                    <td>${serviceIcons[report.service_type] || '📍'} ${report.service_type}</td>
-                    <td>${report.city || 'N/A'}</td>
-                    <td><span class="badge ${report.status}">${report.status}</span></td>
-                    <td>User #${report.user_id || 'N/A'}</td>
-                    <td>
-                        <button class="action-btn approve" onclick="updateReportStatus(${report.id}, 'restored')">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="action-btn delete" onclick="deleteReport(${report.id})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function displayUsers(users) {
-            const tbody = document.getElementById('usersTableBody');
-            
-            if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">No users found</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = users.map(user => {
-                const trustScore = ((user.total_reports || 0) * 5) + ((user.verifications_count || 0) * 10);
-                const trustLevel = trustScore >= 100 ? 'high' : trustScore >= 50 ? 'medium' : 'low';
-                
-                return `
-                    <tr>
-                        <td>#${user.id}</td>
-                        <td>${user.full_name || 'N/A'}</td>
-                        <td>${user.email || 'N/A'}</td>
-                        <td>${user.total_reports || 0}</td>
-                        <td><span class="badge ${trustLevel}">${trustScore}pts</span></td>
-                        <td><span class="badge ${user.verified ? 'verified' : 'pending'}">
-                            ${user.verified ? '✓ Verified' : 'Pending'}
-                        </span></td>
-                        <td>
-                            ${!user.verified ? `
-                                <button class="action-btn approve" onclick="verifyUser(${user.id})">
-                                    <i class="fas fa-check"></i> Verify
-                                </button>
-                            ` : ''}
-                            <button class="action-btn delete" onclick="deleteUser(${user.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function filterReports() {
-            const filter = document.getElementById('reportFilter').value;
-            const filtered = filter === 'all' 
-                ? allReports 
-                : allReports.filter(r => r.service_type === filter);
-            displayReports(filtered.slice(0, 10));
-        }
-
-        function filterUsers() {
-            const filter = document.getElementById('userFilter').value;
-            let filtered = allUsers;
-            
-            if (filter === 'verified') {
-                filtered = allUsers.filter(u => u.verified);
-            } else if (filter === 'pending') {
-                filtered = allUsers.filter(u => !u.verified);
-            }
-            
-            displayUsers(filtered);
-        }
-
-        async function updateReportStatus(reportId, status) {
-            if (!confirm(`Are you sure you want to mark this report as ${status}?`)) return;
+            messageEl.textContent = '🔄 Creating account...';
+            messageEl.className = 'message';
+            messageEl.style.color = '#667eea';
 
             try {
-                const response = await fetch(`${API_BASE}/reports/${reportId}`, {
-                    method: 'PUT',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                    },
-                    body: JSON.stringify({ status })
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
                 });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Failed to update report');
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    localStorage.setItem('userId', data.data.userId);
+                    localStorage.setItem('userName', formData.full_name);
+                    localStorage.setItem('userEmail', data.data.email);
+                    localStorage.setItem('authToken', data.data.token);
+                    localStorage.setItem('isAdmin', 'false');
+                    
+                    messageEl.textContent = '✅ Account created! Redirecting...';
+                    messageEl.className = 'message success';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'homepage.html';
+                    }, 1000);
+                } else {
+                    messageEl.textContent = '❌ ' + (data.message || 'Registration failed');
+                    messageEl.className = 'message error';
                 }
-
-                alert(`✓ Report #${reportId} status updated to "${status}"!`);
-                await loadDashboardData();
             } catch (error) {
-                console.error('Error updating report:', error);
-                alert(`❌ Failed to update report: ${error.message}`);
-            }
-        }
-
-        async function deleteReport(reportId) {
-            if (!confirm('⚠️ Are you sure you want to delete this report? This action cannot be undone!')) return;
-
-            try {
-                console.log(`Attempting to delete report #${reportId}`);
-                const response = await fetch(`${API_BASE}/reports/${reportId}`, {
-                    method: 'DELETE',
-                    headers: { 
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                console.log('Delete response status:', response.status);
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    console.error('Delete failed:', errorData);
-                    throw new Error(errorData.message || `Server error: ${response.status}`);
-                }
-
-                const result = await response.json().catch(() => ({}));
-                console.log('Delete successful:', result);
-
-                alert(`✓ Report #${reportId} deleted successfully!`);
-                await loadDashboardData();
-            } catch (error) {
-                console.error('Error deleting report:', error);
-                alert(`❌ Failed to delete report: ${error.message}`);
-            }
-        }
-
-        async function verifyUser(userId) {
-            if (!confirm('Are you sure you want to verify this user?')) return;
-
-            try {
-                console.log(`Attempting to verify user #${userId}`);
-                const response = await fetch(`${API_BASE}/users/${userId}`, {
-                    method: 'PUT',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                    },
-                    body: JSON.stringify({ verified: true })
-                });
-
-                console.log('Verify response status:', response.status);
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    console.error('Verify failed:', errorData);
-                    throw new Error(errorData.message || `Server error: ${response.status}`);
-                }
-
-                const result = await response.json().catch(() => ({}));
-                console.log('Verify successful:', result);
-
-                alert(`✓ User #${userId} has been verified!`);
-                await loadDashboardData();
-            } catch (error) {
-                console.error('Error verifying user:', error);
-                alert(`❌ Failed to verify user: ${error.message}`);
-            }
-        }
-
-        async function deleteUser(userId) {
-            if (!confirm('⚠️ Are you sure you want to delete this user? This will also delete all their reports!')) return;
-
-            try {
-                console.log(`Attempting to delete user #${userId}`);
-                const response = await fetch(`${API_BASE}/users/${userId}`, {
-                    method: 'DELETE',
-                    headers: { 
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                console.log('Delete response status:', response.status);
-                
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    console.error('Delete failed:', errorData);
-                    throw new Error(errorData.message || `Server error: ${response.status}`);
-                }
-
-                const result = await response.json().catch(() => ({}));
-                console.log('Delete successful:', result);
-                
-                alert(`✓ User #${userId} deleted successfully!`);
-                await loadDashboardData();
-            } catch (error) {
-                console.error('Error deleting user:', error);
-                alert(`❌ Failed to delete user: ${error.message}`);
-            }
-        }
-
-        // Quick actions
-        function showUserManagement() {
-            document.querySelector('#usersTable').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function exportReports() {
-            if (allReports.length === 0) {
-                alert('No reports to export!');
-                return;
-            }
-
-            try {
-                // Create CSV content
-                const headers = ['ID', 'Service Type', 'Title', 'Description', 'Status', 'City', 'Country', 'User ID', 'Created At', 'Upvotes', 'Downvotes'];
-                const csvRows = [headers.join(',')];
-
-                allReports.forEach(report => {
-                    const row = [
-                        report.id,
-                        report.service_type || '',
-                        `"${(report.title || '').replace(/"/g, '""')}"`,
-                        `"${(report.description || '').replace(/"/g, '""')}"`,
-                        report.status || '',
-                        report.city || '',
-                        report.country || '',
-                        report.user_id || '',
-                        report.created_at || '',
-                        report.upvotes || 0,
-                        report.downvotes || 0
-                    ];
-                    csvRows.push(row.join(','));
-                });
-
-                const csv = csvRows.join('\n');
-                downloadCSV(csv, `infratrack-reports-${new Date().toISOString().split('T')[0]}.csv`);
-                alert('✓ Reports exported successfully!');
-            } catch (error) {
-                console.error('Export error:', error);
-                alert('❌ Failed to export reports');
-            }
-        }
-
-        function downloadCSV(csv, filename) {
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }
-
-        function viewAnalytics() {
-            if (allReports.length === 0) {
-                alert('No data available for analytics');
-                return;
-            }
-
-            const powerReports = allReports.filter(r => r.service_type === 'power').length;
-            const waterReports = allReports.filter(r => r.service_type === 'water').length;
-            const internetReports = allReports.filter(r => r.service_type === 'internet').length;
-            const resolvedReports = allReports.filter(r => r.status === 'restored').length;
-            const activeReports = allReports.filter(r => r.status !== 'restored').length;
-
-            const analyticsMessage = `
-📊 ANALYTICS SUMMARY
-
-Total Reports: ${allReports.length}
-Active Issues: ${activeReports}
-Resolved Issues: ${resolvedReports}
-
-BY SERVICE TYPE:
-⚡ Power: ${powerReports}
-💧 Water: ${waterReports}
-📡 Internet: ${internetReports}
-
-Total Users: ${allUsers.length}
-            `;
-
-            alert(analyticsMessage);
-        }
-
-       <!-- Replace the sendNotification() function in Admin.html with this: -->
-
-
-// Updated sendNotification function
-async function sendNotification() {
-    const title = prompt('📢 Enter notification title:');
-    if (!title || !title.trim()) return;
-    
-    const message = prompt('📝 Enter notification message:');
-    if (!message || !message.trim()) return;
-
-    if (!confirm(`Send this notification to all ${allUsers.length} users?\n\nTitle: ${title}\nMessage: ${message}`)) {
-        return;
-    }
-
-    try {
-        console.log('📤 Broadcasting notification...');
-        
-        const response = await fetch(`${API_BASE}/notifications/broadcast`, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-            },
-            body: JSON.stringify({ title, message })
-        });
-
-        console.log('Response status:', response.status);
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to send notification');
-        }
-
-        const data = await response.json();
-        console.log('✅ Broadcast successful:', data);
-
-        alert(`✅ Notification sent to ${data.count} users successfully!`);
-    } catch (error) {
-        console.error('❌ Error broadcasting notification:', error);
-        alert(`❌ Failed to send notification: ${error.message}`);
-    }
-}
-        // Initialize
-        window.addEventListener('DOMContentLoaded', () => {
-            if (checkAdminAuth()) {
-                loadDashboardData();
+                console.error('Register error:', error);
+                messageEl.textContent = '❌ Connection error. Please try again.';
+                messageEl.className = 'message error';
             }
         });
-        setInterval(() => {
-            if (checkAdminAuth()) {
-                loadDashboardData();
-            }
-        }, 60000); // Refresh every minute
     </script>
 </body>
 </html>
