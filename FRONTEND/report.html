@@ -175,7 +175,7 @@
 
     <script>
         // ==================== CONFIGURATION ====================
-        const API_BASE = 'http://127.0.0.1:3000/api';
+        const API_BASE = `${window.location.origin}/api`;
         let currentLocation = { latitude: null, longitude: null };
 
         // ==================== MOBILE MENU TOGGLE ====================
@@ -328,7 +328,7 @@
 
             } catch (error) {
                 console.error('❌ Error:', error);
-                alert('❌ Error: ' + error.message + '\n\nPlease check:\n1. Backend server is running on http://localhost:3000\n2. Open browser console (F12) for more details');
+                alert('❌ Error: ' + error.message + `\n\nPlease check:\n1. Backend server is running on ${window.location.origin}\n2. Open browser console (F12) for more details`);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Report';

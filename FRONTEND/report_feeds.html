@@ -85,7 +85,7 @@
     </div>
 
     <script>
-        const API_BASE = 'http://127.0.0.1:3000/api';
+        const API_BASE = `${window.location.origin}/api`;
         
         let currentReports = [];
         let filteredReports = [];
@@ -236,7 +236,7 @@
                 }
             } catch (error) {
                 console.error('❌ Error loading reports:', error);
-                showError(`Connection error: ${error.message}. Please check if backend is running on http://127.0.0.1:3000`);
+                showError(`Connection error: ${error.message}. Please check if backend is running on ${window.location.origin}`);
             }
         }
 
@@ -357,7 +357,7 @@
                 ${report.image_path ? `
                     <div class="report-image">
                         <img 
-                            src="http://127.0.0.1:3000/${report.image_path}" 
+                            src="${window.location.origin}/${report.image_path}" 
                             alt="Report image"
                             loading="lazy"
                             onclick="window.open(this.src, '_blank')"
